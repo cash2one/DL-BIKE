@@ -24,13 +24,13 @@ shell commond::
 import tornado.httpserver
 import tornado.web
 import tornado.ioloop
-import tornado.options
 from tornado.options import options
+import tornadis
 
 from setting import settings
 from route import routes
-import utils.common.session as session
 from utils.common.log import Logger
+# from utils.common.session import Session
 
 tornado.options.parse_command_line()
 logger = Logger(logpath=options.logpath)
@@ -45,24 +45,27 @@ class Application(tornado.web.Application):
 
         self.logger = logger
 
-        self.session_manager = session.SessionManager(
-            settings["session_secret"],
-            settings["store_options"],
-            settings["session_timeout"])
+        # self.redis_cli = Session()
 
+        # # 异步redis客户端
+        # self.redis_cli = tornadis.ClientPool(
+        #     dict(port=settings['redis_port'],
+        #          host=settings['redis_host'],
+        #          connect_timeout=settings['connect_timeout'])
+        # )
 
 def main():
+
     application = Application()
     try:
-        logger.info('DingLing-Bike Server Starting, on port : {0}'.format(
-            options.port))
+        logger.info('Server starting, on port : {0}'.format(options.port))
         http_server = tornado.httpserver.HTTPServer(application, xheaders=True)
         http_server.listen(options.port)
         tornado.ioloop.IOLoop.instance().start()
     except Exception as e:
         logger.error(e)
     finally:
-        logger.info('DingLing-Bike Server Closing, on port : {0}'.format(options.port))
+        logger.info('Server closing, on port : {0}'.format(options.port))
 
 if __name__ == "__main__":
     main()

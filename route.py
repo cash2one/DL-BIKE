@@ -8,7 +8,7 @@ api接口的route都加上api，非api的route会被统计为PV、UV
 routes = [
 
     # wechat
-    (r"/wechat",                                  "handler.wechat.wechat.WeixinHandler")
+    (r"/wechat",                                  "handler.wechat.wechat.WechatHandler")
 
     # # job
     # (r"/job/api/positionfav",                   "handler.job.position_fav.PositionFavHandler"),

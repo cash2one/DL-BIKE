@@ -1,12 +1,16 @@
 # coding=utf-8
 
-from handler.base import BaseHandler
-
 import hashlib
+from tornado import gen
+from handler.base import BaseHandler
+from utils.common.decorator import handle_error
+from utils.tool.http_tool import http_get
 
 
-class WeixinHandler(BaseHandler):
+class WechatHandler(BaseHandler):
 
+    @handle_error
+    @gen.coroutine
     def get(self, *args, **kwargs):
         """
         公众平台接入
@@ -14,7 +18,14 @@ class WeixinHandler(BaseHandler):
         :param kwargs:
         :return:
         """
-        self.write("hello")
+
+        html = yield http_get(route='http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html')
+        # print (html)
+
+        self.send_json({
+            "hai": 1,
+            "html": html
+        })
         # if self.get_argument("echostr", "") and self._verify_wexin_request():
         #     ret = self.get_argument("echostr", "", True)
         #     self.write(ret)

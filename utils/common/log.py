@@ -14,7 +14,7 @@ from logging.handlers import TimedRotatingFileHandler
 #  Configurations
 # --------------------------------------------------------------------------
 
-LOGGER_NAME = 'DLLogger'
+LOGGER_NAME = 'DQLogger'
 FORMATER = logging.Formatter(
     u'%(asctime)s\t%(pathname)s:%(lineno)s\t%(levelname)s\t%(message)s'
 )
@@ -98,4 +98,4 @@ class Logger(object):
 
     def record(self, message):
         self.__logger.log(
-            logging.getLevelName("CUSTOMER"), message, exc_info=1)
+            logging.getLevelName("CUSTOMER"), message, exc_info=0)

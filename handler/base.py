@@ -1,28 +1,30 @@
 # coding=utf-8
 
 import ujson
-
-import tornado.web
+import importlib
+import time
+from tornado import gen, web
 from tornado.util import ObjectDict
 
-from utils.tool.json_tool import JSONEncoder
-from utils.common.session import Session
+import conf.common as constant
 
+class BaseHandler(web.RequestHandler):
 
-class BaseHandler(tornado.web.RequestHandler):
-
-    # Initialization and properties
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self.json_args = None
         self.params = None
         self._log_info = None
+        self.start_time = time.time()
 
-        self.session = Session(self.application.session_manager, self, 1)
-        self.session.save()
-
-        # 日志变量
-        # pageservice实例化
+        self.city_ps = getattr(importlib.import_module('service.page.{0}.{1}'.format('wechat', 'city')),
+                                  'CityPageService')()
+        self.scrap_log_ps = getattr(importlib.import_module('service.page.{0}.{1}'.format('wechat', 'scrap_log')),
+                                 'ScrapLogPageService')()
+        self.station_ps = getattr(importlib.import_module('service.page.{0}.{1}'.format('wechat', 'station')),
+                                   'StationPageService')()
+        self.user_ps = getattr(importlib.import_module('service.page.{0}.{1}'.format('wechat', 'user')),
+                                   'UserPageService')()
 
     @property
     def logger(self):
@@ -31,6 +33,14 @@ class BaseHandler(tornado.web.RequestHandler):
     @property
     def settings(self):
         return self.application.settings
+    #
+    # @property
+    # def redis(self):
+    #     return self.application.redis_cli
+
+    @property
+    def constant(self):
+        return constant
 
     @property
     def log_info(self):
@@ -43,7 +53,6 @@ class BaseHandler(tornado.web.RequestHandler):
         if dict(value):
             self._log_info = dict(value)
 
-    # Public API
     def prepare(self):
         self.json_args = None
         headers = self.request.headers
@@ -55,33 +64,6 @@ class BaseHandler(tornado.web.RequestHandler):
             self.logger.error(e)
 
     # def get_current_user(self):
-
-    def guarantee(self, fields_mapping, *args):
-
-        '''
-        :param fields_mapping 校验类型。会过滤HTML标签
-        usage:
-            对输入参数做检查，主要用于post、put
-
-            try:
-                self.guarantee("mobile", "name", "password")
-            except AttributeError:
-                return
-
-            mobile = self.params["mobile"]
-        '''
-
-        self.params = {}
-        for arg in args:
-            try:
-                self.params[arg] = self.json_args[arg]
-                self.json_args.pop(arg)
-            except KeyError:
-                ret_field = fields_mapping.get(arg, arg)
-                raise AttributeError(u"{0}不能为空".format(ret_field))
-            self.params.update(self.json_args)
-
-        return self.params
 
     def on_finish(self):
         info = ObjectDict(
@@ -96,13 +78,20 @@ class BaseHandler(tornado.web.RequestHandler):
         self.logger.record(
             ujson.dumps(self._get_info_header(info), ensure_ascii=0))
 
-    def add_log(self, log={}):
+    def write_error(self, status_code, **kwargs):
 
-        '''
-        手动添加日志字段
-        :return:
-        '''
-        self._log_info.update(log)
+        if status_code == 403:
+            self.send_json({
+                "msg": u"用户未被授权请求"
+            }, status_code=403)
+        elif status_code == 404:
+            self.send_json({
+                "msg": u"资源不存在"
+            }, status_code=404)
+        else:
+            self.send_json({
+                "msg": u"服务器错误"
+            }, status_code=500)
 
     def send_json(self, chunk, status_code=200):
 
@@ -125,20 +114,22 @@ class BaseHandler(tornado.web.RequestHandler):
                 "data": []
             }
         '''
-
+        if status_code == 200:
+            chunk.update({
+                "msg": self.constant.RESPONSE_SUCCESS
+            })
         self.log_info = {"res_type": "json"}
-        chunk = JSONEncoder().encode(chunk)
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.set_status(status_code)
         self.write(chunk)
         return
 
-    # priviate methods
     def _get_info_header(self, log_params):
         request = self.request
         req_params = request.arguments
 
         log_info_common = ObjectDict(
+            elapsed_time="%.4f" % (time.time() - self.start_time),
             useragent=request.headers.get('User-Agent'),
             referer=request.headers.get('Referer'),
             remote_ip=(
@@ -148,10 +139,8 @@ class BaseHandler(tornado.web.RequestHandler):
             ),
             req_type=request.method,
             req_uri=request.uri,
-            session_id=self.get_secure_cookie('session_id'),
+            req_params=req_params,
         )
 
-        log_info_common.update(req_params)
         log_params.update(log_info_common)
-
-        return JSONEncoder().encode(log_params)
+        return ujson.encode(log_params)

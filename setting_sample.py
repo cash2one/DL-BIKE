@@ -12,28 +12,27 @@ from tornado.options import define
 
 #############################以下内容为系统设置，搭建项目时可根据数据库、redis设置进行调整###############
 
-define("port", default=8000, help="run on the given port", type=int)
+define("port", default=8080, help="run on the given port", type=int)
 define("logpath", default="logs/", help="log path")
 
 settings = {}
 settings['xsrf_cookies'] = True
-settings['cookie_secret'] = "EAB1D2AB05EEF04D35BA5FDF789DD6A3"
-settings['debug'] = False
+settings['cookie_secret'] = "EAB1D2UT05EEF04D35BA5FDF789DW6B3"
+settings['debug'] = True
 settings['log_level'] = "DEBUG"
 
-# 数据库配置 dqv4
-settings['mysql_host'] = "qx.dqprism.com"
+# 数据库配置
+settings['mysql_host'] = "127.0.0.1"
 settings['mysql_port'] = 3306
-settings['mysql_database'] = "dqv4"
-settings['mysql_user'] = "daqi"
-settings['mysql_password'] = "5F51692091B4031640E18E7C27430E071BC878C8"
+settings['mysql_database'] = "bike"
+settings['mysql_user'] = "root"
+settings['mysql_password'] = ""
 
 # session配置
-settings['session'] = True
-settings['session_secret'] = "FILUCyiulhrweuflhwesoihqwurihfbaskjdhquwvrlqkwjfv"
-settings['session_timeout'] = 600
+settings['session_secret'] = "FILUCtuulhrweuflhwesoihqwurwhfbaskldhquwvrlqkwjfv"
+settings['session_timeout'] = 3600
 settings['store_options'] = {
-    'redis_host': '182.92.131.142',
+    'redis_host': '127.0.0.1',
     'redis_port': 6379,
     'redis_pass': ''
 }
