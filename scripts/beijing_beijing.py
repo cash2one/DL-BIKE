@@ -9,15 +9,16 @@
 
     分城区列表页地址：wdList.html?areaid=0102
 
-
 '''
+
 import ujson
 from tornado.util import ObjectDict
 from tornado.ioloop import IOLoop
 from tornado import gen
-import conf.common as const
+
 from utils.tool.http_tool import http_get
 from utils.parse.parser import Parser
+import constant
 
 AREA_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html'
 STATIONS_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/BicycleServlet?action=GetBicycleStatus'
@@ -59,7 +60,7 @@ class BeijingParser(Parser):
 
     @gen.coroutine
     def parse_html(self):
-        source = yield http_get(route=AREA_LIST, headers=const.BEIJING_HTML_HEADERS)
+        source = yield http_get(route=AREA_LIST, headers=constant.BEIJING_HTML_HEADERS)
         source = self.replace_white_within_span(source)
         source = self.remove_white_character(source)
         html = self.nbsp2space(source)
@@ -90,7 +91,7 @@ class BeijingParser(Parser):
                     "currentAreaid": v
                 }
                 print (data)
-                stations_list = yield http_get(route=STATIONS_LIST, jdata=data, headers=const.BEIJING_JSON_HEADERS)
+                stations_list = yield http_get(route=STATIONS_LIST, jdata=data, headers=constant.BEIJING_JSON_HEADERS)
                 stations_list = ujson.decode(stations_list)
                 if not stations_list:
                     break
@@ -103,7 +104,7 @@ class BeijingParser(Parser):
                     station['district'] = k
                     station['code'] = item.get('stationCode')
                     station['type'] = item['type']
-                    station['status'] = const.STATUS_ONUSE if item['status'] == 2 else const.STATUS_UNUSE
+                    station['status'] = constant.STATUS_ONUSE if item['status'] == 2 else constant.STATUS_UNUSE
                     station['total'] = item['bikesNum']
                     station['name'] = item['name']
                     station['address'] = item['adress']

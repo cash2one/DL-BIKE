@@ -5,7 +5,7 @@ import functools
 from tornado import gen
 from tornado.util import ObjectDict
 
-import conf.common as constant
+import constant
 
 
 def handle_error(method):

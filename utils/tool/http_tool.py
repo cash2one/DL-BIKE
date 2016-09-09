@@ -7,12 +7,12 @@ import ujson
 import tornado.httpclient
 from tornado import gen
 from tornado.httputil import url_concat, HTTPHeaders
-import conf.common as const
+import constant
 
 @gen.coroutine
 def http_get(route, jdata=None, headers={}, timeout=5):
 
-    headers.update(const.COMMON_UA)
+    headers.update(constant.COMMON_UA)
 
     url = url_concat(route, jdata)
     http_client = tornado.httpclient.AsyncHTTPClient()
@@ -32,7 +32,7 @@ def http_get(route, jdata=None, headers={}, timeout=5):
 @gen.coroutine
 def http_post(url, jdata, headers={}, timeout=5):
 
-    headers.update(const.COMMON_UA)
+    headers.update(constant.COMMON_UA)
     print (headers)
 
     http_client = tornado.httpclient.AsyncHTTPClient()

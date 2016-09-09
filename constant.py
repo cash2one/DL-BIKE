@@ -3,10 +3,8 @@
 '''
 说明:
 constant配置常量规范：
-1.常量涉及通用业务逻辑定义，即同时适用于聚合号和企业号
-2.系统常量定义在顶部，业务常量定义在底部。
-3.使用分割线区分系统、业务常量
-4.常量配置添加注释
+1.系统常量定义在顶部，业务常量定义在底部。
+2.常量配置添加注释
 
 常量使用大写字母，字符串需要时标注为unicode编码
 例如 SUCCESS = u"成功"
@@ -48,11 +46,12 @@ STATUS_UNUSE = 0
 
 # ++++++++++业务常量+++++++++++
 
+## USER_AGENT
 COMMON_UA = {
     'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5 Build/MOB30Y) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile MQQBrowser/6.2 TBS/036555 Safari/537.36 MicroMessenger/6.3.22.821 NetType/WIFI Language/zh_CN',
 }
 
-## USER_AGENT
+### BEIJING
 BEIJING_HTML_HEADERS = {
     'Host': 'www.bjjtw.gov.cn',
     'Referer': 'http://www.bjjtw.gov.cn/wx/app/weixin/bicycle/main/al?character=publicCityServer',

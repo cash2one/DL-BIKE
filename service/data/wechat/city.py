@@ -1,10 +1,11 @@
 # coding=utf-8
 
 from tornado import gen
-from service.data.base import DataService
+from service.data.base import *
 
 class CityDataService(DataService):
 
+    @cache(ttl=60)
     @gen.coroutine
     def get_city(self, conds, fields=[]):
 

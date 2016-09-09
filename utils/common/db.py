@@ -12,7 +12,7 @@ from tornado_mysql import pools, cursors
 from setting import settings
 from utils.common.log import Logger
 from utils.tool.date_tool import is_time_valid
-import conf.common as constant
+import constant
 
 
 class DB(object):

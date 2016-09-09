@@ -19,8 +19,10 @@ class WechatHandler(BaseHandler):
         :return:
         """
 
-        html = yield http_get(route='http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html')
+        html = yield http_get(route='http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html', timeout=10)
         # print (html)
+
+        self.logger.debug("com: %s" % self.constant.BEIJING_JSON_HEADERS)
 
         self.send_json({
             "hai": 1,

@@ -6,7 +6,7 @@
 
 from datetime import datetime
 
-import conf.common as constant
+import constant
 
 
 def curr_datetime_now():

@@ -11,22 +11,16 @@ dataservice之间不能相互调用
 可以根据表名创建dataservice
 '''
 
+import re
 import importlib
+import glob
 
+import constant
 from utils.common.log import Logger
-import conf.common as constant
+from setting import settings
+from utils.cache import cache
+from utils.common.singleton import Singleton
 
-
-class Singleton(type):
-
-    def __init__(cls, name, bases, dict):
-        super(Singleton, cls).__init__(name, bases, dict)
-        cls._instance = None
-
-    def __call__(cls, *args, **kw):
-        if cls._instance is None:
-            cls._instance = super(Singleton, cls).__call__(*args, **kw)
-        return cls._instance
 
 class DataService:
 
@@ -37,11 +31,12 @@ class DataService:
         self.logger = Logger
         self.constant = constant
 
-        self.city_dao = getattr(importlib.import_module('dao.{0}.{1}'.format('wechat', 'city')),
-                                      'CityDao')()
-        self.scrap_log_dao = getattr(importlib.import_module('dao.{0}.{1}'.format('wechat', 'scrap_log')),
-                                           'ScrapLogDao')()
-        self.station_dao = getattr(importlib.import_module('dao.{0}.{1}'.format('wechat', 'station')),
-                                        'StationDao')()
-        self.user_dao = getattr(importlib.import_module('dao.{0}.{1}'.format('wechat', 'user')),
-                                        'UserDao')()
+        d = settings['root_path'] + "dao/**/*.py"
+        for module in filter(lambda x: not x.endswith("init__.py"), glob.glob(d)):
+            p = module.split("/")[-2]
+            m = module.split("/")[-1].split(".")[0]
+            m_list = [item.title() for item in re.split(u"_", m)]
+            pmDao = "".join(m_list) + "Dao"
+            pmObj = m + "_dao"
+
+            setattr(self, pmObj, getattr(importlib.import_module('dao.{0}.{1}'.format(p, m)), pmDao)())

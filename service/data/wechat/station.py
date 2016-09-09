@@ -1,10 +1,11 @@
 # coding=utf-8
 
 from tornado import gen
-from service.data.base import DataService
+from service.data.base import *
 
 class StationDataService(DataService):
 
+    @cache(ttl=60)
     @gen.coroutine
     def get_station(self, conds, fields=[]):
 
@@ -19,6 +20,7 @@ class StationDataService(DataService):
         response = yield self.station_dao.get_record_by_conds(conds, fields)
         raise gen.Return(response)
 
+    @cache(ttl=60)
     @gen.coroutine
     def get_stations_list(self, conds, fields, options=[], appends=[], index='', params=[]):
 

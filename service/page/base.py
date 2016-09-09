@@ -10,24 +10,15 @@ pageservice的父类
 pageservice之间可以相互调用，但不建议
 可以根据业务类型创建pageservice
 '''
-
+import re
 import importlib
+import glob
 
 from utils.common.log import Logger
 from setting import settings
-import conf.common as constant
+import constant
+from utils.common.singleton import Singleton
 
-
-class Singleton(type):
-
-    def __init__(cls, name, bases, dict):
-        super(Singleton, cls).__init__(name, bases, dict)
-        cls._instance = None
-
-    def __call__(cls, *args, **kw):
-        if cls._instance is None:
-            cls._instance = super(Singleton, cls).__call__(*args, **kw)
-        return cls._instance
 
 class PageService:
 
@@ -43,11 +34,12 @@ class PageService:
         self.settings = settings
         self.constant = constant
 
-        self.city_ds = getattr(importlib.import_module('service.data.{0}.{1}'.format('wechat', 'city')),
-                                     'CityDataService')()
-        self.scrap_log_ds = getattr(importlib.import_module('service.data.{0}.{1}'.format('wechat', 'scrap_log')),
-                                          'ScrapLogDataService')()
-        self.station_ds = getattr(importlib.import_module('service.data.{0}.{1}'.format('wechat', 'station')),
-                                       'StationDataService')()
-        self.user_ds = getattr(importlib.import_module('service.data.{0}.{1}'.format('wechat', 'user')),
-                                       'UserDataService')()
+        d = settings['root_path'] + "/service/data/**/*.py"
+        for module in filter(lambda x: not x.endswith("init__.py"), glob.glob(d)):
+            p = module.split("/")[-2]
+            m = module.split("/")[-1].split(".")[0]
+            m_list = [item.title() for item in re.split(u"_", m)]
+            pmDS = "".join(m_list) + "DataService"
+            pmObj = m + "_ds"
+
+            setattr(self, pmObj, getattr(importlib.import_module('service.data.{0}.{1}'.format(p, m)), pmDS)())

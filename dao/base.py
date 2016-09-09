@@ -10,7 +10,7 @@ from tornado.util import ObjectDict
 
 from utils.common.db import DB
 from utils.tool.date_tool import curr_now
-import conf.common as constant
+import constant
 
 
 class Singleton(type):

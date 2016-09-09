@@ -1,14 +1,31 @@
 # coding=utf-8
 
+import os
+import glob
+import re
+
 import ujson
 import importlib
 import time
 from tornado import gen, web
 from tornado.util import ObjectDict
 
-import conf.common as constant
+# 动态创建类,加载全局pageservice方法
+obDict = {}
+d = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + "/service/page/**/*.py"
+for module in filter(lambda x: not x.endswith("init__.py"), glob.glob(d)):
+    p = module.split("/")[-2]
+    m = module.split("/")[-1].split(".")[0]
+    m_list = [item.title() for item in re.split(u"_", m)]
+    pmPS = "".join(m_list) + "PageService"
+    pmObj = m + "_ps"
+    obDict.update({
+        pmObj: getattr(importlib.import_module('service.page.{0}.{1}'.format(p, m)), pmPS)()
+    })
 
-class BaseHandler(web.RequestHandler):
+_base = type("_base", (web.RequestHandler,), obDict)
+
+class BaseHandler(_base):
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
@@ -33,14 +50,10 @@ class BaseHandler(web.RequestHandler):
     @property
     def settings(self):
         return self.application.settings
-    #
-    # @property
-    # def redis(self):
-    #     return self.application.redis_cli
 
     @property
     def constant(self):
-        return constant
+        return self.application.constant
 
     @property
     def log_info(self):
