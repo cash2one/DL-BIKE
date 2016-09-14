@@ -34,3 +34,25 @@ class StationDataService(DataService):
 
         response = yield self.station_dao.get_list_by_conds(conds, fields, options, appends, index, params)
         raise gen.Return(response)
+
+    @gen.coroutine
+    def add_station(self, fields, options=[]):
+
+        if not fields or not isinstance(fields, dict):
+            self.Log.warning("Warning:[add_station][invalid parameters], Detail:[fields: {0}, "
+                        "type: {1}]".format(fields, type(fields)))
+            raise gen.Return(False)
+
+        response = yield self.station_dao.insert_record(fields, options)
+        raise gen.Return(response)
+
+    @gen.coroutine
+    def update_station(self, conds, fields, options=[], appends=[]):
+
+        if not fields or not isinstance(fields, dict):
+            self.Log.warning("Warning:[update_station][invalid parameters], Detail:[fields: {0}, "
+                        "type: {1}]".format(fields, type(fields)))
+            raise gen.Return(False)
+
+        response = yield self.station_dao.update_by_conds(conds, fields, options, appends)
+        raise gen.Return(response)

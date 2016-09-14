@@ -29,35 +29,6 @@ class BeijingParser(Parser):
     北京租赁点抓取
     """
 
-
-    # def get_li_h4_value_from_section(self, html, h=''):
-    #     re_li = h+r'<li><h4>(.*?)</h4>'
-    #     return self.get_value_from_html(re_li, html)
-    #
-    # def get_section_value(self, k, html):
-    #     re_section = r'<section><h3><span>' + k + r'(.*?)</section>'
-    #     return self.get_value_from_html(re_section, html)
-    #
-    #
-    #
-    # def get_time_time_str_title(self, html):
-    #     html = self.get_li_h4_value_from_section(html)
-    #     re_t = r"([0-9.\w]*)[^\s]?\s*([^\s]*)\s*(.*)"
-    #     return self.get_value_from_html(re_t, html, default=('', '', ''))
-    #
-    # def get_str_time_time_title(self, html):
-    #     html = self.get_li_h4_value_from_section(html)
-    #     re_t = r"([^\s]*)\s*([0-9.\w]*)(.*)"
-    #     return self.get_value_from_html(re_t, html, default=('', '', ''))
-    #
-    # def get_sub_content(self, html):
-    #     re_t = r'(^</li><li><h4>.*?</li><li><h4>|</li><li><h4>.*?</li><li>)'
-    #     return self.get_all_value_from_html(re_t, html)
-    #
-    # def get_remark(self, k, html):
-    #     re_remark = k + "</span></h3><divclass=\"preview-content\">(.*?)</div>"
-    #     return self.get_value_from_html(re_remark, html, default='')
-
     @gen.coroutine
     def parse_html(self):
         source = yield http_get(route=AREA_LIST, headers=constant.BEIJING_HTML_HEADERS)
@@ -99,7 +70,6 @@ class BeijingParser(Parser):
                 print (stations_list)
 
                 for item in stations_list:
-                    print (item)
                     station = ObjectDict()
                     station['district'] = k
                     station['code'] = item.get('stationCode')
@@ -114,11 +84,10 @@ class BeijingParser(Parser):
                     station['telephone'] = item['name']
                     station['service_time'] = item['name']
                     stations.append(station)
+                    print station
 
                 currentPage = currentPage + 1
                 length = len(stations_list)
-
-
 
         raise gen.Return(stations)
 
