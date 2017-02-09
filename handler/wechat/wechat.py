@@ -3,13 +3,13 @@
 import hashlib
 from tornado import gen
 from handler.base import BaseHandler
-from utils.common.decorator import handle_error
-from utils.tool.http_tool import http_get
+from util.common.decorator import handle_response
+from util.tool.http_tool import http_get
 
 
 class WechatHandler(BaseHandler):
 
-    @handle_error
+    @handle_response
     @gen.coroutine
     def get(self, *args, **kwargs):
         """
@@ -24,7 +24,7 @@ class WechatHandler(BaseHandler):
 
         self.logger.debug("com: %s" % self.constant.BEIJING_JSON_HEADERS)
 
-        self.send_json({
+        self.send_json_success({
             "hai": 1,
             "html": html
         })

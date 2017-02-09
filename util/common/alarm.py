@@ -7,7 +7,7 @@
 # Copyright 2016 MoSeeker
 
 import json
-from utils.tool.http_tool import http_post
+from util.tool.http_tool import http_post
 from setting import settings
 
 # Moseeker Slack team webhook settings url:
@@ -44,5 +44,5 @@ Alarm = Alarm(SLACKMAN_WEBHOOK_URL)
 
 if __name__ == '__main__':
     Alarm.biu('biu',
-                 botname="叮铃单车",
+                 botname="公共自行车查询",
                  channel="#dl-bike")

@@ -2,40 +2,34 @@
 
 # Copyright 2016 MoSeeker
 
-"""
-DQLogger
-
-merge tornado gen_log
-do not merge tornado app_log & access_log
-"""
-
 import logging
+import traceback
 import os
 from logging.handlers import TimedRotatingFileHandler
+from util.common.alarm import Alarm
 
 from tornado.log import gen_log
-from utils.common.alarm import Alarm
 
 # --------------------------------------------------------------------------
 #  Configurations
 # --------------------------------------------------------------------------
 
-LOGGER_NAME = 'DLBike'
+LOGGER_NAME = 'DL-Bike'
 
 FORMATER = logging.Formatter(
     u'%(asctime)s\t%(pathname)s:%(lineno)s\t%(levelname)s\t%(message)s')
 
 SUFFIX = '%Y%m%d%H.log'
 
-# Highest built-in level is 50, so make CUSTOMER as 60
-logging.addLevelName(60, 'CUSTOMER')
+# Highest built-in level is 50, so make STATS as 60
+logging.addLevelName(60, 'STATS')
 
 LOG_LEVELS = {
     'DEBUG':    logging.DEBUG,
     'INFO':     logging.INFO,
     'WARN':     logging.WARN,
     'ERROR':    logging.ERROR,
-    'CUSTOMER': logging.getLevelName('CUSTOMER')
+    'STATS':    logging.getLevelName('STATS')
 }
 
 # --------------------------------------------------------------------------
@@ -44,9 +38,7 @@ LOG_LEVELS = {
 
 
 class ExactLogLevelFilter(logging.Filter):
-    """
-    The filter appended to handlers
-    """
+    """The filter appended to handlers"""
     def __init__(self, level):
         self.__level = level
 
@@ -55,6 +47,7 @@ class ExactLogLevelFilter(logging.Filter):
 
 
 class Logger(object):
+    """3rd-party package independent logger root class"""
 
     def __init__(self, logpath='/tmp/', log_backcount=0,
                  log_filesize=10 * 1024 * 1024):
@@ -71,9 +64,8 @@ class Logger(object):
             'INFO':     os.path.join(logpath, 'info/info.log'),
             'WARN':     os.path.join(logpath, 'warn/warn.log'),
             'ERROR':    os.path.join(logpath, 'error/error.log'),
-            'CUSTOMER': os.path.join(logpath, 'customer/customer.log'),
+            'STATS':    os.path.join(logpath, 'stats/stats.log'),
         }
-
         self._create_handlers()
 
     def _create_handlers(self):
@@ -89,6 +81,7 @@ class Logger(object):
                 path, backupCount=self._log_backcount)
             self._handlers[level].setFormatter(FORMATER)
             self._handlers[level].suffix = SUFFIX
+            self._handlers[level].setLevel(LOG_LEVELS[level])
             self._handlers[level].addFilter(
                 ExactLogLevelFilter(LOG_LEVELS[level]))
 
@@ -101,13 +94,40 @@ class Logger(object):
     def info(self, message):
         self.__logger.info(message, exc_info=0)
 
+    def warning(self, message):
+        self.__logger.warning(message, exc_info=0)
+
     def warn(self, message):
-        self.__logger.warn(message, exc_info=0)
+        self.warning(message)
 
     def error(self, message):
-        self.__logger.error(message, exc_info=1)
-        Alarm.biu(message)
+        self.__logger.error(message, exc_info=0)
 
-    def record(self, message):
+    def stats(self, message):
         self.__logger.log(
-            logging.getLevelName("CUSTOMER"), message, exc_info=0)
+            logging.getLevelName("STATS"), message, exc_info=0)
+
+
+class MessageLogger(Logger):
+    """MessageLogger can push the message to redis"""
+
+    def __init__(self, **kwargs):
+        super(MessageLogger, self).__init__(**kwargs)
+
+    def debug(self, message):
+        super(MessageLogger, self).debug(message)
+
+    def info(self, message):
+        super(MessageLogger, self).info(message)
+
+    def warning(self, message):
+        super(MessageLogger, self).warning(message)
+
+    def error(self, message):
+        super(MessageLogger, self).error(message)
+        # error 及时报警
+        Alarm.biu(message)
+        Alarm.biu(traceback.format_exc())
+
+    def stats(self, message):
+        super(MessageLogger, self).stats(message)

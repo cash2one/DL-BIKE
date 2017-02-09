@@ -31,7 +31,8 @@ CREATE TABLE `station` (
   `is_duty` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否有人值守 0：否 1：是',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  key `IDX_CODE` (`code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='自行车租赁点';
 
 CREATE TABLE `user` (

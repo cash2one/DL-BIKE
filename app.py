@@ -27,12 +27,13 @@ import tornado.ioloop
 from tornado.options import options
 
 from setting import settings
-import constant
 from route import routes
-from utils.common.log import Logger
+from util.common.cache import BaseRedis
+from util.common.log import MessageLogger
 
 tornado.options.parse_command_line()
-logger = Logger(logpath=options.logpath)
+logger = MessageLogger(logpath=options.logpath)
+redis = BaseRedis()
 
 class Application(tornado.web.Application):
 
@@ -41,7 +42,7 @@ class Application(tornado.web.Application):
 
         self.settings = settings
         self.logger = logger
-        self.constant = constant
+        self.redis = redis
 
 def main():
 

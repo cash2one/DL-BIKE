@@ -12,19 +12,19 @@
 '''
 
 import ujson
-from tornado.util import ObjectDict
-from tornado.ioloop import IOLoop
 from tornado import gen
+from tornado.ioloop import IOLoop
+from tornado.util import ObjectDict
 
-from utils.tool.http_tool import http_get
-from utils.parse.parser import Parser
 import constant
+from scripts.parser import Parser
+from util.tool.http_tool import http_get
 
 AREA_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html'
 STATIONS_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/BicycleServlet?action=GetBicycleStatus'
 
-class BeijingParser(Parser):
 
+class BeijingParser(Parser):
     """
     北京租赁点抓取
     """
@@ -37,20 +37,33 @@ class BeijingParser(Parser):
         html = self.nbsp2space(source)
 
         beijing_list = self.parse_list(html)
-        print (beijing_list)
-        stations = yield self.parse_stations(beijing_list)
+        stations = yield self.parse_html_stations(beijing_list)
+        ret = yield self.update_station(stations)
 
         raise gen.Return(beijing_list)
 
     def parse_list(self, html):
+
+        """
+        解析 html 列表页
+        :param html:
+        :return:
+        """
         area = ObjectDict()
-        stations_list = self.get_all_value_from_html(r'<li><ahref=\"wdList\.html\?areaid=(.*?)\"title=\"(.*?)\"><div>.*?</div></a></li>', html)
+        stations_list = self.get_all_value_from_html(
+            r'<li><ahref=\"wdList\.html\?areaid=(.*?)\"title=\"(.*?)\"><div>.*?</div></a></li>', html)
         for item in stations_list:
             area[item[1]] = item[0]
         return area
 
     @gen.coroutine
-    def parse_stations(self, area):
+    def parse_html_stations(self, area):
+
+        """
+        解析二级页面，获得每个租赁点
+        :param area:
+        :return:
+        """
         stations = []
         for k, v in area.items():
             currentPage = 1
@@ -61,13 +74,10 @@ class BeijingParser(Parser):
                     "currentPage": currentPage,
                     "currentAreaid": v
                 }
-                print (data)
                 stations_list = yield http_get(route=STATIONS_LIST, jdata=data, headers=constant.BEIJING_JSON_HEADERS)
                 stations_list = ujson.decode(stations_list)
                 if not stations_list:
                     break
-
-                print (stations_list)
 
                 for item in stations_list:
                     station = ObjectDict()
@@ -84,27 +94,53 @@ class BeijingParser(Parser):
                     station['telephone'] = item['name']
                     station['service_time'] = item['name']
                     stations.append(station)
-                    print station
 
                 currentPage = currentPage + 1
                 length = len(stations_list)
 
         raise gen.Return(stations)
 
+    @gen.coroutine
+    def update_station(self, stations):
+
+        """
+        增加或更新数据库中租赁点信息
+        :param stations:
+        :return:
+
+
+
+        """
+        for item in stations:
+            station = self.station_ds.get_station({"code": item.get("code")})
+            print station
+            if station:
+                # 存在，则更新
+                print 1
+                pass
+
+            else:
+                # 不存在，则增加
+                print 2
+                fields = ObjectDict({
+                    "city_id":'',
+                    "code": item.get("code", station.get("code"))
+                })
+                ret = yield self.station_ds.add_station(fields=fields)
+                print ret
+
+
+
     def close(self):
         IOLoop.instance().stop()
-        # self.db.close()
 
     @gen.coroutine
     def runner(self):
         yield self.parse_html()
         self.close()
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     jp = BeijingParser()
     jp.runner()
     IOLoop.instance().start()
-
-
-

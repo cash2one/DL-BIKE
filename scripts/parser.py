@@ -1,8 +1,16 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 
 import re
+from service.data.wechat.station import StationDataService
+from service.data.wechat.city import CityPageService
+from service.data.wechat.scrap_log import ScrapLogPageService
 
 class Parser():
+
+    def __init__(self):
+        self.station_ds = StationDataService()
+        self.city_ds = CityPageService()
+        self.scraplog_ds = ScrapLogPageService()
 
     def rhtml(self, html):
         p = re.compile('<[^>]+>')

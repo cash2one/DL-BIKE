@@ -1,7 +1,10 @@
 # coding=utf-8
 
 from tornado import gen
-from service.data.base import *
+
+from util.common.decorator import cache
+from service.data.base import DataService
+
 
 class StationDataService(DataService):
 
