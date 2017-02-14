@@ -28,8 +28,8 @@ from tornado.options import options
 
 from setting import settings
 from route import routes
-from util.common.cache import BaseRedis
 from util.common.log import MessageLogger
+from util.common.cache import BaseRedis
 
 tornado.options.parse_command_line()
 logger = MessageLogger(logpath=options.logpath)

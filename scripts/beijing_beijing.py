@@ -11,12 +11,12 @@
 
 '''
 
-import ujson
 from tornado import gen
 from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
 
-import constant
+import conf.common as const
+import conf.headers as const_headers
 from scripts.parser import Parser
 from util.tool.http_tool import http_get
 
@@ -31,13 +31,17 @@ class BeijingParser(Parser):
 
     @gen.coroutine
     def parse_html(self):
-        source = yield http_get(route=AREA_LIST, headers=constant.BEIJING_HTML_HEADERS)
-        source = self.replace_white_within_span(source)
+        source = yield http_get(route=AREA_LIST,
+                                res_json=False,
+                                headers=const_headers.BEIJING_HTML_HEADERS,
+                                timeout=20)
+        source = self.replace_white_within_span(str(source))
         source = self.remove_white_character(source)
         html = self.nbsp2space(source)
 
         beijing_list = self.parse_list(html)
         stations = yield self.parse_html_stations(beijing_list)
+        print (stations)
         ret = yield self.update_station(stations)
 
         raise gen.Return(beijing_list)
@@ -65,6 +69,7 @@ class BeijingParser(Parser):
         :return:
         """
         stations = []
+
         for k, v in area.items():
             currentPage = 1
             length = 1
@@ -74,17 +79,20 @@ class BeijingParser(Parser):
                     "currentPage": currentPage,
                     "currentAreaid": v
                 }
-                stations_list = yield http_get(route=STATIONS_LIST, jdata=data, headers=constant.BEIJING_JSON_HEADERS)
-                stations_list = ujson.decode(stations_list)
+                stations_list = yield http_get(route=STATIONS_LIST,
+                                               res_json=True,
+                                               jdata=data,
+                                               headers=const_headers.BEIJING_JSON_HEADERS,
+                                               timeout=15)
                 if not stations_list:
                     break
 
                 for item in stations_list:
                     station = ObjectDict()
                     station['district'] = k
-                    station['code'] = item.get('stationCode')
+                    station['code'] = str(item.get('stationCode'))
                     station['type'] = item['type']
-                    station['status'] = constant.STATUS_ONUSE if item['status'] == 2 else constant.STATUS_UNUSE
+                    station['status'] = const.STATUS_INUSE if item['status'] == 2 else const.STATUS_UNUSE
                     station['total'] = item['bikesNum']
                     station['name'] = item['name']
                     station['address'] = item['adress']
@@ -95,8 +103,10 @@ class BeijingParser(Parser):
                     station['service_time'] = item['name']
                     stations.append(station)
 
-                currentPage = currentPage + 1
+                currentPage += 1
                 length = len(stations_list)
+
+            break
 
         raise gen.Return(stations)
 
@@ -107,29 +117,24 @@ class BeijingParser(Parser):
         增加或更新数据库中租赁点信息
         :param stations:
         :return:
-
-
-
         """
         for item in stations:
-            station = self.station_ds.get_station({"code": item.get("code")})
-            print station
+            station = yield self.station_ps.get_station({"code": item.get("code")})
+            print (station)
             if station:
                 # 存在，则更新
-                print 1
+                print (1)
                 pass
 
             else:
                 # 不存在，则增加
-                print 2
+                print (2)
                 fields = ObjectDict({
                     "city_id":'',
                     "code": item.get("code", station.get("code"))
                 })
-                ret = yield self.station_ds.add_station(fields=fields)
-                print ret
-
-
+                ret = yield self.station_ps.add_station(fields=fields)
+                print (ret)
 
     def close(self):
         IOLoop.instance().stop()

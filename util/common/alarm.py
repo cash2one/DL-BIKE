@@ -4,10 +4,9 @@
 # @Author  : Panda (panyuxin@moseeker.com）
 # @File    : alarm.py
 
-# Copyright 2016 MoSeeker
-
 import json
-from util.tool.http_tool import http_post
+import requests
+import socket
 from setting import settings
 
 # Moseeker Slack team webhook settings url:
@@ -29,6 +28,7 @@ class Alarm(object):
         # debug 环境不报警
         assert text
         if not settings['debug']:
+            text = "[{0}]: {1}".format(socket.gethostname(), text)
             payload = json.dumps({
                 'text': text,
                 'username': kwargs.get('botname'),
@@ -36,9 +36,9 @@ class Alarm(object):
                 'icon_emoji': kwargs.get('emoji')
             })
 
-            http_post(route=self._webhook_url, jdata=payload)
-
-        return
+            ret = requests.post(self._webhook_url, data=payload)
+            return ret.content == 'ok'
+        return False
 
 Alarm = Alarm(SLACKMAN_WEBHOOK_URL)
 

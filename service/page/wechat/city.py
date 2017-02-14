@@ -17,7 +17,7 @@ class CityPageService(PageService):
         }
         :return:
         '''
-        #
-        # company = yield self.hr_company_ds.get_company(conds, fields)
-        #
-        # raise gen.Return(company)
+
+        city = yield self.city_ds.get_city(conds, fields)
+
+        raise gen.Return(city)

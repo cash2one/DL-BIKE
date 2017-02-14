@@ -19,15 +19,17 @@ class WechatHandler(BaseHandler):
         :return:
         """
 
-        html = yield http_get(route='http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html', timeout=10)
-        # print (html)
+        self.logger.debug("request: {}".format(self.request))
 
-        self.logger.debug("com: %s" % self.constant.BEIJING_JSON_HEADERS)
-
-        self.send_json_success({
-            "hai": 1,
-            "html": html
-        })
+        # html = yield http_get(route='http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html', timeout=10)
+        # # print (html)
+        #
+        # self.logger.debug("com: %s" % self.constant.BEIJING_JSON_HEADERS)
+        #
+        # self.send_json_success({
+        #     "hai": 1,
+        #     "html": html
+        # })
         # if self.get_argument("echostr", "") and self._verify_wexin_request():
         #     ret = self.get_argument("echostr", "", True)
         #     self.write(ret)

@@ -68,10 +68,6 @@ class BaseHandler(AtomHandler):
         return self.application.settings
 
     @property
-    def env(self):
-        return self.application.env
-
-    @property
     def in_wechat(self):
         return self._in_wechat == const.CLIENT_WECHAT
 
@@ -176,15 +172,11 @@ class BaseHandler(AtomHandler):
         """
 
         if http_code == 403:
-            self.render_page(
-                'system/info.html',
-                data=ObjectDict(code=http_code, css="warning", message=const.NOT_AUTHORIZED))
+            self.send_json_error(message=const.NOT_AUTHORIZED, http_code=http_code)
         elif http_code == 404:
-            self.render_page(
-                'system/info.html', data=ObjectDict(code=http_code, message=const.NO_DATA))
+            self.send_json_error(message=const.NO_DATA, http_code=http_code)
         else:
-            self.render_page(
-                'system/info.html', data=ObjectDict(code=http_code, message=const.UNKNOWN_DEFAULT))
+            self.send_json_error(message=const.UNKNOWN_DEFAULT, http_code=http_code)
 
     def render(self, status_code=const.API_SUCCESS, http_code=200, *args, **kwargs):
         """override RequestHandler.render()
@@ -222,6 +214,9 @@ class BaseHandler(AtomHandler):
 
     def send_json_success(self, data=None, message=const.RESPONSE_SUCCESS, http_code=200):
         """API 成功返回的便捷方法"""
+        if data is None:
+            data = ObjectDict()
+
         self._send_json(data=data,
                         status_code=const.API_SUCCESS,
                         message=message,
@@ -229,6 +224,9 @@ class BaseHandler(AtomHandler):
 
     def send_json_error(self, data=None, message=const.RESPONSE_FAILURE, http_code=416):
         """API 错误返回的便捷方法"""
+        if data is None:
+            data = ObjectDict()
+
         self._send_json(data=data,
                         status_code=const.API_FAILURE,
                         message=message,

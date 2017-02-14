@@ -17,7 +17,7 @@ class ScrapLogPageService(PageService):
         }
         :return:
         '''
-        # 
-        # company = yield self.hr_company_ds.get_company(conds, fields)
-        # 
-        # raise gen.Return(company)
+
+        scrap_log = yield self.scrap_log_ds.get_scrap_log(conds, fields)
+
+        raise gen.Return(scrap_log)

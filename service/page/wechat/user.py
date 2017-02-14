@@ -17,7 +17,7 @@ class UserPageService(PageService):
         }
         :return:
         '''
-        # 
-        # company = yield self.hr_company_ds.get_company(conds, fields)
-        # 
-        # raise gen.Return(company)
+
+        user = yield self.user_ds.get_user(conds, fields)
+
+        raise gen.Return(user)

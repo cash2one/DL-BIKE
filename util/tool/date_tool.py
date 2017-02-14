@@ -6,7 +6,7 @@
 
 from datetime import datetime
 
-import constant
+import conf.common as const
 
 
 def curr_datetime_now():
@@ -14,27 +14,27 @@ def curr_datetime_now():
 
 
 def curr_now():
-    return datetime.now().strftime(constant.TIME_FORMAT)
+    return datetime.now().strftime(const.TIME_FORMAT)
 
 
 def curr_now_pure():
-    return datetime.now().strftime(constant.TIME_FORMAT_PURE)
+    return datetime.now().strftime(const.TIME_FORMAT_PURE)
 
 
 def curr_now_dateonly():
-    return datetime.now().strftime(constant.TIME_FORMAT_DATEONLY)
+    return datetime.now().strftime(const.TIME_FORMAT_DATEONLY)
 
 
 def curr_now_minute():
-    return datetime.now().strftime(constant.TIME_FORMAT_MINUTE)
+    return datetime.now().strftime(const.TIME_FORMAT_MINUTE)
 
 
 def curr_now_msec():
-    return datetime.now().strftime(constant.TIME_FORMAT_MSEC)
+    return datetime.now().strftime(const.TIME_FORMAT_MSEC)
 
 
 def format_dateonly(time):
-    return time.strftime(constant.TIME_FORMAT_DATEONLY)
+    return time.strftime(const.TIME_FORMAT_DATEONLY)
 
 
 def is_time_valid(str_time, form):

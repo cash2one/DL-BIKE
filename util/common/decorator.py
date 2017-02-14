@@ -5,12 +5,9 @@
 import functools
 import hashlib
 import traceback
-from urllib.parse import urlencode
-
 from tornado import gen
 from tornado.locks import Semaphore
 
-import conf.common as const
 from util.common.cache import BaseRedis
 
 

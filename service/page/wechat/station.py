@@ -17,7 +17,7 @@ class StationPageService(PageService):
         }
         :return:
         '''
-        # 
-        # company = yield self.hr_company_ds.get_company(conds, fields)
-        # 
-        # raise gen.Return(company)
+
+        station = yield self.station_ds.get_station(conds, fields)
+
+        raise gen.Return(station)
