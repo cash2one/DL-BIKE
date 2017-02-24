@@ -7,7 +7,6 @@
 import json
 import requests
 import socket
-from setting import settings
 
 # Moseeker Slack team webhook settings url:
 # https://moseekermm.slack.com/services/B0TUGEK60#service_setup
@@ -27,22 +26,17 @@ class Alarm(object):
         """
         # debug 环境不报警
         assert text
-        if not settings['debug']:
-            text = "[{0}]: {1}".format(socket.gethostname(), text)
-            payload = json.dumps({
-                'text': text,
-                'username': kwargs.get('botname'),
-                'channel': kwargs.get('channel'),
-                'icon_emoji': kwargs.get('emoji')
-            })
+        text = "[{0}]: {1}".format(socket.gethostname(), text)
+        payload = json.dumps({
+            'text': text,
+            'username': kwargs.get('botname') or "公共自行车查询",
+            'channel': kwargs.get('channel') or "#dl-bike",
+            'icon_emoji': kwargs.get('emoji')
+        })
 
-            ret = requests.post(self._webhook_url, data=payload)
-            return ret.content == 'ok'
-        return False
+        requests.post(self._webhook_url, data=payload)
 
 Alarm = Alarm(SLACKMAN_WEBHOOK_URL)
 
 if __name__ == '__main__':
-    Alarm.biu('biu',
-                 botname="公共自行车查询",
-                 channel="#dl-bike")
+    Alarm.biu('biu')

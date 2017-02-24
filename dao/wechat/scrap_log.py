@@ -14,7 +14,7 @@ class ScrapLogDao(BaseDao):
         self.table = "scrap_log"
         self.fields_map = {
             "id":           self.constant.TYPE_INT,
-            "city_id":      self.constant.TYPE_INT, # city.id
+            "cid":          self.constant.TYPE_INT, # city.cid
             "status":       self.constant.TYPE_INT, # 是否成功，0：否 1：是
             "create_time":  self.constant.TYPE_TIMESTAMP, # 创建时间
         }

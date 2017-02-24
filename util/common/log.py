@@ -3,7 +3,6 @@
 # Copyright 2016 MoSeeker
 
 import logging
-import traceback
 import os
 from logging.handlers import TimedRotatingFileHandler
 from util.common.alarm import Alarm
@@ -14,7 +13,7 @@ from tornado.log import gen_log
 #  Configurations
 # --------------------------------------------------------------------------
 
-LOGGER_NAME = 'DL-Bike'
+LOGGER_NAME = 'DLBike'
 
 FORMATER = logging.Formatter(
     u'%(asctime)s\t%(pathname)s:%(lineno)s\t%(levelname)s\t%(message)s')
@@ -126,8 +125,7 @@ class MessageLogger(Logger):
     def error(self, message):
         super(MessageLogger, self).error(message)
         # error 及时报警
-        Alarm.biu(message)
-        Alarm.biu(traceback.format_exc())
+        # Alarm.biu(message)
 
     def stats(self, message):
         super(MessageLogger, self).stats(message)

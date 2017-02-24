@@ -5,8 +5,10 @@
 """基础服务 api 调用工具"""
 
 import traceback
-import tornado.httpclient
 import ujson
+from urllib.parse import urlencode
+
+import tornado.httpclient
 from tornado import gen
 from tornado.httputil import url_concat
 
@@ -14,34 +16,257 @@ from app import logger
 import conf.headers as const_headers
 from util.common import ObjectDict
 
+
 @gen.coroutine
-def http_get(route, jdata=None, res_json=True, timeout=5, headers=None):
-    ret = yield _async_http_get(route, jdata, res_json, headers, timeout=timeout, method='GET')
+def http_get(
+        route,
+        jdata=None,
+        res_json=True,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        headers=None):
+    ret = yield _async_http_get(route, jdata, res_json, headers, timeout=timeout, proxy_host=proxy_host, proxy_port=proxy_port, method='GET')
     raise gen.Return(ret)
 
 
 @gen.coroutine
-def http_delete(route, jdata=None, res_json=True, timeout=5, headers=None):
-    ret = yield _async_http_get(route, jdata, res_json, headers, timeout=timeout, method='DELETE')
+def http_delete(
+        route,
+        jdata=None,
+        res_json=True,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        headers=None):
+    ret = yield _async_http_get(route, jdata, res_json, headers, timeout=timeout, proxy_host=proxy_host, proxy_port=proxy_port, method='DELETE')
     raise gen.Return(ret)
 
 
 @gen.coroutine
-def http_post(route, jdata=None, res_json=True, timeout=5, headers=None):
-    ret = yield _async_http_post(route, jdata, res_json, headers, timeout=timeout, method='POST')
+def http_post(
+        route,
+        jdata=None,
+        res_json=True,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        headers=None):
+    ret = yield _async_http_post(route, jdata, res_json, headers, timeout=timeout, proxy_host=proxy_host, proxy_port=proxy_port, method='POST')
     raise gen.Return(ret)
 
 
 @gen.coroutine
-def http_put(route, jdata=None, res_json=True, timeout=5, headers=None):
-    ret = yield _async_http_post(route, jdata, res_json, headers, timeout=timeout, method='PUT')
+def http_put(
+        route,
+        jdata=None,
+        res_json=True,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        headers=None):
+    ret = yield _async_http_post(route, jdata, res_json, headers, timeout=timeout, proxy_host=proxy_host, proxy_port=proxy_port, method='PUT')
     raise gen.Return(ret)
 
 
 @gen.coroutine
-def http_patch(route, jdata=None, res_json=True, timeout=5, headers=None):
-    ret = yield _async_http_post(route, jdata, res_json, headers, timeout=timeout, method='PATCH')
+def http_patch(
+        route,
+        jdata=None,
+        res_json=True,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        headers=None):
+    ret = yield _async_http_post(route, jdata, res_json, headers, timeout=timeout, proxy_host=proxy_host, proxy_port=proxy_port, method='PATCH')
     raise gen.Return(ret)
+
+
+@gen.coroutine
+def http_fetch(
+        route,
+        data=None,
+        res_json=True,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        headers=None,
+        method='POST'):
+    """
+    使用 www-form 形式异步请求，支持 GET，POST
+    :param route:
+    :param jdata:
+    :param res_json:
+    :param timeout:
+    :param headers:
+    :return:
+    """
+    if method.lower() not in "get post":
+        raise ValueError("method is not in GET and POST")
+
+    if data is None:
+        data = ObjectDict()
+
+    if headers is None:
+        headers = const_headers.COMMON_UA
+
+    tornado.httpclient.AsyncHTTPClient.configure(
+        "tornado.curl_httpclient.CurlAsyncHTTPClient")
+
+    http_client = tornado.httpclient.AsyncHTTPClient()
+
+    try:
+        if method.upper() == "GET":
+            if data:
+                route = "{}?{}".format(route, urlencode(data))
+
+            http_request = tornado.httpclient.HTTPRequest(
+                route,
+                method=method.upper(),
+                request_timeout=timeout,
+                headers=headers,
+                proxy_host=proxy_host,
+                proxy_port=proxy_port
+            )
+        else:
+            http_request = tornado.httpclient.HTTPRequest(
+                route,
+                method=method.upper(),
+                body=urlencode(data),
+                request_timeout=timeout,
+                headers=headers,
+                proxy_host=proxy_host,
+                proxy_port=proxy_port
+            )
+        response = yield http_client.fetch(http_request)
+
+        if res_json:
+            #  返回结果为 JSON 形式
+            logger.debug("[http_fetch][url: {}][body: {}][ret: {}] ".format(
+                route, ujson.encode(data), ujson.decode(response.body)))
+            body = ujson.decode(response.body)
+            raise gen.Return(_objectdictify(body))
+        else:
+            raise gen.Return(response.body)
+
+    except tornado.httpclient.HTTPError as e:
+        logger.error("[http_fetch][url: {}][body: {}]".format(
+            route, ujson.encode(data)))
+        logger.error("http_fetch httperror: {}".format(e))
+
+    raise gen.Return(False)
+
+
+@gen.coroutine
+def _async_http_get(
+        url,
+        jdata=None,
+        res_json=True,
+        headers=None,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        method='GET'):
+    """可用 HTTP 动词为 GET 和 DELETE"""
+    if method.lower() not in "get delete":
+        raise ValueError("method is not in GET and DELETE")
+
+    if jdata is None:
+        jdata = ObjectDict()
+
+    if headers is None:
+        headers = const_headers.COMMON_UA
+
+    tornado.httpclient.AsyncHTTPClient.configure(
+        "tornado.curl_httpclient.CurlAsyncHTTPClient")
+
+    http_client = tornado.httpclient.AsyncHTTPClient()
+
+    try:
+        url = url_concat(url, jdata)
+        http_request = tornado.httpclient.HTTPRequest(
+            url,
+            request_timeout=timeout,
+            method=method.upper(),
+            headers=headers,
+            proxy_host=proxy_host,
+            proxy_port=proxy_port
+        )
+        response = yield http_client.fetch(http_request)
+
+        if res_json:
+            # 返回结果为 JSON 形式
+            logger.debug("[_async_http_get][url: {}][ret: {}] ".format(
+                url, ujson.decode(response.body)))
+            body = ujson.decode(response.body)
+            raise gen.Return(_objectdictify(body))
+        else:
+            logger.debug("[_async_http_get][url: {}] ".format(url))
+            raise gen.Return(response.body)
+
+    except tornado.httpclient.HTTPError as e:
+        logger.error("[_async_http_get][url: {}] ".format(url))
+        logger.error("_async_http_get httperror: {}".format(e))
+
+    raise gen.Return(False)
+
+
+@gen.coroutine
+def _async_http_post(
+        url,
+        jdata=None,
+        res_json=True,
+        headers=None,
+        timeout=5,
+        proxy_host=None,
+        proxy_port=None,
+        method='POST'):
+    """可用 HTTP 动词为 POST, PATCH 和 PUT"""
+    if method.lower() not in "post put patch":
+        raise ValueError("method is not in POST, PUT and PATCH")
+
+    if jdata is None:
+        jdata = ObjectDict()
+
+    if headers is None:
+        headers = const_headers.COMMON_UA
+
+    tornado.httpclient.AsyncHTTPClient.configure(
+        "tornado.curl_httpclient.CurlAsyncHTTPClient")
+
+    http_client = tornado.httpclient.AsyncHTTPClient()
+
+    try:
+        http_request = tornado.httpclient.HTTPRequest(
+            url,
+            method=method.upper(),
+            body=ujson.encode(jdata),
+            request_timeout=timeout,
+            headers=headers,
+            proxy_host=proxy_host,
+            proxy_port=proxy_port
+        )
+        response = yield http_client.fetch(http_request)
+
+        if res_json:
+            #  返回结果为 JSON 形式
+            logger.debug("[_async_http_post][url: {}][body: {}][ret: {}] ".format(
+                url, ujson.encode(jdata), ujson.decode(response.body)))
+            body = ujson.decode(response.body)
+            raise gen.Return(_objectdictify(body))
+        else:
+            logger.debug(
+                "[_async_http_post][url: {}][body: {}] ".format(
+                    url, ujson.encode(jdata)))
+            raise gen.Return(response.body)
+
+    except tornado.httpclient.HTTPError as e:
+        logger.error(
+            "[_async_http_post][url: {}][body: {}] ".format(
+                url, ujson.encode(jdata)))
+        logger.error("_async_http_post httperror: {}".format(e))
+
+    raise gen.Return(False)
 
 
 def _objectdictify(result):
@@ -56,69 +281,5 @@ def _objectdictify(result):
             pass
     except Exception as e:
         logger.error(traceback.format_exc())
-        pass
     finally:
         return ret
-
-
-@gen.coroutine
-def _async_http_get(url, jdata=None, res_json=True, headers=None, timeout=5, method='GET'):
-    """可用 HTTP 动词为 GET 和 DELETE"""
-    if method.lower() not in "get delete":
-        raise ValueError("method is not in GET and DELETE")
-
-    if jdata is None:
-        jdata = ObjectDict()
-
-    if headers is None:
-        headers = const_headers.COMMON_UA
-
-    url = url_concat(url, jdata)
-    http_client = tornado.httpclient.AsyncHTTPClient()
-    response = yield http_client.fetch(
-        url,
-        request_timeout=timeout,
-        method=method.upper(),
-        headers=headers,
-    )
-
-    if res_json:
-        # 返回结果为 JSON 形式
-        logger.debug("[_async_http_get][url: {}][ret: {}] ".format(
-            url, ujson.decode(response.body)))
-        body = ujson.decode(response.body)
-        raise gen.Return(_objectdictify(body))
-    else:
-        raise gen.Return(response.body)
-
-
-@gen.coroutine
-def _async_http_post(url, jdata=None, res_json=True, headers=None, timeout=5, method='POST'):
-    """可用 HTTP 动词为 POST, PATCH 和 PUT"""
-    if method.lower() not in "post put patch":
-        raise ValueError("method is not in POST, PUT and PATCH")
-
-    if jdata is None:
-        jdata = ObjectDict()
-
-    if headers is None:
-        headers = const_headers.COMMON_UA
-
-    http_client = tornado.httpclient.AsyncHTTPClient()
-    response = yield http_client.fetch(
-        url,
-        method=method.upper(),
-        body=ujson.encode(jdata),
-        request_timeout=timeout,
-        headers=headers,
-    )
-    # headers = HTTPHeaders({"Content-Type": "application/json"}
-
-    if res_json:
-        #  返回结果为 JSON 形式
-        logger.debug("[_async_http_post][url: {}][body: {}][ret: {}] ".format(
-            url, ujson.encode(jdata), ujson.decode(response.body)))
-        body = ujson.decode(response.body)
-        raise gen.Return(_objectdictify(body))
-    else:
-        raise gen.Return(response.body)

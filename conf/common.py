@@ -12,7 +12,6 @@ constant配置常量规范：
 常量使用大写字母
 例如 SUCCESS = "成功"
 """
-from util.common import ObjectDict
 
 # status_message
 RESPONSE_SUCCESS = "SUCCESS"
@@ -56,3 +55,5 @@ JD_TIME_FORMAT_YESTERDAY = "昨天 {:0>2}:{:0>2}"
 # 数据库规范化常量
 STATUS_INUSE = 1
 STATUS_UNUSE = 0
+
+BAIDU_POI_Q = ["美食", "旅馆", "小区"]

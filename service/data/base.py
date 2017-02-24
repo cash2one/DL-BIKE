@@ -13,7 +13,7 @@ import glob
 import importlib
 import re
 
-from app import logger
+from app import logger, redis
 from setting import settings
 from util.common.singleton import Singleton
 
@@ -24,6 +24,7 @@ class DataService:
 
     def __init__(self):
         self.logger = logger
+        self.redis = redis
 
         for module in self._search_path():
             p = module.split("/")[-2]

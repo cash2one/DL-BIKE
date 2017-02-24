@@ -5,7 +5,6 @@
 # @File    : redis.py
 # @DES     : redis 方法封装
 
-# Copyright 2016 MoSeeker
 
 import json
 import redis
@@ -25,7 +24,7 @@ class BaseRedis(object):
 
     _redis = redis.StrictRedis(connection_pool=_pool)
 
-    _PREFIX = "WECHAT"
+    _PREFIX = "DLBike"
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(cls, '_instance'):
@@ -63,18 +62,17 @@ class BaseRedis(object):
         value = json_dumps(value)
         self._redis.set(key, value, ex=ttl)
 
-    def update(self, key, value, ttl=None):
+    def update(self, key, value, ttl=None, prefix=False):
         if value is None:
             return
-
-        key = self.key_name(key)
+        key = self.key_name(key, prefix)
         redis_value = self._get(key)
         if redis_value:
             redis_value.update(value)
-            self.set(key, redis_value, ttl)
+            self.set(key, redis_value, ttl, prefix=prefix)
 
-    def delete(self, key):
-        key = self.key_name(key)
+    def delete(self, key, prefix=True):
+        key = self.key_name(key, prefix)
         self._redis.delete(key)
 
     def incr(self, key):
@@ -84,3 +82,29 @@ class BaseRedis(object):
     def exists(self, key):
         key = self.key_name(key)
         return self._redis.exists(key)
+
+    def pub(self, key, message, prefix=True):
+        channel = self.key_name(key, prefix)
+        return self._redis.publish(channel, message)
+
+if __name__ == "__main__":
+
+    redis = BaseRedis()
+
+    key = "aaa"
+    value1 = {
+        "a": 1,
+        "b": {}
+    }
+
+    # res = redis.set(key, value1, ttl=3333, prefix=False)
+
+    value2 = {
+        "a": 2,
+        "b": {
+            "bbb": 7
+        }
+    }
+
+    res = redis.update(key, value2, prefix=False)
+    print (redis.get(key, prefix=False))

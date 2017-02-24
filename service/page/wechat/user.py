@@ -6,10 +6,10 @@ from service.page.base import PageService
 class UserPageService(PageService):
 
     @gen.coroutine
-    def get_user(self, conds, fields=[]):
+    def get_user(self, conds, fields=None):
 
         '''
-        获得城市信息
+        获得用户信息
         :param conds:
         :param fields: 示例:
         conds = {
@@ -19,5 +19,4 @@ class UserPageService(PageService):
         '''
 
         user = yield self.user_ds.get_user(conds, fields)
-
         raise gen.Return(user)

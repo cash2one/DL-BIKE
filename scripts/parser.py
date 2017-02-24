@@ -1,10 +1,13 @@
 # coding=utf-8
 
 import re
+from app import logger
 from service.page.wechat.city import CityPageService
 from service.page.wechat.scrap_log import ScrapLogPageService
 from service.page.wechat.station import StationPageService
 from service.page.wechat.user import UserPageService
+from service.page.wechat.infra import InfraPageService
+from service.page.wechat.region import RegionPageService
 
 class Parser():
 
@@ -13,6 +16,9 @@ class Parser():
         self.scraplog_ps = ScrapLogPageService()
         self.station_ps = StationPageService()
         self.user_ps = UserPageService()
+        self.infra_ps = InfraPageService()
+        self.region_ps = RegionPageService()
+        self.logger = logger
 
     def rhtml(self, html):
         p = re.compile('<[^>]+>')
