@@ -44,8 +44,11 @@ class InfraDataService(DataService):
             "page_size": page_size,
         })
 
-        ret = yield http_get(path.BAIDU_WEBAPI_PLACE_POI_LIST, params)
-        raise gen.Return(ret)
+        ret = yield http_get(route=path.BAIDU_WEBAPI_PLACE_POI_LIST, jdata=params, timeout=40)
+        if ret:
+            raise gen.Return(ret)
+        else:
+            raise gen.Return(ObjectDict())
 
     @gen.coroutine
     def get_dingda_nearby(self, longitude, latitude):
@@ -64,17 +67,16 @@ class InfraDataService(DataService):
         })
 
         ip_proxys = yield self.get_ip_proxy()
-        ip_proxy = ip_proxys[random.randint(0,19)]
-        print (ip_proxy)
+        ip_proxy = ip_proxys[random.randint(0,4)]
 
-        ret = yield http_get(path.DINGDA_NEARBY_LIST, params, headers=headers.DINGDA_NEARBY_HEADERS, timeout=30,
+        ret = yield http_get(path.DINGDA_NEARBY_LIST, params, headers=headers.DATA_SOURCE.dingda_app.header, timeout=30,
                              proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
 
         if not ret:
             yield self.del_ip_proxy(ip_proxy.get("host"))
             raise gen.Return(ObjectDict())
-
         raise gen.Return(ret)
+
 
     @gen.coroutine
     def get_beijing_nearby(self, longitude, latitude):
@@ -106,10 +108,9 @@ class InfraDataService(DataService):
         })
 
         ip_proxys = yield self.get_ip_proxy()
-        ip_proxy = ip_proxys[random.randint(0,19)]
-        print (ip_proxy)
+        ip_proxy = ip_proxys[random.randint(0,4)]
 
-        ret = yield http_fetch(path.BEIJING_NEARBY_LIST, params, headers=headers.BEIJING_NEARBY_HEADERS, timeout=30,
+        ret = yield http_fetch(path.BEIJING_NEARBY_LIST, params, headers=headers.DATA_SOURCE.beijing_app.header, timeout=30,
                                proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
         if not ret:
             yield self.del_ip_proxy(ip_proxy.get("host"))
@@ -119,7 +120,7 @@ class InfraDataService(DataService):
 
     @cache(ttl=600, key="get_ip_proxy", hash=False)
     @gen.coroutine
-    def get_ip_proxy(self, count=20, types=0, protocol=1, country='国内'):
+    def get_ip_proxy(self, count=30, types=0, protocol=1, country='国内'):
         """
         获得代理 IP
         referer: https://github.com/qiyeboy/IPProxyPool
@@ -135,7 +136,7 @@ class InfraDataService(DataService):
             "types": types,
             "protocol": protocol,
             "count": count,
-            "country": country
+            # "country": country
         })
 
         ret = yield http_get(path.IP_PROXY_GET, params, res_json=False)
@@ -166,9 +167,6 @@ class InfraDataService(DataService):
             "ip": ip,
         })
 
-        print ("!!!!!!!!!!del_ip_proxy!!!!!!!!!!!!!!!!")
         ret = yield http_get(path.IP_PROXY_DELETE, params, res_json=False)
-        print (ret)
-        res = self.redis.delete("DLBike_infra:get_ip_proxy:get_ip_proxy", prefix=False)
-        print (res)
+        self.redis.delete("infra:get_ip_proxy:get_ip_proxy")
         raise gen.Return(ret)

@@ -6,7 +6,6 @@
 # @DES     : 基础 Base，只包含一些公共方法，不涉及到业务逻辑，
 #            仅供 BaseHandler 调用，或与 BaseHandler 不同业务逻辑时调用
 
-# Copyright 2016 MoSeeker
 
 import os
 import re

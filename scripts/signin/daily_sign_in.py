@@ -5,7 +5,6 @@
 # @File    : daily_sign_in.py
 # @DES     : 
 
-# Copyright 2016 MoSeeker
 
 import http.client
 

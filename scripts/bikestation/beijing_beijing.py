@@ -20,6 +20,7 @@ from scripts.parser import Parser
 
 # 北京
 CITY_ID = 11000
+SID = 1
 
 
 class BeijingbeijingParser(Parser):
@@ -46,7 +47,6 @@ class BeijingbeijingParser(Parser):
                         if data_list.success==1 and data_list.stationList:
                             for item in data_list.stationList:
                                 station = ObjectDict()
-                                station['cid'] = CITY_ID
                                 station['code'] = str(item.get('stationNo'))
                                 station['status'] = const.STATUS_INUSE if item["state"] == 1 else const.STATUS_UNUSE
                                 # station['type'] = ""
@@ -92,13 +92,13 @@ class BeijingbeijingParser(Parser):
         station = yield self.station_ps.get_station(conds={
             "code": item.code,
             "cid": CITY_ID,
+            "sid": SID,
         })
         if station:
             # 存在，则更新
             self.station_ps.update_station(
                 conds={
-                    "code": item.code,
-                    "cid": CITY_ID,
+                    "id": station.id
                 },
                 fields={
                     "status": item.status,
@@ -116,6 +116,7 @@ class BeijingbeijingParser(Parser):
             yield self.station_ps.add_station(fields={
                 "code": item.code,
                 "cid": CITY_ID,
+                "sid": SID,
                 "status": item.status,
                 "total": item.total,
                 "name": item.name,

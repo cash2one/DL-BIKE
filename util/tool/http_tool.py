@@ -1,6 +1,5 @@
 # coding=utf-8
 
-# Copyright 2016 MoSeeker
 
 """基础服务 api 调用工具"""
 
@@ -108,7 +107,7 @@ def http_fetch(
         data = ObjectDict()
 
     if headers is None:
-        headers = const_headers.COMMON_UA
+        headers = const_headers.COMMON_HEADER
 
     tornado.httpclient.AsyncHTTPClient.configure(
         "tornado.curl_httpclient.CurlAsyncHTTPClient")
@@ -175,7 +174,7 @@ def _async_http_get(
         jdata = ObjectDict()
 
     if headers is None:
-        headers = const_headers.COMMON_UA
+        headers = const_headers.COMMON_HEADER
 
     tornado.httpclient.AsyncHTTPClient.configure(
         "tornado.curl_httpclient.CurlAsyncHTTPClient")
@@ -229,7 +228,7 @@ def _async_http_post(
         jdata = ObjectDict()
 
     if headers is None:
-        headers = const_headers.COMMON_UA
+        headers = const_headers.COMMON_HEADER
 
     tornado.httpclient.AsyncHTTPClient.configure(
         "tornado.curl_httpclient.CurlAsyncHTTPClient")

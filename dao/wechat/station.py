@@ -15,6 +15,7 @@ class StationDao(BaseDao):
         self.fields_map = {
             "id":               self.constant.TYPE_INT,
             "cid":              self.constant.TYPE_INT, # city.cid
+            "sid":              self.constant.TYPE_INT,  # data_source.id
             "code":             self.constant.TYPE_STRING, # 租赁点编号
             "type":             self.constant.TYPE_STRING, # 租赁点类型
             "status":           self.constant.TYPE_INT, # 是否有效，0：否 1：是

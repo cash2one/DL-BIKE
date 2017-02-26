@@ -4,7 +4,6 @@
 # @Author  : Panda (panyuxin@moseeker.com）
 # @File    : singleton.py
 
-# Copyright 2016 MoSeeker
 
 class Singleton(type):
 

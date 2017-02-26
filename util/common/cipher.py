@@ -5,7 +5,6 @@
 # @File    : cipher.py
 # @DES     : referer: http://kvz.io/blog/2009/06/10/create-short-ids-with-php-like-youtube-or-tinyurl/
 
-# Copyright 2016 MoSeeker
 
 import math
 import hashlib

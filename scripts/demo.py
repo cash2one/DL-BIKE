@@ -30,7 +30,7 @@ class Demo(Parser):
     @gen.coroutine
     def get_demo(self):
 
-        ips = yield self.infra_ps.get_ip_proxy()
+        ips = yield self.infra_ps.get_beijing_nearby(120, 30)
         print (ips)
 
     @gen.coroutine

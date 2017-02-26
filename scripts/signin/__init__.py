@@ -4,5 +4,3 @@
 # @Author  : panda (panyuxin@moseeker.com)
 # @File    : __init__.py.py
 # @DES     : 
-
-# Copyright 2016 MoSeeker

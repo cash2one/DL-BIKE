@@ -27,6 +27,7 @@ AREA_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html'
 STATIONS_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/BicycleServlet?action=GetBicycleStatus'
 # 北京
 CITY_ID = 1
+SID = 2
 
 
 class BeijingParser(Parser):
@@ -39,7 +40,7 @@ class BeijingParser(Parser):
         try:
             source = yield http_get(route=AREA_LIST,
                                     res_json=False,
-                                    headers=const_headers.BEIJING_HTML_HEADERS,
+                                    headers=const_headers.DATA_SOURCE.beijing_wechat.header_html,
                                     timeout=20)
             source = self.replace_white_within_span(to_str(source))
             source = self.remove_white_character(source)
@@ -73,7 +74,6 @@ class BeijingParser(Parser):
         :return:
         """
         area = ObjectDict()
-        print (html)
         stations_list = self.get_all_value_from_html(
             r'<li><ahref=\"wdList\.html\?areaid=(.*?)\"title=\"(.*?)\"><div>.*?</div></a></li>', html)
         for item in stations_list:
@@ -100,31 +100,23 @@ class BeijingParser(Parser):
                 stations_list = yield http_get(route=STATIONS_LIST,
                                                res_json=True,
                                                jdata=data,
-                                               headers=const_headers.BEIJING_JSON_HEADERS,
+                                               headers=const_headers.DATA_SOURCE.beijing_wechat.header_json,
                                                timeout=40)
-                print ("station_list: {}".format(stations_list))
                 region = yield self.get_regions(k)
-                print (k)
-                print (region.rid)
 
                 if stations_list:
                     for item in stations_list:
-                        print ("item")
-                        print (item)
-                        print (type(item))
                         if not isinstance(item, dict):
                             break
-                        print ("ddddddddddddddddddddddddddd")
                         station = ObjectDict()
-                        station['cid'] = CITY_ID
                         station['code'] = str(item.get('stationCode'))
                         station['status'] = const.STATUS_INUSE if item['status'] == 2 else const.STATUS_UNUSE
                         # station['type'] = item['type']  暂时不清楚含义
                         station['total'] = int(item['bikesNum'])
                         station['name'] = item['name']
                         station['address'] = item['adress']
-                        station['district'] = to_str(k)
-                        station['district_id'] = int(item['countyCode'])
+                        station['district'] = region.rname,
+                        station['district_id'] = region.rid,
                         station['longitude'] = item['bdLongitude']
                         station['latitude'] = item['bdLatitude']
                         # station['service_time'] = ""
@@ -152,13 +144,13 @@ class BeijingParser(Parser):
         station = yield self.station_ps.get_station({
             "code": item.code,
             "cid": CITY_ID,
+            "sid": SID,
         })
         if station:
             # 存在，则更新
             self.station_ps.update_station(
                 conds={
-                    "code": item.code,
-                    "cid": CITY_ID,
+                    "id": station.id
                 },
                 fields={
                     "status": item.status,
@@ -175,6 +167,7 @@ class BeijingParser(Parser):
             # 不存在，则增加
             yield self.station_ps.add_station(fields={
                 "cid": CITY_ID,
+                "sid": SID,
                 "code": item.code,
                 "status": item.status,
                 "total": item.total,

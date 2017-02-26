@@ -3,6 +3,7 @@ USE bike;
 CREATE TABLE `station` (
   `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
   `cid` int(11) NOT NULL DEFAULT '0' COMMENT 'city.cid',
+  `sid` int(11) NOT NULL DEFAULT '0' COMMENT 'data_source.id',
   `code` varchar(128) NOT NULL DEFAULT '' COMMENT '租赁点编号',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否有效，0：否 1：是',
   `type` varchar(20) NOT NULL DEFAULT '' COMMENT '租赁点类型',
@@ -19,7 +20,7 @@ CREATE TABLE `station` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `IDX_CODE_CITYID` (`code`, `cid`)
+  UNIQUE KEY `IDX_CODE_CITYID_SID` (`code`, `cid`, `sid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='自行车租赁点';
 
 CREATE TABLE `user` (
@@ -50,4 +51,10 @@ CREATE TABLE `scrap_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='抓取脚本log';
+
+CREATE TABLE `data_source` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(512) DEFAULT '' COMMENT '来源名称, 对应 header中的键名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据来源';
 

@@ -4,5 +4,3 @@
 # @Author  : panda (panyuxin@moseeker.com)
 # @File    : wechat.py
 # @DES     : 
-
-# Copyright 2016 MoSeeker

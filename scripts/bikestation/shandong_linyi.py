@@ -20,6 +20,7 @@ from scripts.parser import Parser
 
 # 临沂
 CITY_ID = 37013
+SID = 3
 
 
 class DingdaParser(Parser):
@@ -48,7 +49,6 @@ class DingdaParser(Parser):
                         if dingda_list.data and dingda_list.data.stationLists:
                             for item in dingda_list.data.stationLists:
                                 station = ObjectDict()
-                                station['cid'] = CITY_ID
                                 station['code'] = str(item.get('id'))
                                 station['status'] = const.STATUS_INUSE
                                 # station['type'] = ""
@@ -95,14 +95,14 @@ class DingdaParser(Parser):
         station = yield self.station_ps.get_station(conds={
             "code": item.code,
             "cid": CITY_ID,
+            "sid": SID,
         })
 
         if station:
             # 存在，则更新
             self.station_ps.update_station(
                 conds={
-                    "code": item.code,
-                    "cid": CITY_ID,
+                    "id": station.id
                 },
                 fields={
                     "status": item.status,
@@ -120,6 +120,7 @@ class DingdaParser(Parser):
             yield self.station_ps.add_station(fields={
                 "code": item.code,
                 "cid": CITY_ID,
+                "sid": SID,
                 "status": item.status,
                 # "total": item.total,
                 "name": item.name,
