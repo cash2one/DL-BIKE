@@ -47,6 +47,28 @@ class InfraPageService(PageService):
         raise gen.Return(ret)
 
     @gen.coroutine
+    def get_xian_nearby(self, longitude, latitude):
+        """
+        西安公共自行车，获得附近租赁点列表
+        :param longitude:
+        :param latitude:
+        :return:
+        """
+
+        ret = yield self.infra_ds.get_xian_nearby(longitude, latitude)
+        raise gen.Return(ret)
+
+    @gen.coroutine
+    def get_nanjing_list(self):
+        """
+        南京公共自行车，获得附近租赁点列表
+        :return:
+        """
+
+        ret = yield self.infra_ds.get_nanjing_list()
+        raise gen.Return(ret)
+
+    @gen.coroutine
     def get_ip_proxy(self, count=5, types=0, protocol=1, country='国内'):
         """
         获得代理 IP

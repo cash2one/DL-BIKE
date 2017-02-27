@@ -11,6 +11,7 @@ from util.common import ObjectDict
 ## 随机 User_agent
 COMMON_UA = [
     'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5 Build/MOB30Y) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile MQQBrowser/6.2 TBS/036555 Safari/537.36 MicroMessenger/6.3.22.821 NetType/WIFI Language/zh_CN',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27 MicroMessenger/6.5.5 NetType/WIFI Language/zh_CN'
 ]
 
 COMMON_HEADER = {
@@ -54,7 +55,6 @@ DATA_SOURCE = ObjectDict({
             'Accept-Encoding': 'gzip, deflate',
             'Accept-Language': 'zh-CN,en-US;q=0.8',
             'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 6 Build/MOB30Y) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile MQQBrowser/6.2 TBS/036555 Safari/537.36 MicroMessenger/6.3.22.821 NetType/WIFI Language/zh_CN',
-
         })
     }),
     "dingda_app": ObjectDict({
@@ -64,6 +64,28 @@ DATA_SOURCE = ObjectDict({
             'user-agent': "DDTrip/1.4.2 (iPhone; iOS 10.2.1; Scale/2.00)",
             'source': "IOS",
             'version': "1.4.0",
+        })
+    }),
+    "xian_app": ObjectDict({
+        "source_id": 4,
+        "header": ObjectDict({
+            'content-type': "application/x-www-form-urlencoded",
+            'cookie': "PHPSESSID=abtgvitarmb8cgs85a1jcm1c63",
+            'user-agent': "2.0.0 (iPhone; iOS 10.2.1; zh_CN)",
+            'host': "bike.phioc.cn",
+            'accept-encoding': "gzip",
+        })
+    }),
+    "nanjing_wechat": ObjectDict({
+        "source_id": 5,
+        "header": ObjectDict({
+            'Host': 'www.njlrsoft.cn',
+            'Referer': 'http://www.njlrsoft.cn/bicycle/lwzj.html?openid=oybL6s2gsJQ7UqDo7FSxIVQRk3fs&flag=wx',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'zh-CN',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27 MicroMessenger/6.5.5 NetType/WIFI Language/zh_CN',
         })
     }),
 })

@@ -3,6 +3,7 @@
 import random
 import ujson
 from tornado import gen
+import urllib.request
 
 import conf.path as path
 import conf.headers as headers
@@ -118,9 +119,73 @@ class InfraDataService(DataService):
 
         raise gen.Return(ret)
 
+    @gen.coroutine
+    def get_xian_nearby(self, longitude, latitude):
+
+        """
+        西安公共自行车，获得附近租赁点列表
+        demo:
+        payload = "longitude=108.91684&latitude=34.258907"
+
+        headers = {
+            'host': "bike.phioc.cn",
+            'content-type': "application/x-www-form-urlencoded",
+            'cookie': "PHPSESSID=abtgvitarmb8cgs85a1jcm1c63",
+            'user-agent': "2.0.0 (iPhone; iOS 10.2.1; zh_CN)",
+            'accept-encoding': "gzip",
+            'cache-control': "no-cache",
+            'postman-token': "487d8d8b-8946-40d4-5d38-12db68eb19c8"
+            }
+
+        conn.request("POST", "/api/get_around", payload, headers)
+        :param longitude:
+        :param latitude:
+        :return:
+        """
+
+        params = ObjectDict({
+            "longitude": longitude,
+            "latitude": latitude,
+        })
+
+        ip_proxys = yield self.get_ip_proxy()
+        ip_proxy = ip_proxys[random.randint(0,4)]
+
+        ret = yield http_fetch(path.XIAN_NEARBY_LIST, params, headers=headers.DATA_SOURCE.xian_app.header, timeout=30,
+                               proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
+        if not ret:
+            yield self.del_ip_proxy(ip_proxy.get("host"))
+            raise gen.Return(ObjectDict())
+
+        raise gen.Return(ret)
+
+    @gen.coroutine
+    def get_nanjing_list(self):
+
+        """
+        南京公共自行车，获得所有租赁点列表
+        demo:
+        conn = http.client.HTTPConnection("www.njlrsoft.cn")
+
+        headers = {
+            'cache-control': "no-cache",
+            'postman-token': "f1780baa-95a0-91d8-6ce3-8d84bcd50a53"
+            }
+
+        conn.request("GET", "/bicycle/assets/js/site.json", headers=headers)
+        :return:
+        """
+
+        ret = yield http_get(path.NANJING_LIST, headers=headers.DATA_SOURCE.nanjing_wechat.header, res_json=False, timeout=30)
+        ret = ret.decode('utf-8-sig') # 去除 dom 头
+        if not ret:
+            raise gen.Return(ObjectDict())
+        else:
+            raise gen.Return(ujson.decode(ret))
+
     @cache(ttl=600, key="get_ip_proxy", hash=False)
     @gen.coroutine
-    def get_ip_proxy(self, count=30, types=0, protocol=1, country='国内'):
+    def get_ip_proxy(self, count=50, types=0, protocol=1, country='国内'):
         """
         获得代理 IP
         referer: https://github.com/qiyeboy/IPProxyPool

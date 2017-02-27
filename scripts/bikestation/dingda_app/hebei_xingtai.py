@@ -3,7 +3,7 @@
 '''
 :author pyx0622@gmail.com
 :date 2016.08.13
-:desc 江苏连云港租赁点抓取脚本
+:desc 河北邢台租赁点抓取脚本
 
     由百度 place api 获得 POI 经纬度，再根据叮嗒出行的经纬度列表接口，由这些经纬度查询所有公共自行车租赁点
 
@@ -18,8 +18,8 @@ from tornado.util import ObjectDict
 import conf.common as const
 from scripts.parser import Parser
 
-# 连云港
-CITY_ID = 32007
+# 邢台
+CITY_ID = 13005
 SID = 3
 
 
@@ -143,7 +143,6 @@ class DingdaParser(Parser):
             "cid": CITY_ID,
             "status": const.STATUS_INUSE,
         })
-        self.logger.info("[scripts][beijing_beijing] SUCCESS")
 
     @gen.coroutine
     def runner(self):

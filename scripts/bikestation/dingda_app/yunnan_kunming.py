@@ -3,7 +3,7 @@
 '''
 :author pyx0622@gmail.com
 :date 2016.08.13
-:desc 北京租赁点抓取脚本
+:desc 云南昆明租赁点抓取脚本
 
     由百度 place api 获得 POI 经纬度，再根据叮嗒出行的经纬度列表接口，由这些经纬度查询所有公共自行车租赁点
 
@@ -18,14 +18,14 @@ from tornado.util import ObjectDict
 import conf.common as const
 from scripts.parser import Parser
 
-# 北京
-CITY_ID = 11000
-SID = 1
+# 昆明
+CITY_ID = 53001
+SID = 3
 
 
-class BeijingbeijingParser(Parser):
+class DingdaParser(Parser):
     """
-    北京租赁点抓取，包括市区，郊县。数据来自北京市公共自行车官方客户端
+    云南昆明租赁点抓取，包括市区，郊县。数据来自叮嗒出行客户端
     """
 
     @gen.coroutine
@@ -41,17 +41,19 @@ class BeijingbeijingParser(Parser):
         for region in regions:
             for q in const.BAIDU_POI_Q:
                 for page_num in range(0, 40):
-                    baidu_poi_list = yield self.infra_ps.get_city_poi(q, region.pname, region.rname, page_num, coord_type = 2)
+                    baidu_poi_list = yield self.infra_ps.get_city_poi(q, region.pname, region.rname, page_num, coord_type = 3)
+
                     for item in baidu_poi_list.results:
-                        data_list = yield self.infra_ps.get_beijing_nearby(item.get("location", {}).get("lng",""), item.get("location", {}).get("lat", ""))
-                        if data_list.success==1 and data_list.stationList:
-                            for item in data_list.stationList:
+                        dingda_list = yield self.infra_ps.get_dingda_nearby(item.get("location", {}).get("lng", ""),
+                                                                            item.get("location", {}).get("lat", ""))
+                        if dingda_list.data and dingda_list.data.stationLists:
+                            for item in dingda_list.data.stationLists:
                                 station = ObjectDict()
-                                station['code'] = str(item.get('stationNo'))
-                                station['status'] = const.STATUS_INUSE if item["state"] == 1 else const.STATUS_UNUSE
+                                station['code'] = str(item.get('id'))
+                                station['status'] = const.STATUS_INUSE
                                 # station['type'] = ""
-                                station['total'] = int(item['freeNum'] + item['rentNum'])
-                                station['name'] = item['stationName']
+                                # station['total'] = ""
+                                station['name'] = item['name']
                                 # station['address'] = ""
                                 # station['district'] = ""
                                 station['longitude'] = item["longitude"]
@@ -59,10 +61,11 @@ class BeijingbeijingParser(Parser):
                                 # station['service_time'] = ""
                                 # station['is_24'] = ""
                                 # station['is_duty'] = ""
-                                print (station)
+                                print(station)
                                 yield self.update_station(station)
 
                     x = int(random.random() * 10)
+                    print(x)
                     yield self.async_sleep(x)
 
         print ("end")
@@ -94,6 +97,7 @@ class BeijingbeijingParser(Parser):
             "cid": CITY_ID,
             "sid": SID,
         })
+
         if station:
             # 存在，则更新
             self.station_ps.update_station(
@@ -102,7 +106,7 @@ class BeijingbeijingParser(Parser):
                 },
                 fields={
                     "status": item.status,
-                    "total": item.total,
+                    # "total": item.total,
                     "name": item.name,
                     # "address": item.address,
                     # "district": item.district,
@@ -118,7 +122,7 @@ class BeijingbeijingParser(Parser):
                 "cid": CITY_ID,
                 "sid": SID,
                 "status": item.status,
-                "total": item.total,
+                # "total": item.total,
                 "name": item.name,
                 # "address": item.address,
                 # "district": item.district,
@@ -139,7 +143,6 @@ class BeijingbeijingParser(Parser):
             "cid": CITY_ID,
             "status": const.STATUS_INUSE,
         })
-        self.logger.info("[scripts][beijing_beijing] SUCCESS")
 
     @gen.coroutine
     def runner(self):
@@ -148,6 +151,6 @@ class BeijingbeijingParser(Parser):
 
 
 if __name__ == "__main__":
-    jp = BeijingbeijingParser()
+    jp = DingdaParser()
     jp.runner()
     IOLoop.instance().start()
