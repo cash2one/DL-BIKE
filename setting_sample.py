@@ -40,3 +40,6 @@ settings['store_options'] = {
     'redis_pass': '',
     'max_connections': 500
 }
+
+settings['proxy'] = "http://127.0.0.1:8016"
+settings['baidu_ak'] = "lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf"

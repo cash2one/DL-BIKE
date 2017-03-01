@@ -109,7 +109,7 @@ class InfraDataService(DataService):
         })
 
         ip_proxys = yield self.get_ip_proxy()
-        ip_proxy = ip_proxys[random.randint(0,4)]
+        ip_proxy = ip_proxys[random.randint(0,2)]
 
         ret = yield http_fetch(path.BEIJING_NEARBY_LIST, params, headers=headers.DATA_SOURCE.beijing_app.header, timeout=30,
                                proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
@@ -149,7 +149,7 @@ class InfraDataService(DataService):
         })
 
         ip_proxys = yield self.get_ip_proxy()
-        ip_proxy = ip_proxys[random.randint(0,4)]
+        ip_proxy = ip_proxys[random.randint(0,2)]
 
         ret = yield http_fetch(path.XIAN_NEARBY_LIST, params, headers=headers.DATA_SOURCE.xian_app.header, timeout=30,
                                proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
@@ -204,7 +204,7 @@ class InfraDataService(DataService):
             # "country": country
         })
 
-        ret = yield http_get(path.IP_PROXY_GET, params, res_json=False)
+        ret = yield http_get(settings.proxy, params, res_json=False)
         res_list = list()
         ret = ujson.decode(to_str(ret))
 
@@ -232,6 +232,6 @@ class InfraDataService(DataService):
             "ip": ip,
         })
 
-        ret = yield http_get(path.IP_PROXY_DELETE, params, res_json=False)
+        ret = yield http_get("{}/{}".format(settings.proxy, "delete"), params, res_json=False)
         self.redis.delete("infra:get_ip_proxy:get_ip_proxy")
         raise gen.Return(ret)
