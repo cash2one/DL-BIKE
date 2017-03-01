@@ -143,6 +143,7 @@ class DingdaParser(Parser):
             "cid": CITY_ID,
             "status": const.STATUS_INUSE,
         })
+        self.logger.info("[scripts][beijing_beijing] SUCCESS")
 
     @gen.coroutine
     def runner(self):
