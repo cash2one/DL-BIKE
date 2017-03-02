@@ -8,15 +8,13 @@
     由百度 place api 获得 POI 经纬度，再根据叮嗒出行的经纬度列表接口，由这些经纬度查询所有公共自行车租赁点
 
 '''
-import random
 import time
 import traceback
+
 from tornado import gen
 from tornado.ioloop import IOLoop
-from tornado.util import ObjectDict
 
-import conf.common as const
-from scripts.parser import Parser
+from scripts.bikestation.parser import Parser
 
 # 北京
 CITY_ID = 11000

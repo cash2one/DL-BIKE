@@ -2,6 +2,7 @@
 
 import re
 from app import logger
+import conf.common as const
 from service.page.wechat.city import CityPageService
 from service.page.wechat.scrap_log import ScrapLogPageService
 from service.page.wechat.station import StationPageService
@@ -19,6 +20,7 @@ class Parser():
         self.infra_ps = InfraPageService()
         self.region_ps = RegionPageService()
         self.logger = logger
+        self.const = const
 
     def rhtml(self, html):
         p = re.compile('<[^>]+>')

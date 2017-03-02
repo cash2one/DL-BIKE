@@ -39,7 +39,7 @@ class InfraDataService(DataService):
             "q": q,
             "tag": tag,
             "output": "json",
-            "ak": settings.baidu_ak,
+            "ak": settings['baidu_ak'],
             "coord_type": coord_type,
             "page_num": page_num,
             "page_size": page_size,
@@ -204,7 +204,7 @@ class InfraDataService(DataService):
             # "country": country
         })
 
-        ret = yield http_get(settings.proxy, params, res_json=False)
+        ret = yield http_get(settings['proxy'], params, res_json=False)
         res_list = list()
         ret = ujson.decode(to_str(ret))
 
@@ -232,6 +232,6 @@ class InfraDataService(DataService):
             "ip": ip,
         })
 
-        ret = yield http_get("{}/{}".format(settings.proxy, "delete"), params, res_json=False)
+        ret = yield http_get("{}/{}".format(settings['proxy'], "delete"), params, res_json=False)
         self.redis.delete("infra:get_ip_proxy:get_ip_proxy")
         raise gen.Return(ret)

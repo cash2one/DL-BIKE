@@ -13,15 +13,15 @@
 import random
 import time
 import traceback
+
 from tornado import gen
 from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
 
-import conf.common as const
 import conf.headers as const_headers
+from scripts.bikestation.parser import Parser
 from util.tool.http_tool import http_get
-from util.tool.str_tool import to_bytes, to_str
-from scripts.parser import Parser
+from util.tool.str_tool import to_str
 
 AREA_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html'
 STATIONS_LIST = 'http://bjggzxc.btic.org.cn/Bicycle/BicycleServlet?action=GetBicycleStatus'
@@ -54,7 +54,7 @@ class BeijingParser(Parser):
             # 增加抓取记录 log
             yield self.scraplog_ps.add_scrap_log(fields={
                 "cid": CITY_ID,
-                "status": const.STATUS_UNUSE,
+                "status": self.const.STATUS_UNUSE,
             })
 
     @gen.coroutine
@@ -110,7 +110,7 @@ class BeijingParser(Parser):
                             break
                         station = ObjectDict()
                         station['code'] = str(item.get('stationCode'))
-                        station['status'] = const.STATUS_INUSE if item['status'] == 2 else const.STATUS_UNUSE
+                        station['status'] = self.const.STATUS_INUSE if item['status'] == 2 else self.const.STATUS_UNUSE
                         # station['type'] = item['type']  暂时不清楚含义
                         station['total'] = int(item['bikesNum'])
                         station['name'] = item['name']
@@ -189,7 +189,7 @@ class BeijingParser(Parser):
         # 增加抓取记录 log
         yield self.scraplog_ps.add_scrap_log(fields={
             "cid": CITY_ID,
-            "status": const.STATUS_INUSE,
+            "status": self.const.STATUS_INUSE,
         })
 
     @gen.coroutine

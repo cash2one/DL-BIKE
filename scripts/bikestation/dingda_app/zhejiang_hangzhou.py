@@ -11,12 +11,12 @@
 import random
 import time
 import traceback
+
 from tornado import gen
 from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
 
-import conf.common as const
-from scripts.parser import Parser
+from scripts.bikestation.parser import Parser
 
 # 杭州
 CITY_ID = 33001
@@ -39,7 +39,7 @@ class DingdaParser(Parser):
     def get_stations(self):
         regions = yield self.get_regions()
         for region in regions:
-            for q in const.BAIDU_POI_Q:
+            for q in self.const.BAIDU_POI_Q:
                 for page_num in range(0, 40):
                     baidu_poi_list = yield self.infra_ps.get_city_poi(q, region.pname, region.rname, page_num, coord_type = 3)
 
@@ -50,7 +50,7 @@ class DingdaParser(Parser):
                             for item in dingda_list.data.stationLists:
                                 station = ObjectDict()
                                 station['code'] = str(item.get('id'))
-                                station['status'] = const.STATUS_INUSE
+                                station['status'] = self.const.STATUS_INUSE
                                 # station['type'] = ""
                                 # station['total'] = ""
                                 station['name'] = item['name']
@@ -81,7 +81,7 @@ class DingdaParser(Parser):
             # 增加抓取记录 log
             yield self.scraplog_ps.add_scrap_log(fields={
                 "cid": CITY_ID,
-                "status": const.STATUS_UNUSE,
+                "status": self.const.STATUS_UNUSE,
             })
 
     @gen.coroutine
@@ -141,7 +141,7 @@ class DingdaParser(Parser):
         # 增加抓取记录 log
         yield self.scraplog_ps.add_scrap_log(fields={
             "cid": CITY_ID,
-            "status": const.STATUS_INUSE,
+            "status": self.const.STATUS_INUSE,
         })
 
     @gen.coroutine

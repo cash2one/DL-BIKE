@@ -10,12 +10,12 @@
 '''
 import time
 import traceback
+
 from tornado import gen
 from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
 
-import conf.common as const
-from scripts.parser import Parser
+from scripts.bikestation.parser import Parser
 
 # 南京
 CITY_ID = 32001
@@ -35,7 +35,7 @@ class JiangsunanjingParser(Parser):
             for item in data_list.get("netword"):
                 station = ObjectDict()
                 station['code'] = str(item.get('networdId'))
-                station['status'] = const.STATUS_INUSE
+                station['status'] = self.const.STATUS_INUSE
                 # station['type'] = ""
                 # station['total'] = ""
                 station['name'] = item['networdName']
@@ -60,7 +60,7 @@ class JiangsunanjingParser(Parser):
             # 增加抓取记录 log
             yield self.scraplog_ps.add_scrap_log(fields={
                 "cid": CITY_ID,
-                "status": const.STATUS_UNUSE,
+                "status": self.const.STATUS_UNUSE,
             })
 
     @gen.coroutine
@@ -119,7 +119,7 @@ class JiangsunanjingParser(Parser):
         # 增加抓取记录 log
         yield self.scraplog_ps.add_scrap_log(fields={
             "cid": CITY_ID,
-            "status": const.STATUS_INUSE,
+            "status": self.const.STATUS_INUSE,
         })
 
     @gen.coroutine
