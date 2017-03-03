@@ -19,7 +19,7 @@ from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
 
 import conf.headers as const_headers
-from scripts.bikestation.parser import Parser
+from scripts.parser import Parser
 from util.tool.http_tool import http_get
 from util.tool.str_tool import to_str
 

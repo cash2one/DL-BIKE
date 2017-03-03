@@ -14,7 +14,7 @@ import traceback
 from tornado import gen
 from tornado.ioloop import IOLoop
 
-from scripts.bikestation.parser import Parser
+from scripts.parser import Parser
 
 # 北京
 CITY_ID = 11000
