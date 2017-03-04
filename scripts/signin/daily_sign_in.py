@@ -5,8 +5,9 @@
 # @File    : daily_sign_in.py
 # @DES     : 
 
-
 import http.client
+
+from util.tool.date_tool import curr_now
 
 def qyer_sign_in():
 
@@ -31,7 +32,7 @@ def qyer_sign_in():
     res = conn.getresponse()
     data = res.read()
 
-    print(data.decode("utf-8"))
+    print("[qyer][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
 def smzdm_sign_in():
 
@@ -55,7 +56,8 @@ def smzdm_sign_in():
     res = conn.getresponse()
     data = res.read()
 
-    print(data.decode("utf-8"))
+    print("[smzdm][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
 
 def music_163_sign_in():
 
@@ -75,7 +77,9 @@ def music_163_sign_in():
 
     conn.request("POST", "/eapi/point/dailyTask", payload, headers)
 
-    res = conn.getresponse()
+    conn.getresponse()
+
+    print("[163music][time:{}]".format(curr_now()))
 
 if __name__ == '__main__':
 

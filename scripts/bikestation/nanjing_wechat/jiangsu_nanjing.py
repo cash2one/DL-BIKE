@@ -15,7 +15,7 @@ from tornado import gen
 from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
 
-from bike.scripts.parser import Parser
+from scripts.parser import Parser
 
 # 南京
 CITY_ID = 32001
