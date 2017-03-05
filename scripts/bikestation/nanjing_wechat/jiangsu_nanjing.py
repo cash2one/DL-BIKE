@@ -52,18 +52,6 @@ class JiangsunanjingParser(Parser):
         raise gen.Return(True)
 
     @gen.coroutine
-    def main(self):
-        try:
-            yield self.get_stations()
-        except Exception as e:
-            self.logger.error(traceback.format_exc())
-            # 增加抓取记录 log
-            yield self.scraplog_ps.add_scrap_log(fields={
-                "cid": CITY_ID,
-                "status": self.const.STATUS_UNUSE,
-            })
-
-    @gen.coroutine
     def update_station(self, item):
 
         """
@@ -114,18 +102,25 @@ class JiangsunanjingParser(Parser):
         # Sleep without blocking the IOLoop
         yield gen.Task(IOLoop.instance().add_timeout, time.time() + timeout)
 
-    def close(self):
-        IOLoop.instance().stop()
+    @gen.coroutine
+    def runner(self):
+        try:
+            yield self.get_stations()
+        except Exception as e:
+            self.logger.error(traceback.format_exc())
+            # 增加抓取记录 log
+            yield self.scraplog_ps.add_scrap_log(fields={
+                "cid": CITY_ID,
+                "status": self.const.STATUS_UNUSE,
+            })
+
         # 增加抓取记录 log
         yield self.scraplog_ps.add_scrap_log(fields={
             "cid": CITY_ID,
             "status": self.const.STATUS_INUSE,
         })
 
-    @gen.coroutine
-    def runner(self):
-        yield self.main()
-        self.close()
+        IOLoop.instance().stop()
 
 
 if __name__ == "__main__":

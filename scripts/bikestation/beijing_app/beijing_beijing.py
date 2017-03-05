@@ -43,6 +43,8 @@ class BeijingbeijingParser(Parser):
                 for page_num in range(0, 40):
                     baidu_poi_list = yield self.infra_ps.get_city_poi(q, region.pname, region.rname, page_num, coord_type = 2)
                     for item in baidu_poi_list.results:
+                        if not item.get("location"):
+                            continue
                         data_list = yield self.infra_ps.get_beijing_nearby(item.get("location", {}).get("lng",""), item.get("location", {}).get("lat", ""))
                         if data_list.success==1 and data_list.stationList:
                             for item in data_list.stationList:
@@ -68,18 +70,6 @@ class BeijingbeijingParser(Parser):
         print ("end")
 
         raise gen.Return(True)
-
-    @gen.coroutine
-    def main(self):
-        try:
-            yield self.get_stations()
-        except Exception as e:
-            self.logger.error(traceback.format_exc())
-            # 增加抓取记录 log
-            yield self.scraplog_ps.add_scrap_log(fields={
-                "cid": CITY_ID,
-                "status": self.const.STATUS_UNUSE,
-            })
 
     @gen.coroutine
     def update_station(self, item):
@@ -132,18 +122,25 @@ class BeijingbeijingParser(Parser):
         # Sleep without blocking the IOLoop
         yield gen.Task(IOLoop.instance().add_timeout, time.time() + timeout)
 
-    def close(self):
-        IOLoop.instance().stop()
+    @gen.coroutine
+    def runner(self):
+        try:
+            yield self.get_stations()
+        except Exception as e:
+            self.logger.error(traceback.format_exc())
+            # 增加抓取记录 log
+            yield self.scraplog_ps.add_scrap_log(fields={
+                "cid": CITY_ID,
+                "status": self.const.STATUS_UNUSE,
+            })
+
         # 增加抓取记录 log
         yield self.scraplog_ps.add_scrap_log(fields={
             "cid": CITY_ID,
             "status": self.const.STATUS_INUSE,
         })
 
-    @gen.coroutine
-    def runner(self):
-        yield self.main()
-        self.close()
+        IOLoop.instance().stop()
 
 
 if __name__ == "__main__":

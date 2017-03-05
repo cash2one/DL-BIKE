@@ -3,20 +3,21 @@
 import random
 import ujson
 from tornado import gen
-import urllib.request
 
 import conf.path as path
 import conf.headers as headers
 from setting import settings
 from service.data.base import DataService
+from cache.ipproxy import IpproxyCache
 from util.common import ObjectDict
-from util.common.decorator import cache
 from util.tool.date_tool import curr_now
 from util.tool.str_tool import md5Encode, to_str
-from util.tool.http_tool import http_get, http_post, http_put, http_delete, http_patch, http_fetch
+from util.tool.http_tool import http_get, http_post, http_fetch
 
 
 class InfraDataService(DataService):
+
+    ipproxy = IpproxyCache()
 
     """对接网络请求服务"""
 
@@ -67,14 +68,13 @@ class InfraDataService(DataService):
             "latitude": latitude,
         })
 
-        ip_proxys = yield self.get_ip_proxy()
-        ip_proxy = ip_proxys[random.randint(0,4)]
+        host, port = yield self.get_ip_proxy()
 
         ret = yield http_get(path.DINGDA_NEARBY_LIST, params, headers=headers.DATA_SOURCE.dingda_app.header, timeout=30,
-                             proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
+                             proxy_host=host, proxy_port=port)
 
         if not ret:
-            yield self.del_ip_proxy(ip_proxy.get("host"))
+            yield self.del_ip_proxy(host)
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
@@ -108,13 +108,12 @@ class InfraDataService(DataService):
             "time": curr_now()
         })
 
-        ip_proxys = yield self.get_ip_proxy()
-        ip_proxy = ip_proxys[random.randint(0,2)]
+        host, port = yield self.get_ip_proxy()
 
         ret = yield http_fetch(path.BEIJING_NEARBY_LIST, params, headers=headers.DATA_SOURCE.beijing_app.header, timeout=30,
-                               proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
+                               proxy_host=host, proxy_port=port)
         if not ret:
-            yield self.del_ip_proxy(ip_proxy.get("host"))
+            yield self.del_ip_proxy(host)
             raise gen.Return(ObjectDict())
 
         raise gen.Return(ret)
@@ -148,13 +147,12 @@ class InfraDataService(DataService):
             "latitude": latitude,
         })
 
-        ip_proxys = yield self.get_ip_proxy()
-        ip_proxy = ip_proxys[random.randint(0,2)]
+        host, port = yield self.get_ip_proxy()
 
         ret = yield http_fetch(path.XIAN_NEARBY_LIST, params, headers=headers.DATA_SOURCE.xian_app.header, timeout=30,
-                               proxy_host=ip_proxy.get("host"), proxy_port=ip_proxy.get("port"))
+                               proxy_host=host, proxy_port=port)
         if not ret:
-            yield self.del_ip_proxy(ip_proxy.get("host"))
+            yield self.del_ip_proxy(host)
             raise gen.Return(ObjectDict())
 
         raise gen.Return(ret)
@@ -183,7 +181,6 @@ class InfraDataService(DataService):
         else:
             raise gen.Return(ujson.decode(ret))
 
-    @cache(ttl=600, key="get_ip_proxy", hash=False)
     @gen.coroutine
     def get_ip_proxy(self, count=50, types=0, protocol=1, country='国内'):
         """
@@ -197,26 +194,43 @@ class InfraDataService(DataService):
         :return:
         """
 
-        params = ObjectDict({
-            "types": types,
-            "protocol": protocol,
-            "count": count,
-            # "country": country
-        })
-
-        ret = yield http_get(settings['proxy'], params, res_json=False)
-        res_list = list()
-        ret = ujson.decode(to_str(ret))
-
-        for item in ret:
-            ip_dict = ObjectDict({
-                "host": item[0],
-                "port": item[1],
-                "score": item[2]
+        ipproxy_session_dict = self.ipproxy.get_ipproxy_session()
+        if ipproxy_session_dict:
+            ip_proxys = list(ipproxy_session_dict.values())
+            if len(ip_proxys) > 3:
+                ip_proxy = ip_proxys[random.randint(0,2)]
+                return ip_proxy.get("host"), ip_proxy.get("port")
+            else:
+                return "",""
+        else:
+            params = ObjectDict({
+                "types": types,
+                "protocol": protocol,
+                "count": count,
+                # "country": country
             })
-            res_list.append(ip_dict)
 
-        raise gen.Return(res_list)
+            ret = yield http_get(settings['proxy'], params, res_json=False)
+            res_dict = ObjectDict()
+            ret = ujson.decode(to_str(ret))
+
+            for item in ret:
+                ip_dict = ObjectDict({
+                    "host": item[0],
+                    "port": item[1],
+                    "score": item[2]
+                })
+                res_dict.update({
+                    item[0]: ip_dict
+                })
+            self.ipproxy.set_ipproxy_session(res_dict)
+
+            ip_proxys = list(res_dict.values())
+            if len(ip_proxys) > 3:
+                ip_proxy = ip_proxys[random.randint(0,2)]
+                return ip_proxy.get("host"), ip_proxy.get("port")
+            else:
+                return "",""
 
     @gen.coroutine
     def del_ip_proxy(self, ip):
@@ -228,10 +242,15 @@ class InfraDataService(DataService):
         :return:
         """
 
+        ipproxy_session_dict = self.ipproxy.get_ipproxy_session()
+
+        if ipproxy_session_dict:
+            ipproxy_session_dict.pop(ip)
+            self.ipproxy.set_ipproxy_session(ipproxy_session_dict)
+
         params = ObjectDict({
             "ip": ip,
         })
 
         ret = yield http_get("{}/{}".format(settings['proxy'], "delete"), params, res_json=False)
-        self.redis.delete("infra:get_ip_proxy:get_ip_proxy")
         raise gen.Return(ret)

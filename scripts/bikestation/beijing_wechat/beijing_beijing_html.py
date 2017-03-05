@@ -36,28 +36,6 @@ class BeijingParser(Parser):
     """
 
     @gen.coroutine
-    def parse_html(self):
-        try:
-            source = yield http_get(route=AREA_LIST,
-                                    res_json=False,
-                                    headers=const_headers.DATA_SOURCE.beijing_wechat.header_html,
-                                    timeout=20)
-            source = self.replace_white_within_span(to_str(source))
-            source = self.remove_white_character(source)
-            html = self.nbsp2space(source)
-
-            beijing_list = self.parse_list(to_str(html))
-            print (beijing_list)
-            yield self.parse_html_stations(beijing_list)
-        except Exception as e:
-            self.logger.error(traceback.format_exc())
-            # 增加抓取记录 log
-            yield self.scraplog_ps.add_scrap_log(fields={
-                "cid": CITY_ID,
-                "status": self.const.STATUS_UNUSE,
-            })
-
-    @gen.coroutine
     def get_regions(self, rname):
         regions = yield self.region_ps.get_regions(conds={
             "cid": CITY_ID,
@@ -184,18 +162,36 @@ class BeijingParser(Parser):
         # Sleep without blocking the IOLoop
         yield gen.Task(IOLoop.instance().add_timeout, time.time() + timeout)
 
-    def close(self):
-        IOLoop.instance().stop()
+    @gen.coroutine
+    def runner(self):
+        try:
+            source = yield http_get(route=AREA_LIST,
+                                    res_json=False,
+                                    headers=const_headers.DATA_SOURCE.beijing_wechat.header_html,
+                                    timeout=20)
+            source = self.replace_white_within_span(to_str(source))
+            source = self.remove_white_character(source)
+            html = self.nbsp2space(source)
+
+            beijing_list = self.parse_list(to_str(html))
+            print (beijing_list)
+            yield self.parse_html_stations(beijing_list)
+        except Exception as e:
+            self.logger.error(traceback.format_exc())
+            # 增加抓取记录 log
+            yield self.scraplog_ps.add_scrap_log(fields={
+                "cid": CITY_ID,
+                "status": self.const.STATUS_UNUSE,
+            })
+
+
         # 增加抓取记录 log
         yield self.scraplog_ps.add_scrap_log(fields={
             "cid": CITY_ID,
             "status": self.const.STATUS_INUSE,
         })
 
-    @gen.coroutine
-    def runner(self):
-        yield self.parse_html()
-        self.close()
+        IOLoop.instance().stop()
 
 
 if __name__ == "__main__":
