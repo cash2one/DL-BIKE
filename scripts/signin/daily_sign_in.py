@@ -81,8 +81,88 @@ def music_163_sign_in():
 
     print("[163music][time:{}]".format(curr_now()))
 
+def nuomi_sign_in():
+
+    """百度糯米签到"""
+    conn = http.client.HTTPConnection("180.97.93.28")
+
+    headers = {
+        'host': "app.nuomi.com",
+        'cookie': "STOKEN=a6a802f9721b1ccb9df862df46eecc1f8b10b7978af359d9f51bf31935a9cf39; bn_na_ctag=W3siayI6Imljb25fNCIsInMiOiJ0dWFuIiwieCI6IiIsInYiOiIxMDkwMDAwMCIsInQiOiIxNDg4OTg0MTczIn1d; bn_na_home_entry=W3siayI6IjQiLCJzIjoidG9waWNvbiIsIngiOiIiLCJ2IjoiMTA5MDAwMDAiLCJ0IjoiMTQ4ODk4NDE3MyJ9XQ==; bn_na_copid=7f889be41fa4bcfb75df92aa29a13e93; BAINUOCUID=812b949966edc7a0043332b9f0e7819898906605; bn_na_component_sinfo=%7B%22pl_sinfo%22%3A%22%7B%5C%22NA%5C%22%3A%5B777%2C523%2C326%2C533%2C253%2C218%2C539%2C327%2C375%2C585%2C413%2C648%2C347%2C734%2C615%2C382%2C378%2C671%2C760%2C452%2C607%2C782%2C619%2C455%2C552%2C636%2C605%2C683%2C628%2C633%2C642%2C771%2C654%2C655%2C665%2C673%2C675%2C678%2C695%2C696%2C700%2C737%2C711%2C792%2C728%2C804%2C748%2C773%2C762%2C774%2C781%2C803%5D%7D%5Cn%22%2C%22app_v%22%3A%227.1.0%22%7D; bn_na_smallflow_info=%7B%22pl_sinfo%22%3A%22%7B%5C%22NA%5C%22%3A%5B777%2C523%2C326%2C533%2C253%2C218%2C539%2C327%2C375%2C585%2C413%2C648%2C347%2C734%2C615%2C382%2C378%2C671%2C760%2C452%2C607%2C782%2C619%2C455%2C552%2C636%2C605%2C683%2C628%2C633%2C642%2C771%2C654%2C655%2C665%2C673%2C675%2C678%2C695%2C696%2C700%2C737%2C711%2C792%2C728%2C804%2C748%2C773%2C762%2C774%2C781%2C803%5D%7D%5Cn%22%7D; UID=161275167; BAIDUID=ED6800311E782FD7EC2BDACABD76C793:FG=1; bn_v=7.1.0; na_pdqab_new=812b949966edc7a0043332b9f0e7819898906605; BDUSS=FkRzJMMm9KbmxGMHE2SkY1U01IekdTMmt-UWZ4VHl2cEhGQUhZaUdodzFwcUZZSVFBQUFBJCQAAAAAAAAAAAEAAAAf3ZwJt7nQobezAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADUZelg1GXpYcG; na_qab=c75f7a1f7f8196b59ffeb9f0c5553ab4; moudle_pdqab=voucher; access_log=27a05c44016d5fac9e924fb351caaf89",
+        'user-agent': "Bainuo/7.1.0 (iPhone; iOS 10.2.1; Scale/2.00)",
+        'cache-control': "no-cache",
+        'postman-token': "14adbbb8-0f83-f272-0edd-0319327bf49b"
+    }
+
+    conn.request("GET",
+                 "/naserver/user/memberpointreceive?appid=ios&appkey=sFTRwpfNpZihllpqhpionpCmnJ%2Box6WSztKXZJ6ppqGeVI2DpM6Yq5qgqp2Gb1ua0adZXVjSqdTJ2ZeqUm5ZoqqhzspW3w%3D%3D&bduss=FkRzJMMm9KbmxGMHE2SkY1U01IekdTMmt-UWZ4VHl2cEhGQUhZaUdodzFwcUZZSVFBQUFBJCQAAAAAAAAAAAEAAAAf3ZwJt7nQobezAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADUZelg1GXpYcG&bnjsv=1.4&channel=com_dot_apple&cityid=200010000&compId=points&compV=1.7.0&cuid=812b949966edc7a0043332b9f0e7819898906605&device=iPhone&ha=5&lbsidfa=00000000-0000-0000-0000-000000000000&location=31.328280%2C121.388300&net=wifi&os=10.2&outer_channel=&page_type=component&power=0.64&sheight=1334&sign=5ab0c43622562c72db15e578654b7714&swidth=750&terminal_type=ios&timestamp=1488984174393&tn=ios&uuid=812b949966edc7a0043332b9f0e7819898906605&v=1.1.0",
+                 headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[nuomi][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+def gewara_sign_in():
+
+    """格瓦拉签到"""
+    conn = http.client.HTTPSConnection("m.gewara.com")
+
+    payload = ""
+
+    headers = {
+        'host': "m.gewara.com",
+        'accept': "text/javascript, text/html, application/xml, text/xml, */*",
+        'x-requested-with': "XMLHttpRequest",
+        'if-modified-since': "0",
+        'cache-control': "no-cache",
+        'content-type': "application/x-www-form-urlencoded",
+        'origin': "https://m.gewara.com",
+        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27 GewaraMovie/8.1.0 appkey/iphoneV64 appSource/AS02 apptype/cinema osType/IPHONE from/appiphoneV64 deviceId/00000000-0000-0000-0000-000000000000 uuid/374E6744-BA1D-4619-8C87-81E077924D1D citycode/310000",
+        'referer': "https://m.gewara.com/touch/app/point/index.xhtml",
+        'cookie': "citycode=310000; _gwtc_=1488984855597_nuWX_901f@843324FB33367FAE8CD8624CDF6E3B06; appVersion=0.1.0; apptype=cinema; email=QzVqc2NIV3BYTXlkbTJhLW9wZW5Ac2luYS5jb20=; from=app; headpic=aW1nL2RlZmF1bHRfaGVhZC5wbmc=; mobile=MTgwNTg4MDgyNjM=; nickname=UGFuN2Fu; osType=IPHONE",
+        'postman-token': "32e8bce6-10d9-9172-3b06-1b4692362696"
+    }
+
+    conn.request("POST", "/touch/app/point/getDayPoint.xhtml", payload, headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[gewara][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+def ctrip_sign_in():
+
+    """携程签到"""
+
+    conn = http.client.HTTPSConnection("m.ctrip.com")
+
+    payload = "{\"head\":{\"cid\":\"12021067210004192157\",\"ctok\":\"\",\"cver\":\"701.002\",\"lang\":\"01\",\"sid\":\"8890\",\"syscode\":\"12\",\"auth\":\"83B18B3D138789BD220EC796908422BAFAE5CCC3779EC87911823971FFE6EDBE\",\"extension\":[{\"name\":\"protocal\",\"value\":\"file\"}]},\"contentType\":\"json\"}"
+
+    headers = {
+        'host': "m.ctrip.com",
+        'content-type': "application/json",
+        'origin': "file://",
+        'cookie': "MKT_Pagesource=H5; _jzqco=%7C%7C%7C%7C1489215185494%7C1.905210666.1455900703011.1489215216335.1489215229617.1489215216335.1489215229617.0.0.0.32.32; cticket=83B18B3D138789BD220EC796908422BAFAE5CCC3779EC87911823971FFE6EDBE; isNonUser=false; _n_cid=12021067210004192157; _abtest_userid=467b8ea3-4289-4840-978d-0ead9501dc78; _ga=GA1.2.499933121.1444525450; __zpspc=9.1.1444525449.1444525449.1%234%7C%7C%7C%7C%7C%23; _bfa=1.1444525448857.2mqlyq.1.1444525448857.1444525448857.1.1",
+        'accept': "application/json",
+        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508_eb64__Ctrip_CtripWireless_7.1.2",
+        'cache-control': "no-cache",
+        'postman-token': "b29a6d46-9414-6e3e-cfc5-4108812251ad"
+    }
+
+    conn.request("POST", "/restapi/soa2/11631/json/CheckIn", payload, headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[ctrip][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
 if __name__ == '__main__':
 
     qyer_sign_in()
     smzdm_sign_in()
     music_163_sign_in()
+    nuomi_sign_in()
+    gewara_sign_in()
+    ctrip_sign_in()
+
