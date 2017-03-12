@@ -200,11 +200,10 @@ class WechatOauthHandler(MetaBaseHandler):
         验证 POST 数据是否真实有效
         :return:
         """
-        if self.settings.token:
-            return False
+        toke = "63659a086f2011e5a2be00163e004a1f"
 
         try:
-            ret, hashstr = SHA1().getSHA1(self.settings.token,
+            ret, hashstr = SHA1().getSHA1(toke,
                                           self.params.timestamp,
                                           self.params.nonce,
                                           '')
