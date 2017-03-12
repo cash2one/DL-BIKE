@@ -199,24 +199,11 @@ class MetaBaseHandler(AtomHandler):
         """
 
         if http_code == 403:
-            self.render_page(
-                'system/info.html',
-                data=ObjectDict(
-                    code=http_code,
-                    css="warning",
-                    message=const.NOT_AUTHORIZED))
+            self.send_json_error(message=const.NOT_AUTHORIZED, http_code=http_code)
         elif http_code == 404:
-            self.render_page(
-                'system/info.html',
-                data=ObjectDict(
-                    code=http_code,
-                    message=const.NO_DATA))
+            self.send_json_error(message=const.NO_DATA, http_code=http_code)
         else:
-            self.render_page(
-                'system/info.html',
-                data=ObjectDict(
-                    code=http_code,
-                    message=const.UNKNOWN_DEFAULT))
+            self.send_json_error(message=const.UNKNOWN_DEFAULT, http_code=http_code)
 
     def render(
             self,
