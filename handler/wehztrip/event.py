@@ -39,7 +39,11 @@ class WechatOauthHandler(MetaBaseHandler):
 
     @gen.coroutine
     def get(self):
-        self.send_xml()
+        echostr = self.params.echostr
+        if echostr and self.verification():
+            self.write(echostr)
+        else:
+            self.send_xml()
 
     @gen.coroutine
     def post(self):
