@@ -244,7 +244,7 @@ class InfraDataService(DataService):
 
         ipproxy_session_dict = self.ipproxy.get_ipproxy_session()
 
-        if ipproxy_session_dict:
+        if ipproxy_session_dict and ipproxy_session_dict.has_key(ip):
             ipproxy_session_dict.pop(ip)
             self.ipproxy.set_ipproxy_session(ipproxy_session_dict)
 

@@ -23,8 +23,6 @@ def qyer_sign_in():
         'connection': "keep-alive",
         'cookie': "__utma=253397513.1667471721.1476627137.1486093623.1486177584.17; __utmb=253397513.1.10.1486177584; __utmc=253397513; __utmt=1; __utmz=253397513.1476627137.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _guid=c50082bd-15a4-c693-dc03-24ffffdcfad0; init_refer=; new_session=1; new_uv=17; session_time=1486177583; cdb_auth=2fd7%2BuJDATGAZtUZ0sEocWnV6ZVZ79H5s14PpNFflLUhPiIP%2B6uVCZhQfqg1CEo2fqc3dWPe6fqcql919ot4FPqJEJd3fA; als=0",
         'user-agent': "QYER/7.4 (iPhone; iOS 10.2.1; Scale/2.00)",
-        'cache-control': "no-cache",
-        'postman-token': "3e10c310-f214-0af9-dea6-d2ed1fcd4c16"
     }
 
     conn.request("POST", "/qyer/mileage/sign/add_mileage", payload, headers)
@@ -47,8 +45,6 @@ def smzdm_sign_in():
         'cookie': "device_id=0ggWhPmKxHzTDvKF24YJ3y6Py1Qv9dNyjVHDEwazEAUN9a5RZWpvpQ==; device_name=iPhone 6s; device_push=notifications_are_disabled; device_s=4AV2/Xtutz19ebZ6LkBPT5PdjEzAF2arHXBblhuQMRuYGa4RMTPgI1zQhJe81ZkHz8fVBPKucw=; device_smzdm=iphone; device_smzdm_version=7.6; device_system_version=10.2.1; device_type=iPhone8,1; login=1; network=WiFi_Net; partner_id=0; partner_name=AppStore; sess=54537f7044811152704; smzdm_id=6418214012; __ckguid=lpi28Cg154wJ7N4VkL4H6N4; __jsluid=ab4c1ed89fd3fb715b47dd3f4f402848; __ckguid=ecu4hlnBgB7f1VftHOl3Co2; _ga=GA1.2.1848225762.1447993948; Hm_lvt_9b7ac3d38f30fe89ff0b8a0546904e58=1482416015; smzdm_user_source=AEF63FB28C36CAC0B5F09EC24FEEC252",
         'user-agent': "smzdm_iPhone/7.6 (iPhone; iOS 10.2.1; Scale/2.00)smzdmapp",
         'accept-language': "zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8",
-        'cache-control': "no-cache",
-        'postman-token': "a35921dd-e68e-15f2-dcd0-1b8711e1f84b"
     }
 
     conn.request("POST", "/v1/user/checkin", payload, headers)
@@ -71,8 +67,6 @@ def music_163_sign_in():
         'content-type': "application/x-www-form-urlencoded",
         'cookie': "os=iPhone OS; osver=10.2.1; appver=3.7.5; deviceId=d03ab28a26a9b5b35d3dee25c3eb00d2; MUSIC_U=61a5d719c83ecbfc5c7b8435f560458e1592dcc50ab2a078cf3c61ff4a7ec5e0ad2ea5269380b8893eb7658aeefa351d365b7c0d8e97a004c3061cd18d77b7a0",
         'accept-encoding': "gzip",
-        'cache-control': "no-cache",
-        'postman-token': "fbd3a91c-99bb-575d-af49-462253fd46d7"
     }
 
     conn.request("POST", "/eapi/point/dailyTask", payload, headers)
@@ -90,8 +84,6 @@ def nuomi_sign_in():
         'host': "app.nuomi.com",
         'cookie': "STOKEN=a6a802f9721b1ccb9df862df46eecc1f8b10b7978af359d9f51bf31935a9cf39; bn_na_ctag=W3siayI6Imljb25fNCIsInMiOiJ0dWFuIiwieCI6IiIsInYiOiIxMDkwMDAwMCIsInQiOiIxNDg4OTg0MTczIn1d; bn_na_home_entry=W3siayI6IjQiLCJzIjoidG9waWNvbiIsIngiOiIiLCJ2IjoiMTA5MDAwMDAiLCJ0IjoiMTQ4ODk4NDE3MyJ9XQ==; bn_na_copid=7f889be41fa4bcfb75df92aa29a13e93; BAINUOCUID=812b949966edc7a0043332b9f0e7819898906605; bn_na_component_sinfo=%7B%22pl_sinfo%22%3A%22%7B%5C%22NA%5C%22%3A%5B777%2C523%2C326%2C533%2C253%2C218%2C539%2C327%2C375%2C585%2C413%2C648%2C347%2C734%2C615%2C382%2C378%2C671%2C760%2C452%2C607%2C782%2C619%2C455%2C552%2C636%2C605%2C683%2C628%2C633%2C642%2C771%2C654%2C655%2C665%2C673%2C675%2C678%2C695%2C696%2C700%2C737%2C711%2C792%2C728%2C804%2C748%2C773%2C762%2C774%2C781%2C803%5D%7D%5Cn%22%2C%22app_v%22%3A%227.1.0%22%7D; bn_na_smallflow_info=%7B%22pl_sinfo%22%3A%22%7B%5C%22NA%5C%22%3A%5B777%2C523%2C326%2C533%2C253%2C218%2C539%2C327%2C375%2C585%2C413%2C648%2C347%2C734%2C615%2C382%2C378%2C671%2C760%2C452%2C607%2C782%2C619%2C455%2C552%2C636%2C605%2C683%2C628%2C633%2C642%2C771%2C654%2C655%2C665%2C673%2C675%2C678%2C695%2C696%2C700%2C737%2C711%2C792%2C728%2C804%2C748%2C773%2C762%2C774%2C781%2C803%5D%7D%5Cn%22%7D; UID=161275167; BAIDUID=ED6800311E782FD7EC2BDACABD76C793:FG=1; bn_v=7.1.0; na_pdqab_new=812b949966edc7a0043332b9f0e7819898906605; BDUSS=FkRzJMMm9KbmxGMHE2SkY1U01IekdTMmt-UWZ4VHl2cEhGQUhZaUdodzFwcUZZSVFBQUFBJCQAAAAAAAAAAAEAAAAf3ZwJt7nQobezAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADUZelg1GXpYcG; na_qab=c75f7a1f7f8196b59ffeb9f0c5553ab4; moudle_pdqab=voucher; access_log=27a05c44016d5fac9e924fb351caaf89",
         'user-agent': "Bainuo/7.1.0 (iPhone; iOS 10.2.1; Scale/2.00)",
-        'cache-control': "no-cache",
-        'postman-token': "14adbbb8-0f83-f272-0edd-0319327bf49b"
     }
 
     conn.request("GET",
@@ -120,8 +112,6 @@ def gewara_sign_in():
         'origin': "https://m.gewara.com",
         'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27 GewaraMovie/8.1.0 appkey/iphoneV64 appSource/AS02 apptype/cinema osType/IPHONE from/appiphoneV64 deviceId/00000000-0000-0000-0000-000000000000 uuid/374E6744-BA1D-4619-8C87-81E077924D1D citycode/310000",
         'referer': "https://m.gewara.com/touch/app/point/index.xhtml",
-        'cookie': "citycode=310000; _gwtc_=1488984855597_nuWX_901f@843324FB33367FAE8CD8624CDF6E3B06; appVersion=0.1.0; apptype=cinema; email=QzVqc2NIV3BYTXlkbTJhLW9wZW5Ac2luYS5jb20=; from=app; headpic=aW1nL2RlZmF1bHRfaGVhZC5wbmc=; mobile=MTgwNTg4MDgyNjM=; nickname=UGFuN2Fu; osType=IPHONE",
-        'postman-token': "32e8bce6-10d9-9172-3b06-1b4692362696"
     }
 
     conn.request("POST", "/touch/app/point/getDayPoint.xhtml", payload, headers)
@@ -146,8 +136,6 @@ def ctrip_sign_in():
         'cookie': "MKT_Pagesource=H5; _jzqco=%7C%7C%7C%7C1489215185494%7C1.905210666.1455900703011.1489215216335.1489215229617.1489215216335.1489215229617.0.0.0.32.32; cticket=83B18B3D138789BD220EC796908422BAFAE5CCC3779EC87911823971FFE6EDBE; isNonUser=false; _n_cid=12021067210004192157; _abtest_userid=467b8ea3-4289-4840-978d-0ead9501dc78; _ga=GA1.2.499933121.1444525450; __zpspc=9.1.1444525449.1444525449.1%234%7C%7C%7C%7C%7C%23; _bfa=1.1444525448857.2mqlyq.1.1444525448857.1444525448857.1.1",
         'accept': "application/json",
         'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508_eb64__Ctrip_CtripWireless_7.1.2",
-        'cache-control': "no-cache",
-        'postman-token': "b29a6d46-9414-6e3e-cfc5-4108812251ad"
     }
 
     conn.request("POST", "/restapi/soa2/11631/json/CheckIn", payload, headers)
@@ -157,6 +145,93 @@ def ctrip_sign_in():
 
     print("[ctrip][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
+
+def jd_sign_in():
+
+    """ 京东签到"""
+
+    conn = http.client.HTTPSConnection("ld.m.jd.com")
+
+    headers = {
+        'host': "ld.m.jd.com",
+        'cookie': "__mjdv=direct|-|none|-; __utmmobile=0xa445f15745f76661.1486907576000.1486907576000.1486907576000.3; abtest=20170206210701441_00; __jda=71854095.908336774.1486385897.1488988831.1489216298.6; __jdb=71854095.1.908336774|6.1489216298; __jdc=71854095; __jdu=908336774; __jdv=71854095|direct|-|none|-|1489216298331; mba_muid=908336774.86.1489216298385; mba_sid=86.5; pre_seq=3; pre_session=e2d83aac95815af9c3888b81fd602c66165d700b|99; pt_key=app_openAAFYw6MoADC4-jVP-jKqSQD2yQln2iDdi4MwiH-PDxTikyfujLVO3HoCDgfC3vJYzCCP1eULrgE; pt_pin=pan7an; pwdt_id=pan7an; sid=8d56e4fb70fa5edc6fca100767d97d8w; mobilev=touch; _jrda=1",
+        'accept': "application/json, text/javascript, */*; q=0.01",
+        'user-agent': "jdapp;iPhone;5.8.0;10.2.1;e2d83aac95815af9c3888b81fd602c66165d700b;network/wifi;supportApplePay/1;pv/86.4;pap/JA2015_311210|5.8.0|IOS 10.2.1;psn/e2d83aac95815af9c3888b81fd602c66165d700b|99;psq/3;ads/;ref/JDMainPageViewController;jdv/0|;usc/direct;adk/;umd/none;ucp/-;utr/-;Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27",
+        'referer': "https://ld.m.jd.com/userBeanHomePage/getLoginUserBean.action?lng=121.376936&lat=31.324753&un_area=2_2824_51912_0&sid=8d56e4fb70fa5edc6fca100767d97d8w",
+        'x-requested-with': "XMLHttpRequest",
+    }
+
+    conn.request("GET", "/SignAndGetBeans/signStart.action?sid=8d56e4fb70fa5edc6fca100767d97d8w", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+    print("[jd][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+def baidumap_sign_in():
+
+    """ 百度地图签到"""
+
+    conn = http.client.HTTPConnection("client.map.baidu.com")
+
+    payload = ""
+
+    headers = {
+        'host': "client.map.baidu.com",
+        'content-type': "application/x-www-form-urlencoded",
+        'cookie': "BDUSS=XRBMzJBRUFIcnhEVGtwS1JOS3ZENERGQmcxN2ZYYkdVSHlKRGc1OTh4QWYyYWRZSVFBQUFBJCQAAAAAAAAAAAEAAAAf3ZwJt7nQobezAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB9MgFgfTIBYQ; BAIDUID=1D43E5A7AB576D4D145FE1F0C0F0E710:FG=1; BIDUPSID=236E51D87EDDDBED261296F61F127CE5; PSTM=1450593054",
+        'user-agent': "IphoneCom/9.7.3 (iPhone; iOS 10.2.1; Scale/2.00)",
+        'accept-language': "zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8",
+    }
+
+    conn.request("POST",
+                 "/usersystem/user/signin/?ctm=1489218201.477000&glr=Adreno&dpi=(326%2C326)&cpu=ARMv7&sv=9.7.3&phonebrand=&channel=1008648b&patchver=&city=289&isart=&sinan=cqYJcogEWV4-b5Bcdecf0uw92&os=iphone10.200000&loc_y=3653069.782598&cuid=30d2343a40812e37b98fa8c653bdf20a&net=1&oem=&ver=1&loc_x=13513007.874462&mb=iPhone8%2C1&resid=01&co=460%3A11&poi_name=%E4%B8%8D%E9%80%89%E6%8B%A9%E5%9C%B0%E7%82%B9&screen=(750%2C1334)&glv=&sign=407807a5220ae63c55e7798428658c60",
+                 payload, headers)
+
+    res = conn.getresponse()
+    data = res.read()
+    print("[baidumap][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+def umetrip_sign_in():
+
+    """航旅纵横签到"""
+
+    conn = http.client.HTTPConnection("ume1.umetrip.com")
+
+    headers = {
+        'host': "ume1.umetrip.com",
+        'cookie': "JSESSIONID=30AD036CB3AB84053405243DE0B901BA; BIGipServerpool_hlzh_122.119.120.20_443=1870165882.20480.0000",
+        'accept': "application/json, text/javascript, */*; q=0.01",
+        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Mobile/14D27 Referer: http://ume1.umetrip.com/UmeAd/everyday/index.do?1=1&token=7up5ZpVPBpxmt+rjlpDbbsEa&sid=10159341$$3ccd35d067ee452297d6f2813802c66f",
+        'x-requested-with': "XMLHttpRequest",
+    }
+
+    conn.request("GET", "/UmeAd/everyday/luck.do?sid=10159341%24%243ccd35d067ee452297d6f2813802c66f", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+    print("[umetrip][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+def xiami_sign_in():
+    """虾米签到"""
+
+    conn = http.client.HTTPConnection("spark.api.xiami.com")
+
+    headers = {
+        'host': "spark.api.xiami.com",
+        'accept-language': "en;q=1, fr;q=0.9, de;q=0.8, zh-Hans;q=0.7, zh-Hant;q=0.6, ja;q=0.5",
+        'user-agent': "walkman/5.8.8 (iPhone; iOS 10.2.1; Scale/2.00)",
+        'connection': "close",
+    }
+
+    conn.request("GET",
+                 "/api?access_token=1fd961bc3238ba56e5af0e1ec8f8e9cd&api_key=655bdb5fc1e0d21a53fce2cb8e1ba0ae&api_sig=5b68d95e8bb3dd49b8799ff4b724f8b2&app_v=5080800&call_id=1489219452.493017&ch=201200&device_id=00000000-0000-0000-0000-000000000000&h_uid=961864&lg=zh&method=task.sign-in&network=1&os_v=10.2.1&platform_id=2&proxy=0&resolution=750*1334&utdid=Vg6e8Fr8JcgDAPbzdTrtYzOg&v=5.0",
+                 headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+    print("[xiami][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+
 if __name__ == '__main__':
 
     qyer_sign_in()
@@ -165,4 +240,8 @@ if __name__ == '__main__':
     nuomi_sign_in()
     gewara_sign_in()
     ctrip_sign_in()
+    jd_sign_in()
+    baidumap_sign_in()
+    umetrip_sign_in()
+    xiami_sign_in()
 

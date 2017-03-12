@@ -22,7 +22,7 @@ class IpproxyCache(object):
         self.redis = redis
 
     def get_ipproxy_session(self):
-        """获得 user_hr_acount 的 session 信息"""
+        """获得 ipproxy 的 session 信息"""
         ipproxy = self.redis.get(self.ipproxy)
         return ipproxy
 

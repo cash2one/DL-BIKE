@@ -113,7 +113,7 @@ def cache(prefix=None, key=None, ttl=60, hash=True, lock=True, separator=":"):
 #         if self.current_user.sysuser and self.in_wechat:
 #             if self._authable and not self.current_user.wxuser and self.request.method in ("GET", "HEAD"):
 #                 # 该企业号是服务号，静默授权
-#                 self._oauth_service.wechat = self.current_user.wechat
+#                 self._oauth_service.weapp = self.current_user.weapp
 #                 self._oauth_service.state = to_hex(self.current_user.qxuser.unionid)
 #                 url = self._oauth_service.get_oauth_code_base_url()
 #                 self.redirect(url)
