@@ -73,7 +73,7 @@ import http.client
 
 conn = http.client.HTTPSConnection("api.weixin.qq.com")
 
-conn.request("POST", "/cgi-bin/menu/create?access_token=0C5jnbKXZoMxs6mGj-Nd_AGZyi_VaMYKoJ8wH4IB08Lbd8recb5iiyz_DRKl0_J0lFXGt0hcREeMP3X9NpQwDoJ6GtQ14Sk4NDR8XSchK2z7UI4XuoRTQ-DwiNoljA_ubU-9ZfS07ihpn3w7_AE3kw", obj_menu)
+conn.request("POST", "/cgi-bin/menu/create?access_token=oRgd35uZMRQbxlr-6S5HsH7mR4GhwPvAY2HF48GP_TJcKd88CV5Bon44faEbrcwiw2wiXt_fNwHu2-7Uslo0zlleMJoCgG-DtLFRTAHA13o-uOvyjbrhFXim_5Ik2AHBEAAbADATPP", obj_menu.encode("utf8"))
 
 res = conn.getresponse()
 data = res.read()
