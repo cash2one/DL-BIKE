@@ -13,7 +13,7 @@ import traceback
 from tornado import gen
 from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
-from cache.pm25 import Pm25Cache
+from cache.hztrip import HztripCache
 from util.tool.http_tool import http_get
 
 from scripts.parser import Parser
@@ -23,7 +23,7 @@ class PM25(Parser):
     pm25每小时更新一次
     """
 
-    pm25 = Pm25Cache()
+    hztrip = HztripCache()
 
     @gen.coroutine
     def get_pm25(self):
@@ -40,7 +40,7 @@ class PM25(Parser):
                 Obj_dict[city].append(item)
 
         if Obj_dict:
-            self.pm25.set_pm25_session(Obj_dict)
+            self.hztrip.set_pm25_session(Obj_dict)
 
     @gen.coroutine
     def runner(self):

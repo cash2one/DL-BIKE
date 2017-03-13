@@ -26,6 +26,8 @@ settings['template_path'] = os.path.join(settings['root_path'], "template")
 settings['static_path'] = os.path.join(settings['root_path'], "static")
 # settings['static_upload_path'] = os.path.join(settings['static_path'], "upload")
 
+settings['static_domain'] = 'http://cdn.hztrip.org'
+
 # 数据库配置
 settings['mysql_host'] = "127.0.0.1"
 settings['mysql_port'] = 3306
