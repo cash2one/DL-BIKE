@@ -40,7 +40,7 @@ class HztripDataService(DataService):
 
         params = ObjectDict({
             "city": city,
-            "q": q,
+            "address": q,
             "output": "json",
             "ak": settings['baidu_ak'],
         })
@@ -51,6 +51,7 @@ class HztripDataService(DataService):
         else:
             raise gen.Return(ObjectDict())
 
+    @gen.coroutine
     def get_bd_lnglat(self, lng, lat):
         """根据微信经纬度为火星坐标，转换为百度地图经纬度
         refer: http://lbsyun.baidu.com/index.php?title=webapi/guide/changeposition
@@ -68,6 +69,8 @@ class HztripDataService(DataService):
             "output": "json",
             "ak": settings['baidu_ak'],
         })
+
+        print (params)
 
         ret = yield http_get(route=path.BAIDU_GEOCONV_LNGLAT, jdata=params, timeout=40)
         if ret:
@@ -158,10 +161,10 @@ class HztripDataService(DataService):
             "cookie": cookie
         })
 
-        print (header)
+        # ret = yield http_get(path.HZTRIP_BIKE, params, headers=header, timeout=30,
+        #                      proxy_host=host, proxy_port=port)
 
-        ret = yield http_get(path.HZTRIP_BIKE, params, headers=header, timeout=30,
-                             proxy_host=host, proxy_port=port)
+        ret = yield http_get(path.HZTRIP_BIKE, params, headers=header, timeout=30)
 
         if not ret:
             yield self.del_ip_proxy(host)

@@ -40,14 +40,36 @@ class EventPageService(PageService):
             "杭州公共出行，可查实时公交、实时自行车、实时停车位信息，并提供汽车违章查询、杭州小客车摇号结果查询、空气质量查询等服务。"
             "杭州出行、生活、旅行必备应用。\n点击菜单，按提示输入查询条件获得实时信息。如需杭州公共交通使用帮助，请输入\"?\"\n"
             "『去百度手机助手下载安装杭州公共出行Android应用，体验更多功能』任何建议、反馈可编辑\"re+内容\",如re谢谢",
-            make_static_url("http://hztrip.sinaapp.com/image/banner.jpg"),
-            "http://hztrip.sinaapp.com/?fr=wechat"
+            make_static_url("http://www.hztrip.org/image/banner.jpg"),
+            "http://www.hztrip.org/?fr=wechat"
         )
         news += item
 
         news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
 
         raise gen.Return(news_info)
+
+    @gen.coroutine
+    def wx_rep_text(self, msg, text):
+        """微信交互：回复文本消息
+        :param msg: 消息
+        :param text: 文本消息
+        :param nonce:
+        :param wechat:
+        :return:
+        """
+
+        if text is None:
+            raise gen.Return("")
+
+        text_info = wx_const.WX_TEXT_REPLY % (msg.FromUserName,
+                                            msg.ToUserName,
+                                            int(time.time()),
+                                            text)
+
+        self.logger.debug("text_info: %s" % text_info)
+
+        raise gen.Return(text_info)
 
     @gen.coroutine
     def opt_msg(self, msg, session_key):
@@ -84,10 +106,42 @@ class EventPageService(PageService):
 
         if msg.MsgType == "text":
             keyword = msg.Content.strip()
+            res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
+            if res.status == 0:
+                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0),
         elif msg.MsgType == "location":
-            pass
+            res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
+            if res.status == 0:
+                lng, lat = res.result[0].get("y", 0), res.result[0].get("x", 0)
 
-        pass
+        res = yield self.hztrip_ds.get_bikes(lng, lat)
+
+        if not res.data:
+            content = "抱歉，找不到这附近的租赁点！输入更详细的地址，查找更精确。\n" \
+                      "查询实时自行车: \n1.输入详细的街道或小区\n2.发送您的位置信息"
+            return self.wx_rep_text(msg, content)
+        else:
+
+            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+                                                      msg.ToUserName,
+                                                      str(time.time()),
+                                                      res.count)
+            for item in res.data:
+                title = "{0}_{1}".format(item.get("name", ""), item.get("areaname", ""))
+                description = "位置：{0} \n可租：{1} 可还：{2}".format(item.get("address",""), item.get("rentcount",""), item.get("restorecount", ""))
+                url = "http://api.map.baidu.com/marker?location={0},{1}&title={2}" \
+                       "&content=[杭州公共出行]公共自行车租赁点查询&output=html&src=hztrip|hztrip".format(item.get("lat", 0), item.get("lon", 0), item.get("name", ""))
+
+                item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                    title,
+                    description,
+                    "",
+                    url
+                )
+                news += item
+
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
 
     @gen.coroutine
     def do_bus(self, msg):
