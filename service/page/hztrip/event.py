@@ -81,7 +81,7 @@ class EventPageService(PageService):
 
         # bus; station; around; transfer; bike; park; yaohao; pm25;
         if session_key == "bus":
-            res = self.do_bus(msg)
+            res = yield self.do_bus(msg)
         # elif session_key == "station":
         #     do_station()
         # elif session_key == "around":
@@ -89,7 +89,7 @@ class EventPageService(PageService):
         # elif session_key == "transfer":
         #     do_transfer()
         elif session_key == "bike":
-            res = self.do_bike(msg)
+            res = yield self.do_bike(msg)
         # elif session_key == "park":
         #     do_park()
         # elif session_key == "yaohao":
@@ -97,7 +97,7 @@ class EventPageService(PageService):
         # elif session_key == "pm25":
         #     do_pm25()
         else:
-            res = self.opt_default(msg, session_key)
+            res = yield self.opt_default(msg, session_key)
 
         return res
 
@@ -121,7 +121,8 @@ class EventPageService(PageService):
         if not res.data:
             content = "抱歉，找不到这附近的租赁点！输入更详细的地址，查找更精确。\n" \
                       "查询实时自行车: \n1.输入详细的街道或小区\n2.发送您的位置信息"
-            return self.wx_rep_text(msg, content)
+            res = yield self.wx_rep_text(msg, content)
+            return res
         else:
 
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
