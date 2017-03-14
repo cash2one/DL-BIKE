@@ -119,8 +119,8 @@ class EventPageService(PageService):
         res = yield self.hztrip_ds.get_bikes(lng, lat)
 
         if not res.data:
-            content = "抱歉，找不到这附近的租赁点！输入更详细的地址，查找更精确。\n" \
-                      "查询实时自行车: \n1.输入详细的街道或小区\n2.发送您的位置信息"
+            content = "抱歉，找不到这附近的租赁点！输入更详细的地址，查找更精确\n" \
+                      "查询实时自行车租赁点: \n1.输入详细的街道或小区\n2.发送您的位置信息"
             res = yield self.wx_rep_text(msg, content)
             return res
         else:
@@ -130,8 +130,8 @@ class EventPageService(PageService):
                                                       str(time.time()),
                                                       res.count)
             for item in res.data:
-                title = "{0}_{1}".format(item.get("name", ""), item.get("areaname", ""))
-                description = "位置：{0} \n可租：{1} 可还：{2}".format(item.get("address",""), item.get("rentcount",""), item.get("restorecount", ""))
+                title = "{0}_可租[{1}]_可还[{2}]".format(item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
+                description = "编号：{0}\n位置：{1}".format(item.get("number", ""), item.get("address",""))
                 url = "http://api.map.baidu.com/marker?location={0},{1}&title={2}" \
                        "&content=[杭州公共出行]公共自行车租赁点查询&output=html&src=hztrip|hztrip".format(item.get("lat", 0), item.get("lon", 0), item.get("name", ""))
 
