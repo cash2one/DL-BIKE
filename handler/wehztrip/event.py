@@ -137,7 +137,7 @@ class WechatOauthHandler(MetaBaseHandler):
         self.key = self.msg['EventKey']
         self.hztrip.set_hztrip_session(self.current_user.openid, self.key)
 
-        self.send_xml()
+        self.send_xml("hi")
 
     @gen.coroutine
     def event_VIEW(self):

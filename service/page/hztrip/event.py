@@ -81,7 +81,7 @@ class EventPageService(PageService):
 
         # bus; station; around; transfer; bike; park; yaohao; pm25;
         if session_key == "bus":
-            self.do_bus(msg)
+            res = self.do_bus(msg)
         # elif session_key == "station":
         #     do_station()
         # elif session_key == "around":
@@ -89,7 +89,7 @@ class EventPageService(PageService):
         # elif session_key == "transfer":
         #     do_transfer()
         elif session_key == "bike":
-            self.do_bike(msg)
+            res = self.do_bike(msg)
         # elif session_key == "park":
         #     do_park()
         # elif session_key == "yaohao":
@@ -97,7 +97,9 @@ class EventPageService(PageService):
         # elif session_key == "pm25":
         #     do_pm25()
         else:
-            self.opt_default(msg, session_key)
+            res = self.opt_default(msg, session_key)
+
+        return res
 
     @gen.coroutine
     def do_bike(self, msg):
