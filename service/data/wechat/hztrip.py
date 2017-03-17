@@ -5,8 +5,6 @@
 # @File    : hztrip.py
 # @DES     :
 
-import random
-import ujson
 from tornado import gen
 
 import conf.path as path
@@ -15,9 +13,9 @@ from setting import settings
 from service.data.base import DataService
 from cache.ipproxy import IpproxyCache
 from util.common import ObjectDict
-from util.tool.date_tool import curr_now
-from util.tool.str_tool import md5Encode, to_str
+from util.tool.str_tool import md5Encode
 from util.tool.http_tool import http_get, http_post, http_fetch
+from util.common.decorator import cache
 
 
 class HztripDataService(DataService):
@@ -135,8 +133,9 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=60)
     @gen.coroutine
-    def get_bikes(self, lng, lat):
+    def get_bikes(self, params=None):
 
         """
         根据经纬度，查找杭州公共自行车租赁点实时数据
@@ -145,17 +144,15 @@ class HztripDataService(DataService):
         :param lat:
         :return:
         """
-
-        params = ObjectDict({
-            "lng": lng,
-            "lat": lat,
-            "len": 800,
+        params = params or {}
+        params.update({
+            "len": 800
         })
 
         host, port = yield self.get_ip_proxy()
 
         header = headers.DATA_SOURCE.ggzxc_app.header
-        openid = md5Encode(str(lng))
+        openid = md5Encode(str(params.get("lng")))
         cookie = "JSESSIONID=6C274EA3774D097085A5846C44F64A84; openid={}".format(openid)
         header.update({
             "cookie": cookie

@@ -116,7 +116,10 @@ class EventPageService(PageService):
             if res.status == 0:
                 lng, lat = res.result[0].get("y", 0), res.result[0].get("x", 0)
 
-        res = yield self.hztrip_ds.get_bikes(lng, lat)
+        res = yield self.hztrip_ds.get_bikes({
+            "lng": lng,
+            "lat": lat,
+        })
 
         if not res.data:
             content = "抱歉，找不到这附近的租赁点！输入更详细的地址，查找更精确\n" \
@@ -129,16 +132,19 @@ class EventPageService(PageService):
                                                       msg.ToUserName,
                                                       str(time.time()),
                                                       res.count)
-            for item in res.data:
-                title = "{0}_可租[{1}]_可还[{2}]".format(item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
+            data_list = res.data[0:6]
+            for item in data_list:
+                title = "{0}_可租【{1}】_可还【{2}】".format(item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
                 description = "编号：{0}\n位置：{1}".format(item.get("number", ""), item.get("address",""))
                 url = "http://api.map.baidu.com/marker?location={0},{1}&title={2}" \
                        "&content=[杭州公共出行]公共自行车租赁点查询&output=html&src=hztrip|hztrip".format(item.get("lat", 0), item.get("lon", 0), item.get("name", ""))
+                headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
+                          "&center={0},{1}&width=512&height=512&zoom=17&copyright=1".format(item.get("lon", 0),item.get("lat", 0))
 
                 item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                     title,
                     description,
-                    "",
+                    headimg,
                     url
                 )
                 news += item
