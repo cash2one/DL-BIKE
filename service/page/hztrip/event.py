@@ -132,14 +132,14 @@ class EventPageService(PageService):
                                                       msg.ToUserName,
                                                       str(time.time()),
                                                       res.count)
-            data_list = res.data[0:5]
+            data_list = res.data[0:4]
             for item in data_list:
                 title = "{0}_可租【{1}】_可还【{2}】".format(item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
                 description = "编号：{0}\n位置：{1}".format(item.get("number", ""), item.get("address",""))
                 url = "http://api.map.baidu.com/marker?location={0},{1}&title={2}" \
                        "&content=[杭州公共出行]公共自行车租赁点查询&output=html&src=hztrip|hztrip".format(item.get("lat", 0), item.get("lon", 0), item.get("name", ""))
                 headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
-                          "&center={0},{1}&width=512&height=512&zoom=17&copyright=1".format(item.get("lon", 0),item.get("lat", 0))
+                          "&center={0},{1}&width=512&height=512&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(item.get("lon", 0),item.get("lat", 0),item.get("lon", 0),item.get("lat", 0))
 
                 item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                     title,
