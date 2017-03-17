@@ -132,7 +132,7 @@ class EventPageService(PageService):
                                                       msg.ToUserName,
                                                       str(time.time()),
                                                       res.count)
-            data_list = res.data[0:6]
+            data_list = res.data[0:5]
             for item in data_list:
                 title = "{0}_可租【{1}】_可还【{2}】".format(item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
                 description = "编号：{0}\n位置：{1}".format(item.get("number", ""), item.get("address",""))
