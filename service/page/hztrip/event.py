@@ -128,11 +128,11 @@ class EventPageService(PageService):
             return res
         else:
 
+            data_list = res.data[0:5]
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
                                                       msg.ToUserName,
                                                       str(time.time()),
-                                                      res.count)
-            data_list = res.data[0:3]
+                                                      len(data_list))
             for item in data_list:
                 title = "{0}_可租[{1}]_可还[{2}]".format(item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
                 description = "编号：{0}\n位置：{1}".format(item.get("number", ""), item.get("address",""))
