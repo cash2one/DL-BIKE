@@ -73,6 +73,8 @@ class WechatOauthHandler(MetaBaseHandler):
         print (self.msg)
         res = yield self.event_ps.opt_msg(self.msg, session_key)
         self.send_xml(res)
+        text = yield self.event_ps.wx_rep_text(self.msg, "还有更多吗")
+        self.send_xml(text)
 
     @gen.coroutine
     def post_image(self, session_key):
