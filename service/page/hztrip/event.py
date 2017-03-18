@@ -46,8 +46,8 @@ class EventPageService(PageService):
         item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
             "杭州公共出行——公交车、公共自行车、停车位实时查询'",
             "杭州公共出行，可查实时公交、实时自行车、实时停车位信息，并提供汽车违章查询、杭州小客车摇号结果查询、空气质量查询等服务。"
-            "杭州出行、生活、旅行必备应用。\n点击菜单，按提示输入查询条件获得实时信息。如需杭州公共交通使用帮助，请输入\"?\"\n"
-            "『去百度手机助手下载安装杭州公共出行Android应用，体验更多功能』任何建议、反馈可编辑\"re+内容\",如re谢谢",
+            "杭州出行、生活、旅行必备应用。\n\n点击菜单，按提示输入查询条件获得实时信息。\n"
+            "任何建议、反馈可编辑\"re+内容\",如re谢谢",
             make_static_url("http://www.hztrip.org/image/banner.jpg"),
             "http://www.hztrip.org/?fr=wechat"
         )
@@ -70,9 +70,9 @@ class EventPageService(PageService):
         elif click_key == "transfer":
             content += "查公交换乘:\n输入起点和终点，并以空格分割，如留下 小车桥\n"
         elif click_key == "bike":
-            content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n"
+            content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n3.用语音输入查询的地点\n"
         elif click_key == "park":
-            content += "查实时停车位:\n1.输入具体地址\n2.发送您的位置信息\n"
+            content += "查实时停车位:\n1.输入具体地址\n2.发送您的位置信息\n3.用语音输入查询的地点\n"
         elif click_key == "yaohao":
             content += "杭州小客车摇号结果查询:\n1.输入姓名或个人申请编号\n市调控办每月26日组织摇号，如遇周末顺延\n"
         elif click_key == "pm25":
@@ -397,6 +397,7 @@ class EventPageService(PageService):
                 lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
         elif msg.MsgType == "voice":
             keyword = msg.Recognition.strip()
+            keyword = keyword.rtrip("。")
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0:
                 lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
