@@ -176,21 +176,21 @@ class EventPageService(PageService):
 
             title = "搜索【{}】周边的实时停车位".format(keyword)
             description = "共找到{0}处停车位\n\n".format(len(res.List))
-            markers = ""
-            markerStyles = ""
+            # markers = ""
+            # markerStyles = ""
             for item in res.List:
                 description += "★停车场: {0}\n实时车位: 『{1}』\n地址: {2}\n参考价: {3}\n\n".format(item.get("Name"),
                                                                                       const.STOP_STATE.get(str(item.get("State"))),
                                                                                       item.get("Address"),
                                                                                       item.get("Type"))
-                markers += "{},{}|".format(item.get("Longitude",0), item.get("Latitude",0))
-                markerStyles += "l|"
+                # markers += "{},{}|".format(item.get("Longitude",0), item.get("Latitude",0))
+                # markerStyles += "l|"
 
             url = "http://www.hztrip.org/?fr=wechat"
-            headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
-                      "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2}&markerStyles={3}".format(lng, lat, markers, markerStyles)
+            # headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
+            #           "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2}&markerStyles={3}".format(lng, lat, markers, markerStyles)
 
-            headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf&center=120.16984751210552,30.276734123383317&width=360&height=200&zoom=17&copyright=1&markers=120.16889828763,30.277023573061|120.17102997133,30.276738587605|120.17106569842,30.276878260347|120.16870772967,30.277727198753|120.16827071473,30.275409228486&markerStyles=l|l|l|l|l"
+            headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf&center=120.1698,30.2767&width=360&height=200&zoom=17&copyright=1&markers=120.1688,30.2770|120.1710,30.2767|120.1710,30.2768|120.1687,30.2777|120.1682,30.2754&markerStyles=l|l|l|l|l"
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                 title,
