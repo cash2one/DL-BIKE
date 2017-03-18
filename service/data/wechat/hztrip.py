@@ -68,8 +68,6 @@ class HztripDataService(DataService):
             "ak": settings['baidu_ak'],
         })
 
-        print (params)
-
         ret = yield http_get(route=path.BAIDU_GEOCONV_LNGLAT, jdata=params, timeout=40)
         if ret:
             raise gen.Return(ret)

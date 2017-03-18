@@ -114,7 +114,7 @@ class EventPageService(PageService):
         elif msg.MsgType == "location":
             res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
             if res.status == 0:
-                lng, lat = res.result[0].get("y", 0), res.result[0].get("x", 0)
+                lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
 
         res = yield self.hztrip_ds.get_bikes({
             "lng": lng,
