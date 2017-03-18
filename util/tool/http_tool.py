@@ -149,9 +149,9 @@ def http_fetch(
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:
-        logger.error("[http_fetch][url: {}][body: {}]".format(
+        logger.warning("[http_fetch][url: {}][body: {}]".format(
             route, ujson.encode(data)))
-        logger.error("http_fetch httperror: {}".format(e))
+        logger.warning("http_fetch httperror: {}".format(e))
 
     raise gen.Return(False)
 
@@ -204,8 +204,8 @@ def _async_http_get(
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:
-        logger.error("[_async_http_get][url: {}] ".format(url))
-        logger.error("_async_http_get httperror: {}".format(e))
+        logger.warning("[_async_http_get][url: {}] ".format(url))
+        logger.warning("_async_http_get httperror: {}".format(e))
 
     raise gen.Return(False)
 
@@ -260,10 +260,10 @@ def _async_http_post(
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:
-        logger.error(
+        logger.warning(
             "[_async_http_post][url: {}][body: {}] ".format(
                 url, ujson.encode(jdata)))
-        logger.error("_async_http_post httperror: {}".format(e))
+        logger.warning("_async_http_post httperror: {}".format(e))
 
     raise gen.Return(False)
 

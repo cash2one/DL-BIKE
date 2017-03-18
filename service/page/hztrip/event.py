@@ -161,8 +161,6 @@ class EventPageService(PageService):
             "latitude": lat,
         })
 
-        print (res)
-
         if not res.List:
             content = "抱歉，找不到【{}】附近的停车位！输入更详细的地址，查找更精确\n\n" \
                       "查询实时停车位信息: \n1.输入详细的街道或小区\n2.发送您的位置信息".format(keyword)
@@ -176,21 +174,14 @@ class EventPageService(PageService):
 
             title = "搜索【{}】周边的实时停车位".format(keyword)
             description = "共找到{0}处停车位\n\n".format(len(res.List))
-            # markers = ""
-            # markerStyles = ""
             for item in res.List:
                 description += "★停车场: {0}\n实时车位: 『{1}』\n地址: {2}\n参考价: {3}\n\n".format(item.get("Name"),
                                                                                       const.STOP_STATE.get(str(item.get("State"))),
                                                                                       item.get("Address"),
                                                                                       item.get("Type"))
-                # markers += "{},{}|".format(item.get("Longitude",0), item.get("Latitude",0))
-                # markerStyles += "l|"
 
             url = "http://www.hztrip.org/?fr=wechat"
-            # headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
-            #           "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2}&markerStyles={3}".format(lng, lat, markers, markerStyles)
-
-            headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf&center=120.1698,30.2767&width=360&height=200&zoom=17&copyright=1&markers=120.1688,30.2770|120.1710,30.2767|120.1710,30.2768|120.1687,30.2777|120.1682,30.2754&markerStyles=l|l|l|l|l"
+            headimg = make_static_url("http://www.hztrip.org/image/banner.jpg")
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                 title,

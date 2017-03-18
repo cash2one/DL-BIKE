@@ -95,9 +95,6 @@ class Logger(object):
     def warning(self, message):
         self.__logger.warning(message, exc_info=0)
 
-    def warn(self, message):
-        self.warning(message)
-
     def error(self, message):
         self.__logger.error(message, exc_info=0)
 
