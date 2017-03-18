@@ -204,7 +204,7 @@ class HztripDataService(DataService):
     def get_bus_info(self, params=None):
 
         """
-        根据线路名，查询公交线路
+        根据线路名，查询公交实时到站
         demo: https://publictransit.dtdream.com/v1/bus/getBusPositionByRouteId?routeId=712
         :param params:
         :return:
@@ -219,31 +219,6 @@ class HztripDataService(DataService):
         #                      proxy_host=host, proxy_port=port)
 
         ret = yield http_get(path.HZTRIP_BUS.format("getBusPositionByRouteId"), params, headers=header, timeout=30)
-
-        if not ret:
-            # yield self.del_ip_proxy(host)
-            raise gen.Return(ObjectDict())
-        raise gen.Return(ret)
-
-    @gen.coroutine
-    def get_bus_realtime_route(self, params=None):
-
-        """
-        根据线路名, 查询公交线路实时轨迹
-        demo: https://publictransit.dtdream.com/v1/bus/getNextBusByRouteStopId?routeId=712&stopId=22628
-        :param params:
-        :return:
-        """
-        params = params or {}
-
-        # host, port = yield self.get_ip_proxy()
-
-        header = headers.COMMON_HEADER
-
-        # ret = yield http_get(path.HZTRIP_BIKE, params, headers=header, timeout=30,
-        #                      proxy_host=host, proxy_port=port)
-
-        ret = yield http_get(path.HZTRIP_BUS.format("getNextBusByRouteStopId"), params, headers=header, timeout=30)
 
         if not ret:
             # yield self.del_ip_proxy(host)
@@ -281,3 +256,53 @@ class HztripDataService(DataService):
             # yield self.del_ip_proxy(host)
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
+
+    @gen.coroutine
+    def get_stop_info(self, params=None):
+
+        """
+        根据车站名，查询电子站牌
+        demo: https://publictransit.dtdream.com/v1/bus/getNextBusByStopId?amapStopId=BV10420834
+        :param params:
+        :return:
+        """
+        params = params or {}
+
+        # host, port = yield self.get_ip_proxy()
+
+        header = headers.COMMON_HEADER
+
+        # ret = yield http_get(path.HZTRIP_BIKE, params, headers=header, timeout=30,
+        #                      proxy_host=host, proxy_port=port)
+
+        ret = yield http_get(path.HZTRIP_BUS.format("getNextBusByStopId"), params, headers=header, timeout=30)
+
+        if not ret:
+            # yield self.del_ip_proxy(host)
+            raise gen.Return(ObjectDict())
+        raise gen.Return(ret)
+
+    @gen.coroutine
+    def get_bd_transfer(self, lng, lat):
+        """根据百度 api，查询换成方案
+        refer: http://lbsyun.baidu.com/index.php?title=webapi/guide/changeposition
+        demo: http://api.map.baidu.com/direction/v1?mode=transit&region=%E6%9D%AD%E5%B7%9E&output=json&ak=hS3TTOY2PEFFyTZsrmETWNlZ&origin=
+
+        :param lng: 经度
+        :param lat: 纬度
+        :return json
+        """
+
+        params = ObjectDict({
+            "from": 3,
+            "to": 5,
+            "coords": "{},{}".format(lng, lat),
+            "output": "json",
+            "ak": settings['baidu_ak'],
+        })
+
+        ret = yield http_get(route=path.BAIDU_GEOCONV_LNGLAT, jdata=params, timeout=40)
+        if ret:
+            raise gen.Return(ret)
+        else:
+            raise gen.Return(ObjectDict())

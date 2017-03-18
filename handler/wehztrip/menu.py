@@ -24,7 +24,7 @@ obj_menu = """{
 			{
 			   "type":"click",
 			   "name":"电子站牌",
-			   "key":"station"
+			   "key":"stop"
 			},
 			{
 			   "type":"click",
