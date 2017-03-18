@@ -74,33 +74,34 @@ class HztripDataService(DataService):
         else:
             raise gen.Return(ObjectDict())
 
+    @cache(ttl=60)
     @gen.coroutine
-    def get_stop(self, longitude, latitude):
+    def get_stop(self, params=None):
 
         """
         根据经纬度，获得停车位信息
         demo: http://api.busditu.com/hangzhou/parking/nearby/
-        :param longitude:
-        :param latitude:
+        :param params:
         :return:
         """
 
-        params = ObjectDict({
+        params = params or {}
+        params.update({
             "application": "busdituandroid",
             "code": "iVA7eOUG64aI0zHQ4L0LrvTtRhlyhJos",
-            "longitude": longitude,
-            "latitude": latitude,
             "count": 5,
             "redius": 10000,
         })
 
-        host, port = yield self.get_ip_proxy()
+        # host, port = yield self.get_ip_proxy()
 
-        ret = yield http_get(path.HZTRIP_STOP, params, headers=headers.COMMON_HEADER, timeout=30,
-                             proxy_host=host, proxy_port=port)
+        # ret = yield http_get(path.HZTRIP_STOP, params, headers=headers.COMMON_HEADER, timeout=30,
+        #                      proxy_host=host, proxy_port=port)
+
+        ret = yield http_get(path.HZTRIP_STOP, params, headers=headers.COMMON_HEADER, timeout=30)
 
         if not ret:
-            yield self.del_ip_proxy(host)
+            # yield self.del_ip_proxy(host)
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
@@ -131,7 +132,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
-    @cache(ttl=60)
+    @cache(ttl=120)
     @gen.coroutine
     def get_bikes(self, params=None):
 
@@ -147,7 +148,7 @@ class HztripDataService(DataService):
             "len": 800
         })
 
-        host, port = yield self.get_ip_proxy()
+        # host, port = yield self.get_ip_proxy()
 
         header = headers.DATA_SOURCE.ggzxc_app.header
         openid = md5Encode(str(params.get("lng")))

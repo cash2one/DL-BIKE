@@ -8,6 +8,7 @@ import time
 from tornado import gen
 
 import conf.wechat as wx_const
+import conf.common as const
 from util.tool.url_tool import make_static_url
 from service.page.base import PageService
 
@@ -90,8 +91,8 @@ class EventPageService(PageService):
         #     do_transfer()
         elif session_key == "bike":
             res = yield self.do_bike(msg)
-        # elif session_key == "park":
-        #     do_park()
+        elif session_key == "park":
+            res = yield self.do_park(msg)
         # elif session_key == "yaohao":
         #     do_yaohao()
         # elif session_key == "pm25":
@@ -104,17 +105,7 @@ class EventPageService(PageService):
     @gen.coroutine
     def do_bike(self, msg):
 
-        self.logger.debug("do_bike: {}".format(msg))
-
-        if msg.MsgType == "text":
-            keyword = msg.Content.strip()
-            res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
-            if res.status == 0:
-                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0),
-        elif msg.MsgType == "location":
-            res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
-            if res.status == 0:
-                lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
+        keyword, lng, lat = yield self._get_lng_lat(msg)
 
         res = yield self.hztrip_ds.get_bikes({
             "lng": lng,
@@ -122,13 +113,12 @@ class EventPageService(PageService):
         })
 
         if not res.data:
-            content = "抱歉，找不到这附近的租赁点！输入更详细的地址，查找更精确\n" \
-                      "查询实时自行车租赁点: \n1.输入详细的街道或小区\n2.发送您的位置信息"
+            content = "抱歉，找不到【{}】附近的租赁点！输入更详细的地址，查找更精确\n\n" \
+                      "查询实时自行车租赁点: \n1.输入详细的街道或小区\n2.发送您的位置信息".format(keyword)
             res = yield self.wx_rep_text(msg, content)
             return res
         else:
-
-            data_list = res.data[0:5]
+            data_list = res.data[0:8]
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
                                                       msg.ToUserName,
                                                       str(time.time()),
@@ -139,15 +129,15 @@ class EventPageService(PageService):
                 url = "http://api.map.baidu.com/marker?location={0},{1}&title={2}" \
                        "&content=[杭州公共出行]公共自行车租赁点&output=html".format(item.get("lat", 0), item.get("lon", 0), item.get("name", ""))
                 headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
-                          "&center={0},{1}&width=256&height=256&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(item.get("lon", 0),item.get("lat", 0),item.get("lon", 0),item.get("lat", 0))
+                          "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(item.get("lon", 0),item.get("lat", 0),item.get("lon", 0),item.get("lat", 0))
 
-                item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                news_item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                     title,
                     description,
                     headimg,
                     url
                 )
-                news += item
+                news += news_item
 
             news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
             return news_info
@@ -159,3 +149,81 @@ class EventPageService(PageService):
             keyword = msg.Content.strip()
 
         pass
+
+
+    @gen.coroutine
+    def do_park(self, msg):
+
+        keyword, lng, lat = yield self._get_lng_lat(msg)
+
+        res = yield self.hztrip_ds.get_stop({
+            "longitude": lng,
+            "latitude": lat,
+        })
+
+        print (res)
+
+        if not res.List:
+            content = "抱歉，找不到【{}】附近的停车位！输入更详细的地址，查找更精确\n\n" \
+                      "查询实时停车位信息: \n1.输入详细的街道或小区\n2.发送您的位置信息".format(keyword)
+            res = yield self.wx_rep_text(msg, content)
+            return res
+        else:
+            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+                                                      msg.ToUserName,
+                                                      str(time.time()),
+                                                      1)
+
+            title = "搜索【{}】周边的实时停车位".format(keyword)
+            description = "共找到{0}处停车位\n\n".format(len(res.List))
+            markers = ""
+            markerStyles = ""
+            for item in res.List:
+                description += "★停车场: {0}\n实时车位: 『{1}』\n地址: {2}\n参考价: {3}\n\n".format(item.get("Name"),
+                                                                                      const.STOP_STATE.get(str(item.get("State"))),
+                                                                                      item.get("Address"),
+                                                                                      item.get("Type"))
+                markers += "{},{}|".format(item.get("Longitude",0), item.get("Latitude",0))
+                markerStyles += "l|"
+
+            url = "http://www.hztrip.org?fr=wechatpark"
+            headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
+                      "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2}&markerStyles={3}".format(lng, lat, markers, markerStyles)
+
+            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                title,
+                description,
+                headimg,
+                url
+            )
+            news += item
+
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
+
+
+    @gen.coroutine
+    def _get_lng_lat(self, msg):
+
+        """
+        获得经纬度信息
+        :param msg:
+        :return: lng, lat: 经度，纬度
+        """
+
+        self.logger.debug("do_bike: {}".format(msg))
+
+        lng, lat = 0, 0
+
+        if msg.MsgType == "text":
+            keyword = msg.Content.strip()
+            res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
+            if res.status == 0:
+                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0),
+        elif msg.MsgType == "location":
+            keyword = msg.Label.strip()
+            res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
+            if res.status == 0:
+                lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
+
+        return keyword, lng, lat

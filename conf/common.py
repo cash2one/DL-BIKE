@@ -57,3 +57,13 @@ STATUS_INUSE = 1
 STATUS_UNUSE = 0
 
 BAIDU_POI_Q = ["美食", "旅馆", "小区"]
+
+# HZtrip
+# stop
+STOP_STATE = {
+    "0":"暂无",
+    "1":"泊位已满",
+    "2":"泊位紧张",
+    "3":"少量泊位",
+    "4":"泊位宽裕",
+}
