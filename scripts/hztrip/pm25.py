@@ -15,6 +15,7 @@ from tornado.ioloop import IOLoop
 from tornado.util import ObjectDict
 from cache.hztrip import HztripCache
 from util.tool.http_tool import http_get
+from util.tool.date_tool import curr_datetime_now
 
 from scripts.parser import Parser
 
@@ -44,11 +45,13 @@ class PM25(Parser):
 
     @gen.coroutine
     def runner(self):
+        print ("[{}]pm25 start".format(curr_datetime_now()))
         try:
             yield self.get_pm25()
         except Exception as e:
             self.logger.error(traceback.format_exc())
 
+        print("[{}]pm25 end".format(curr_datetime_now()))
         IOLoop.instance().stop()
 
 
