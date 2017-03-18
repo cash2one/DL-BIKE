@@ -238,12 +238,10 @@ class EventPageService(PageService):
                                           route.get("terminal"))
             d_first = datetime.strptime(str(route.get("firstBus")), "%H:%M:%S")
             d_last = datetime.strptime(str(route.get("lastBus")), "%H:%M:%S")
-            description = "全程: {}公里 首班: {} 末班: {} 票价: {}元\n".format('%.2f' % route.get("distance"),
-                                                                "{}时{}分".format(d_first.hour, d_first.minute),
-                                                                "{}时{}分".format(d_last.hour, d_last.minute),
-                                                                 route.get("airPrice")
-                                                                 )
-
+            description = "全程: {}公里  票价: {}元\n首班: {}  末班: {}  ".format('%.2f' % route.get("distance"),
+                                                                       route.get("airPrice"),
+                                                                       "{}时{}分".format(d_first.hour, d_first.minute),
+                                                                       "{}时{}分".format(d_last.hour, d_last.minute))
 
             if bus_res and bus_res.get("items"):
                 bus_info = bus_res.get("items", [])[0]
@@ -251,7 +249,7 @@ class EventPageService(PageService):
 
                 is_realtime = False
                 for item in stops:
-                    description += "#{} {}".format(item.get("routeStop",{}).get("seqNo"), item.get("routeStop",{}).get("stopName"))
+                    description += "#{}  {}".format(item.get("routeStop",{}).get("seqNo"), item.get("routeStop",{}).get("stopName"))
                     description += "(地铁换乘)\n" if item.get("routeStop",{}).get("metroTrans") else "\n"
                     if item.get("buses",[]) and item.get("routeStop",{}).get("seqNo") != route.get("stationCnt"):
                         is_realtime = True
