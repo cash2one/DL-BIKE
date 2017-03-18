@@ -154,7 +154,6 @@ class WechatOauthHandler(MetaBaseHandler):
         上报地理位置时，微信会将上报地理位置事件推送到开发者填写的URL。"""
         self.send_xml()
 
-
     @gen.coroutine
     def event_TEMPLATESENDJOBFINISH(self):
         """消息模板推送结果 referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1433751277&t=0.29629938341489237
