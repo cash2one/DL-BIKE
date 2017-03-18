@@ -49,3 +49,19 @@ def is_time_valid(str_time, form):
         pass
     finally:
         return ret
+
+def str_2_date(str_time, format):
+    """
+    将字符串时间格式转化为 datetime
+    :param str_time:
+    :param form:
+    :return:
+    """
+    res_date_time = str_time
+    try:
+        res_date_time = datetime.strptime(str(str_time), format)
+    except ValueError:
+        res_date_time = datetime.strptime(str(str_time), const.TIME_FORMAT)
+        res_date_time = res_date_time.strftime(format)
+    finally:
+        return res_date_time

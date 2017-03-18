@@ -4,13 +4,16 @@
 # @Author  : panda (panyuxin@moseeker.com)
 # @File    : event.py
 # @DES     :
+
 import time
+from datetime import datetime, timedelta
 from tornado import gen
 
 import conf.wechat as wx_const
 import conf.common as const
 from util.tool.url_tool import make_static_url
 from service.page.base import PageService
+from util.common import ObjectDict
 
 class EventPageService(PageService):
 
@@ -93,8 +96,8 @@ class EventPageService(PageService):
             res = yield self.do_bike(msg)
         elif session_key == "park":
             res = yield self.do_park(msg)
-        # elif session_key == "yaohao":
-        #     do_yaohao()
+        elif session_key == "yaohao":
+            res = yield self.do_yaohao(msg)
         # elif session_key == "pm25":
         #     do_pm25()
         else:
@@ -150,7 +153,6 @@ class EventPageService(PageService):
 
         pass
 
-
     @gen.coroutine
     def do_park(self, msg):
 
@@ -175,10 +177,12 @@ class EventPageService(PageService):
             title = "搜索【{}】周边的实时停车位".format(keyword)
             description = "共找到{0}处停车位\n\n".format(len(res.List))
             for item in res.List:
-                description += "★停车场: {0}\n实时车位: 『{1}』\n地址: {2}\n参考价: {3}\n\n".format(item.get("Name"),
-                                                                                      const.STOP_STATE.get(str(item.get("State"))),
-                                                                                      item.get("Address"),
-                                                                                      item.get("Type"))
+                description += "★停车场: {0}\n实时车位: 『{1}』\n地址: {2}\n距离: {3}米\n参考价: {4}\n\n".format(item.get("Name"),
+                                                                                               const.STOP_STATE.get(str(
+                                                                                                   item.get("State"))),
+                                                                                               item.get("Address"),
+                                                                                               item.get("Distance"),
+                                                                                               item.get("Type"))
 
             url = "http://www.hztrip.org/?fr=wechat"
             headimg = make_static_url("http://www.hztrip.org/image/banner.jpg")
@@ -193,6 +197,80 @@ class EventPageService(PageService):
 
             news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
             return news_info
+
+    @gen.coroutine
+    def do_yaohao(self, msg):
+
+        keyword = msg.Content.strip()
+        res = yield self.hztrip_ds.get_yaohao({
+            "name": keyword,
+        })
+
+        if res.status != '0' or not res.data[0].get("disp_data", ""):
+            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+                                                      msg.ToUserName,
+                                                      str(time.time()),
+                                                      1)
+
+            title = "抱歉，继续努力吧！".format(keyword)
+            description = "抱歉，找不到【{}】的摇号结果\n\n" \
+                      "摇号申请编码有效期为3个月，请及时登录官网延长有效期\n目前仅支持个人用户的中签查询".format(keyword)
+
+            url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=201864609&idx=1&sn=df673dd4a643301833453fcd503fce82#rd"
+            headimg = make_static_url("http://www.hztrip.org/image/banner.jpg")
+
+            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                title,
+                description,
+                headimg,
+                url
+            )
+            news += item
+
+        else:
+            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+                                                      msg.ToUserName,
+                                                      str(time.time()),
+                                                      1)
+
+            title = "恭喜，所有【{}】的同名中签结果如下".format(keyword)
+            description = "中签有效期六个月，过期无效。本次查询只列出所有有效中签结果\n"
+
+            Obj_dict = dict()
+            for item in res.data[0].get("disp_data", ""):
+                eid = item['eid']
+                if not isinstance(Obj_dict.get(eid, None), list):
+                    Obj_dict[eid] = list()
+                    Obj_dict[eid].append(item)
+                else:
+                    Obj_dict[eid].append(item)
+
+            Obj_list = sorted(Obj_dict.items(), key=lambda d: d[0], reverse=True)
+            valid_month = (datetime.now() + timedelta(days=-200)).strftime("%Y%m")
+            for k, v in Obj_list:
+                res_date_time = datetime.strptime(str(k), "%Y%m")
+                if k < valid_month:
+                    break
+                description += "\n期号: {}年{}月\n".format(res_date_time.year, res_date_time.month)
+                for item in v:
+                    description += "{}  {}\n".format(item.get("name"), item.get("tid"))
+
+            description += "\n温馨提示: \n1.指标配置成功后，您可以登录杭州小客车摇号官网打印《小客车配置指标确认通知书》办理购车、上牌等手续\n" \
+                           "2.指标有效期为6个月。单位和个人应当在指标有效期内使用指标。\n" \
+                           "3.逾期未使用的，视为放弃指标且自有效期届满次日起，两年内不得申请增量指标\n"
+            url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=201864609&idx=1&sn=df673dd4a643301833453fcd503fce82#rd"
+            headimg = ""
+
+            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                title,
+                description,
+                headimg,
+                url
+            )
+            news += item
+
+        news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+        return news_info
 
 
     @gen.coroutine

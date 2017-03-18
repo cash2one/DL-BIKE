@@ -106,29 +106,30 @@ class HztripDataService(DataService):
         raise gen.Return(ret)
 
     @gen.coroutine
-    def get_yaohao(self, name):
+    def get_yaohao(self, params=None):
 
         """
         根据用户名或编号，获得摇号结果
         demo: https://sp0.baidu.com/9_Q4sjW91Qh3otqbppnN2DJv/pae/common/api/yaohao
-        :param name:
+        :param params:
         :return:
         """
 
-        params = ObjectDict({
-            "name": name,
+        params = params or {}
+        params.update({
             "city": "杭州",
             "format": "json",
             "resource_id": 4003,
         })
 
-        host, port = yield self.get_ip_proxy()
+        # host, port = yield self.get_ip_proxy()
 
-        ret = yield http_get(path.HZTRIP_YAOHAO, params, headers=headers.COMMON_HEADER, timeout=30,
-                             proxy_host=host, proxy_port=port)
+        # ret = yield http_get(path.HZTRIP_YAOHAO, params, headers=headers.COMMON_HEADER, timeout=30,
+        #                      proxy_host=host, proxy_port=port)
+        ret = yield http_get(path.HZTRIP_YAOHAO, params, headers=headers.COMMON_HEADER, timeout=30)
 
         if not ret:
-            yield self.del_ip_proxy(host)
+            # yield self.del_ip_proxy(host)
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
@@ -163,6 +164,6 @@ class HztripDataService(DataService):
         ret = yield http_get(path.HZTRIP_BIKE, params, headers=header, timeout=30)
 
         if not ret:
-            yield self.del_ip_proxy(host)
+            # yield self.del_ip_proxy(host)
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
