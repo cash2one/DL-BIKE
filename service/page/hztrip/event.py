@@ -186,7 +186,7 @@ class EventPageService(PageService):
                 markers += "{},{}|".format(item.get("Longitude",0), item.get("Latitude",0))
                 markerStyles += "l|"
 
-            url = "http://www.hztrip.org?fr=wechatpark"
+            url = "http://www.hztrip.org/?fr=wechat"
             headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
                       "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2}&markerStyles={3}".format(lng, lat, markers, markerStyles)
 
