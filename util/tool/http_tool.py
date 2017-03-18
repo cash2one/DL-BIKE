@@ -124,6 +124,7 @@ def http_fetch(
                 method=method.upper(),
                 request_timeout=timeout,
                 headers=headers,
+                validate_cert=False,
                 proxy_host=proxy_host,
                 proxy_port=proxy_port
             )
@@ -134,6 +135,7 @@ def http_fetch(
                 body=urlencode(data),
                 request_timeout=timeout,
                 headers=headers,
+                validate_cert=False,
                 proxy_host=proxy_host,
                 proxy_port=proxy_port
             )
@@ -188,6 +190,7 @@ def _async_http_get(
             request_timeout=timeout,
             method=method.upper(),
             headers=headers,
+            validate_cert=False,
             proxy_host=proxy_host,
             proxy_port=proxy_port
         )
@@ -242,6 +245,7 @@ def _async_http_post(
             body=ujson.encode(jdata),
             request_timeout=timeout,
             headers=headers,
+            validate_cert=False,
             proxy_host=proxy_host,
             proxy_port=proxy_port
         )
