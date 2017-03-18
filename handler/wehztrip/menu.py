@@ -11,14 +11,19 @@ obj_menu = """{
       {
 		   "name":"查公交",
 		   "sub_button":[
+		   	{
+			   "type":"click",
+			   "name":"搜索",
+			   "key":"search"
+			},
 			{
 			   "type":"click",
-			   "name":"线路",
+			   "name":"实时公交",
 			   "key":"bus"
 			},
 			{
 			   "type":"click",
-			   "name":"站点",
+			   "name":"电子站牌",
 			   "key":"station"
 			},
 			{

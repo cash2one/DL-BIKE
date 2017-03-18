@@ -14,6 +14,8 @@ BAIDU_GEOCONV_LNGLAT = "http://api.map.baidu.com/geoconv/v1/"
 HZTRIP_STOP = "http://api.busditu.com/hangzhou/parking/nearby/"
 HZTRIP_YAOHAO = "https://sp0.baidu.com/9_Q4sjW91Qh3otqbppnN2DJv/pae/common/api/yaohao"
 HZTRIP_BIKE = "http://c.ggzxc.com.cn/wz/np_getBikes.do"
+HZTRIP_BUS = "https://publictransit.dtdream.com/v1/bus/{}"
+
 
 # weapp
 DINGDA_NEARBY_LIST = "http://bike-a.api.dingdatech.com/service/bicycle/stations"

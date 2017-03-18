@@ -5,6 +5,7 @@
 # @File    : event.py
 # @DES     :
 
+import re
 import time
 from datetime import datetime, timedelta
 from tornado import gen
@@ -37,6 +38,11 @@ class EventPageService(PageService):
 
     @gen.coroutine
     def opt_follow(self, msg):
+        """
+        处理关注事件
+        :param msg:
+        :return:
+        """
 
         news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
                                                   msg.ToUserName,
@@ -54,23 +60,26 @@ class EventPageService(PageService):
         news += item
 
         news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-
         raise gen.Return(news_info)
 
     @gen.coroutine
     def opt_click(self, msg, click_key):
+        """处理用户点击事件，提示语
+        """
 
         content = ""
-        if click_key == "bus":
-            content += "查公交实时到站:\n输入公交线路，如900\n"
+        if click_key == "search":
+            content += "查车站，线路名称:\n输入线路或车站模糊查询，如B1路, 小车桥"
+        elif click_key == "bus":
+            content += "查公交实时到站:\n准备输入公交线路，如900路\n"
         elif click_key == "station":
-            content += "查公交站点:\n输入站点名，如小车桥\n"
+            content += "查公交车站:\n准备输入车站名，如小车桥\n"
         elif click_key == "around":
-            content += "查周边公交站:\n1.输入具体地址\n2.发送您的位置信息\n"
+            content += "查周边公交车站:\n1.输入具体地址\n2.发送您的位置信息\n"
         elif click_key == "transfer":
             content += "查公交换乘:\n输入起点和终点，并以空格分割，如留下 小车桥\n"
         elif click_key == "bike":
-            content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n3.用语音输入查询的地点\n\n提示：可点击结果查看具体租赁点地图"
+            content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n3.用语音输入查询的地点\n\n提示：可点击结果查看具体租赁点地图\n"
         elif click_key == "park":
             content += "查实时停车位:\n1.输入具体地址\n2.发送您的位置信息\n3.用语音输入查询的地点\n"
         elif click_key == "yaohao":
@@ -112,9 +121,10 @@ class EventPageService(PageService):
         :param session_key:
         :return:
         """
-
-        # bus; station; around; transfer; bike; park; yaohao; pm25;
-        if session_key == "bus":
+        # search; bus; station; around; transfer; bike; park; yaohao; pm25;
+        if session_key == "search":
+            res = yield self.do_search(msg)
+        elif session_key == "bus":
             res = yield self.do_bus(msg)
         # elif session_key == "station":
         #     do_station()
@@ -136,15 +146,147 @@ class EventPageService(PageService):
         return res
 
     @gen.coroutine
+    def do_search(self, msg):
+        """
+        按关键字，模糊查询公交线路
+        :param msg:
+        :return:
+        """
+
+        keyword = self._get_text(msg)
+
+        line_res = yield self.hztrip_ds.get_bus_lines({
+            "routeName": keyword,
+        })
+
+        stop_res = yield self.hztrip_ds.get_bus_stops({
+            "stopName": keyword,
+        })
+
+        if not line_res.get("items") and not stop_res.get("items"):
+            content = "抱歉，找不到【{}】的线路或车站信息！继续输入更详细的关键词，查找更精确\n" \
+                      "如B1路, 小车桥等".format(keyword)
+            res = yield self.wx_rep_text(msg, content)
+            return res
+        else:
+            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+                                                      msg.ToUserName,
+                                                      str(time.time()),
+                                                      1)
+            description = ""
+            if stop_res.get("items"):
+                description += "查询车站结果如下:\n"
+                for item in stop_res.get("items"):
+                    description += "{}\n".format(item.get("name", ""))
+
+            if line_res.get("items"):
+                description += "\n查询线路结果如下:\n"
+                for item in line_res.get("items"):
+                    description += "{}\n".format(item.get("name", ""))
+
+            description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
+            title = "查找到【{}】相关车站或线路如下".format(keyword)
+            url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3"
+            headimg = ""
+
+            news_item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                title,
+                description,
+                headimg,
+                url
+            )
+            news += news_item
+
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
+
+
+    @gen.coroutine
     def do_bus(self, msg):
+        """
+        查实时线路信息
+        :param msg:
+        :return:
+        """
+        keyword = self._get_text(msg)
+        line_list = re.split(" ", keyword)
+        # 线路名
+        line_name = line_list[0] if len(line_list)>0 else ""
+        # 方向
+        line_order = line_list[1] if len(line_list)>1 else 0
 
-        if msg.MsgType == "text":
-            keyword = msg.Content.strip()
+        line_cache = self.hztrip_cache.get_bus_lines(line_name)
+        if not line_cache:
+            yield self.hztrip_ds.get_bus_lines({
+                "routeName": line_name,
+            })
+            line_cache = self.hztrip_cache.get_bus_lines(line_name)
 
-        pass
+        index = 1 if line_order else 0
+        if line_cache and line_cache.get("routes"):
+            route = line_cache.get("routes")[index]
+            bus_res = yield self.hztrip_ds.get_bus_info({
+                "routeId": route.get("routeId"),
+            })
+
+            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+                                                      msg.ToUserName,
+                                                      str(time.time()),
+                                                      1)
+
+            title = "【{}】{} —> {}".format(route.get("routeName"), route.get("origin"),
+                                          route.get("terminal"))
+            d_first = datetime.strptime(str(route.get("firstBus")), "%H:%M:%S")
+            d_last = datetime.strptime(str(route.get("lastBus")), "%H:%M:%S")
+            description = "全程: {}公里 首班: {} 末班: {} 票价: {}元\n".format('%.2f' % route.get("distance"),
+                                                                "{}时{}分".format(d_first.hour, d_first.minute),
+                                                                "{}时{}分".format(d_last.hour, d_last.minute),
+                                                                 route.get("airPrice")
+                                                                 )
+
+
+            if bus_res and bus_res.get("items"):
+                bus_info = bus_res.get("items", [])[0]
+                stops = bus_info.get("routes", [])[0].get("stops", {})
+
+                is_realtime = False
+                for item in stops:
+                    description += "#{} {}".format(item.get("routeStop",{}).get("seqNo"), item.get("routeStop",{}).get("stopName"))
+                    description += "(地铁换乘)\n" if item.get("routeStop",{}).get("metroTrans") else "\n"
+                    if item.get("buses",[]) and item.get("routeStop",{}).get("seqNo") != route.get("stationCnt"):
+                        is_realtime = True
+                        description += "↓----行驶中，距下一站{}米----↓\n".format(item.get("buses",[])[0].get("nextDistance"))
+
+                description += "\n当前暂无车辆实时信息\n" if not is_realtime else ""
+            description += "\n小提示:\n1.查询反向线路信息，请输入“{} {}”\n2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站".format(route.get("routeName"), 1 if index==0 else 0)
+            url = "http://www.hztrip.org/?fr=wechat"
+            headimg = ""
+
+            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                title,
+                description,
+                headimg,
+                url
+            )
+            news += item
+
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
+
+
+        else:
+            content = "抱歉，找不到线路【{}】！输入更详细的线路名，查找更精确\n" \
+                      "如B1路, B支3路区间, 193路".format(keyword)
+            res = yield self.wx_rep_text(msg, content)
+            return res
 
     @gen.coroutine
     def do_bike(self, msg):
+        """
+        公共自行车查询
+        :param msg:
+        :return:
+        """
 
         keyword, lng, lat = yield self._get_lng_lat(msg)
 
@@ -185,6 +327,7 @@ class EventPageService(PageService):
 
     @gen.coroutine
     def do_park(self, msg):
+        """停车位查询"""
 
         keyword, lng, lat = yield self._get_lng_lat(msg)
 
@@ -230,6 +373,7 @@ class EventPageService(PageService):
 
     @gen.coroutine
     def do_yaohao(self, msg):
+        """摇号查询"""
 
         keyword = msg.Content.strip()
         res = yield self.hztrip_ds.get_yaohao({
@@ -304,13 +448,13 @@ class EventPageService(PageService):
 
     @gen.coroutine
     def do_pm25(self, msg):
+        """pm25查询"""
 
         keyword = msg.Content.strip()
 
         pm25_cache = self.hztrip_cache.get_pm25_session()
 
         city_pm25 = pm25_cache.get(keyword)
-        print (city_pm25)
 
         if not city_pm25:
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
@@ -372,6 +516,23 @@ class EventPageService(PageService):
         news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
         return news_info
 
+    def _get_text(self, msg):
+
+        """
+        获得文本信息
+        :param msg:
+        :return:  str
+        """
+
+        self.logger.debug("_get_text: {}".format(msg))
+        keyword = ""
+        if msg.MsgType == "text":
+            keyword = msg.Content.strip()
+        elif msg.MsgType == "voice":
+            keyword = msg.Recognition.strip("。")
+
+        return keyword
+
     @gen.coroutine
     def _get_lng_lat(self, msg):
 
@@ -381,7 +542,7 @@ class EventPageService(PageService):
         :return: lng, lat: 经度，纬度
         """
 
-        self.logger.debug("do_bike: {}".format(msg))
+        self.logger.debug("_get_lng_lat: {}".format(msg))
 
         lng, lat = 0, 0
 
