@@ -396,8 +396,7 @@ class EventPageService(PageService):
             if res.status == 0:
                 lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
         elif msg.MsgType == "voice":
-            keyword = msg.Recognition.strip()
-            keyword = keyword.rtrip("。")
+            keyword = msg.Recognition.strip("。")
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0:
                 lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
