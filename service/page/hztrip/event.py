@@ -190,6 +190,8 @@ class EventPageService(PageService):
             headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
                       "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2}&markerStyles={3}".format(lng, lat, markers, markerStyles)
 
+            headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf&center=120.16984751210552,30.276734123383317&width=360&height=200&zoom=17&copyright=1&markers=120.16889828763,30.277023573061|120.17102997133,30.276738587605|120.17106569842,30.276878260347|120.16870772967,30.277727198753|120.16827071473,30.275409228486&markerStyles=l|l|l|l|l"
+
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                 title,
                 description,
