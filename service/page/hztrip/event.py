@@ -68,7 +68,7 @@ class EventPageService(PageService):
         elif click_key == "around":
             content += "查周边公交站:\n1.输入具体地址\n2.发送您的位置信息\n"
         elif click_key == "transfer":
-            content += "查公交换乘:\n输入\"起点+空格+终点\"，如留下 小车桥\n"
+            content += "查公交换乘:\n输入起点和终点，并以空格分割，如留下 小车桥\n"
         elif click_key == "bike":
             content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n"
         elif click_key == "park":
@@ -78,7 +78,7 @@ class EventPageService(PageService):
         elif click_key == "pm25":
             content += "查实时空气污染指数:\n输入城市中文名称，如杭州"
 
-        content += "\n\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
+        content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
 
         res = yield self.wx_rep_text(msg, content)
         return res
@@ -389,11 +389,16 @@ class EventPageService(PageService):
             keyword = msg.Content.strip()
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0:
-                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0),
+                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
         elif msg.MsgType == "location":
             keyword = msg.Label.strip()
             res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
             if res.status == 0:
                 lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
+        elif msg.MsgType == "voice":
+            keyword = msg.Recognition.strip()
+            res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
+            if res.status == 0:
+                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
 
         return keyword, lng, lat
