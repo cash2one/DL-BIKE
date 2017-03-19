@@ -335,21 +335,37 @@ class EventPageService(PageService):
                 route.get("lng", 0), route.get("lat", 0), route.get("lng", 0), route.get("lat", 0))
             description = "本站可换乘轨道交通\n" if route.get("metroTrans") else ""
 
-            if stop_res and stop_res.get("items"):
-                stop_info = stop_res.get("items", [])[0]
-                routes = stop_info.get("stops", [])[0].get("routes", {})
-                for item in routes:
-                    description += "\n★【{}】{} —> {}\n".format(item.get("route",{}).get("routeName"),
-                                                         item.get("route",{}).get("origin"),
-                                                         item.get("route",{}).get("terminal"))
+            for item in stop_res.get("items",[]):
+                for val in item.get("stops",[]):
+                    for vval in val.get("routes",[]):
+                        description += "\n★【{}】{} —> {}\n".format(vval.get("route",{}).get("routeName"),
+                                                                vval.get("route",{}).get("origin"),
+                                                                vval.get("route",{}).get("terminal"))
 
-                    d_first = datetime.strptime(str(item.get("route",{}).get("firstBus")), "%H:%M:%S")
-                    d_last = datetime.strptime(str(item.get("route",{}).get("lastBus")), "%H:%M:%S")
-                    description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
-                                                               "{}时{}分".format(d_last.hour, d_last.minute),
-                                                               item.get("route", {}).get("airPrice", "未知"))
-                    if item.get("buses",[]):
-                        description += "   ↑----最近一班的距离{}米----↑\n".format(item.get("buses",[])[0].get("targetDistance"))
+                        d_first = datetime.strptime(str(vval.get("route",{}).get("firstBus")), "%H:%M:%S")
+                        d_last = datetime.strptime(str(vval.get("route",{}).get("lastBus")), "%H:%M:%S")
+                        description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
+                                                                      "{}时{}分".format(d_last.hour, d_last.minute),
+                                                                      vval.get("route", {}).get("airPrice"))
+                        for vvval in vval.get("buses",[]):
+                            description += "  ↑----最近一班的距离{}米----↑\n".format(vvval.get("targetDistance"))
+
+
+            # if stop_res and stop_res.get("items",[]):
+            #     stop_info = stop_res.get("items", [])[0]
+            #     routes = stop_info.get("stops", [])[0].get("routes", {})
+            #     for item in routes:
+            #         description += "\n★【{}】{} —> {}\n".format(item.get("route",{}).get("routeName"),
+            #                                              item.get("route",{}).get("origin"),
+            #                                              item.get("route",{}).get("terminal"))
+            #
+            #         d_first = datetime.strptime(str(item.get("route",{}).get("firstBus")), "%H:%M:%S")
+            #         d_last = datetime.strptime(str(item.get("route",{}).get("lastBus")), "%H:%M:%S")
+            #         description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
+            #                                                    "{}时{}分".format(d_last.hour, d_last.minute),
+            #                                                    item.get("route", {}).get("airPrice", "未知"))
+            #         if item.get("buses",[]):
+            #             description += "   ↑----最近一班的距离{}米----↑\n".format(item.get("buses",[])[0].get("targetDistance"))
 
             description += "\n小提示:\n1.查询其他【{}】车站电子站牌，请输入\n".format(stop_cache.get("name"))
             for idx, val in enumerate(stop_cache.get("stops")):
