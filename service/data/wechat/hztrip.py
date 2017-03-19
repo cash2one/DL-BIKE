@@ -105,6 +105,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=60)
     @gen.coroutine
     def get_yaohao(self, params=None):
 
@@ -133,7 +134,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
-    @cache(ttl=120)
+    @cache(ttl=60)
     @gen.coroutine
     def get_bikes(self, params=None):
 
@@ -167,6 +168,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=300)
     @gen.coroutine
     def get_bus_lines(self, params=None):
 
@@ -200,6 +202,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=20)
     @gen.coroutine
     def get_bus_info(self, params=None):
 
@@ -225,11 +228,12 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=300)
     @gen.coroutine
     def get_bus_stops(self, params=None):
 
         """
-        根据车站名，查询公交车站
+        根据车站名，模糊查询公交车站
         demo: https://publictransit.dtdream.com/v1/bus/findStopByName?city=%E6%9D%AD%E5%B7%9E&stopName=%E5%B0%8F
         :param params:
         :return:
@@ -257,6 +261,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=10)
     @gen.coroutine
     def get_stop_info(self, params=None):
 
@@ -282,6 +287,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=20)
     @gen.coroutine
     def get_around_bus_stop(self, params=None):
 
@@ -312,6 +318,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
+    @cache(ttl=300)
     @gen.coroutine
     def get_bd_transfer(self, params=None):
         """根据百度 api，查询换成方案
