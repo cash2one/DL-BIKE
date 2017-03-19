@@ -347,7 +347,7 @@ class EventPageService(PageService):
                     d_last = datetime.strptime(str(item.get("route",{}).get("lastBus")), "%H:%M:%S")
                     description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
                                                                "{}时{}分".format(d_last.hour, d_last.minute),
-                                                               item.get("route", {}).get("airPrice"))
+                                                               item.get("route", {}).get("airPrice", "未知"))
                     if item.get("buses",[]):
                         description += "   ↑----最近一班的距离{}米----↑\n".format(item.get("buses",[])[0].get("targetDistance"))
 
