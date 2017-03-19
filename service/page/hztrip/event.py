@@ -252,7 +252,7 @@ class EventPageService(PageService):
                                           route.get("terminal"))
             d_first = datetime.strptime(str(route.get("firstBus")), "%H:%M:%S")
             d_last = datetime.strptime(str(route.get("lastBus")), "%H:%M:%S")
-            description = "全程: {}公里  票价: {}元\n首班: {}  末班: {}\n".format('%.2f' % route.get("distance"),
+            description = "全程: {}公里  票价: {}元\n首班: {}  末班: {}\n\n".format('%.2f' % route.get("distance"),
                                                                        route.get("airPrice"),
                                                                        "{}时{}分".format(d_first.hour, d_first.minute),
                                                                        "{}时{}分".format(d_last.hour, d_last.minute))
@@ -314,7 +314,7 @@ class EventPageService(PageService):
             })
             stop_cache = self.hztrip_cache.get_bus_stops(stop_name)
 
-        index = 0 if stop_order>len(stop_cache.get("stops")) else stop_order
+        index = 0 if stop_cache and stop_order>len(stop_cache.get("stops")) else stop_order
 
         if stop_cache and stop_cache.get("stops"):
             route = stop_cache.get("stops")[index]
