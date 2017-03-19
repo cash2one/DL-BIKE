@@ -346,26 +346,9 @@ class EventPageService(PageService):
                         d_last = datetime.strptime(str(vval.get("route",{}).get("lastBus")), "%H:%M:%S")
                         description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
                                                                       "{}时{}分".format(d_last.hour, d_last.minute),
-                                                                      vval.get("route", {}).get("airPrice"))
+                                                                      vval.get("route", {}).get("airPrice", "未知"))
                         for vvval in vval.get("buses",[]):
                             description += "  ↑----最近一班的距离{}米----↑\n".format(vvval.get("targetDistance"))
-
-
-            # if stop_res and stop_res.get("items",[]):
-            #     stop_info = stop_res.get("items", [])[0]
-            #     routes = stop_info.get("stops", [])[0].get("routes", {})
-            #     for item in routes:
-            #         description += "\n★【{}】{} —> {}\n".format(item.get("route",{}).get("routeName"),
-            #                                              item.get("route",{}).get("origin"),
-            #                                              item.get("route",{}).get("terminal"))
-            #
-            #         d_first = datetime.strptime(str(item.get("route",{}).get("firstBus")), "%H:%M:%S")
-            #         d_last = datetime.strptime(str(item.get("route",{}).get("lastBus")), "%H:%M:%S")
-            #         description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
-            #                                                    "{}时{}分".format(d_last.hour, d_last.minute),
-            #                                                    item.get("route", {}).get("airPrice", "未知"))
-            #         if item.get("buses",[]):
-            #             description += "   ↑----最近一班的距离{}米----↑\n".format(item.get("buses",[])[0].get("targetDistance"))
 
             description += "\n小提示:\n1.查询其他【{}】车站电子站牌，请输入\n".format(stop_cache.get("name"))
             for idx, val in enumerate(stop_cache.get("stops")):
@@ -432,9 +415,9 @@ class EventPageService(PageService):
                         d_last = datetime.strptime(str(vval.get("route",{}).get("lastBus")), "%H:%M:%S")
                         description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
                                                                       "{}时{}分".format(d_last.hour, d_last.minute),
-                                                                      vval.get("route", {}).get("airPrice"))
+                                                                      vval.get("route", {}).get("airPrice", "未知"))
                         for vvval in vval.get("buses",[]):
-                            description += " ↑----最近一班的距离{}米----↑\n".format(vvval.get("targetDistance"))
+                            description += "  ↑----最近一班的距离{}米----↑\n".format(vvval.get("targetDistance"))
 
 
             description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
@@ -482,7 +465,7 @@ class EventPageService(PageService):
             for idx, val in enumerate(transfer_res.get("result",{}).get("routes",[])):
                 description += "\n★方案{}: 距离: {}公里，约耗时: {}\n".format(idx+1, '%.2f' % (val.get("scheme")[0].get("distance")/1000), sec_2_time(val.get("scheme")[0].get("duration")))
                 for idxx, vval in enumerate(val.get("scheme")[0].get("steps")):
-                    description += "{}. {}\n".format(idxx+1, vval[0].get("stepInstruction"))
+                    description += "{}. {}\n".format(idxx+1, re.sub(r'</?\w+[^>]*>', '', vval[0].get("stepInstruction")))
 
             description += "\n打的: \n距离: {}公里，约耗时: {}\n打车费用: {}元（按驾车的最短路程计算）\n".format('%.2f' % (transfer_res.get("result",{}).get("taxi",{}).get("distance", 0)/1000),
                                                                                    sec_2_time(transfer_res.get("result", {}).get("taxi", {}).get("duration", 0)),
