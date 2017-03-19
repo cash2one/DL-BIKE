@@ -15,7 +15,6 @@ import conf.common as const
 from util.tool.url_tool import make_static_url
 from util.tool.date_tool import sec_2_time
 from service.page.base import PageService
-from util.common import ObjectDict
 from cache.hztrip import HztripCache
 
 class EventPageService(PageService):
@@ -25,15 +24,15 @@ class EventPageService(PageService):
         self.hztrip_cache = HztripCache()
 
     @gen.coroutine
-    def opt_default(self, msg, session_key):
+    def opt_default(self, msg):
         """被动回复用户消息的总控处理
         referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140543&t=0.5116553557196903
         :param msg: 消息
-        :param session_key:
         :return:
         """
 
-        content = "对不起，不明白您的意思，手动输入一句话试试"
+        content = "对不起，不明白您的意思。系统可接受位置、文字、语音等方式查询\n" \
+                  "如果您想与我们合作或了解更多，可发邮件至pyx0622@gmail.com咨询"
         res = yield self.wx_rep_text(msg, content)
         return res
 
@@ -70,7 +69,7 @@ class EventPageService(PageService):
 
         content = ""
         if click_key == "search":
-            content += "查车站，线路名称:\n输入线路或车站，如B1路, 小车桥"
+            content += "查车站，线路名称:\n输入线路或车站，如B1路, 小车桥\n"
         elif click_key == "bus":
             content += "查公交实时到站:\n准确输入公交线路，如900路\n"
         elif click_key == "stop":
@@ -744,7 +743,7 @@ class EventPageService(PageService):
         elif msg.MsgType == "voice":
             keyword = msg.Recognition.strip("。")
 
-        return keyword
+        return keyword.upper()
 
     @gen.coroutine
     def _get_lng_lat(self, msg):
@@ -775,4 +774,4 @@ class EventPageService(PageService):
             if res.status == 0:
                 lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
 
-        return keyword, lng, lat
+        return keyword.upper(), lng, lat
