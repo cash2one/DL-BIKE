@@ -28,7 +28,7 @@ obj_menu = """{
 			},
 			{
 			   "type":"click",
-			   "name":"周边",
+			   "name":"附近",
 			   "key":"around"
 			},
 			{
@@ -51,24 +51,24 @@ obj_menu = """{
 			   "key":"park"
 			},
 			{
-			   "type":"view",
-			   "name":"违章查询",
-			   "url":"http://www.zjsgat.gov.cn:8080/was/phone/carIllegalQuery.jsp?zjolTitleName=%E8%BF%9D%E7%AB%A0%E6%9F%A5%E8%AF%A2"
-			},
-			{
 			   "type":"click",
 			   "name":"摇号查询",
 			   "key":"yaohao"
 			},
 			{
 			   "type":"click",
-			   "name":"PM2.5",
+			   "name":"空气污染",
 			   "key":"pm25"
 			},
 			{
 			   "type":"view",
-			   "name":"打赏",
+			   "name":"赞助",
 			   "url":"http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=208675856&idx=1&sn=92a8a58ef849c1d3e3909a6a3dd75af8#rd"
+			},
+			{
+			   "type":"click",
+			   "name":"联系我们",
+			   "key":"contact"
 			}]
        }]
  }
@@ -78,7 +78,11 @@ import http.client
 
 conn = http.client.HTTPSConnection("api.weixin.qq.com")
 
-conn.request("POST", "/cgi-bin/menu/create?access_token=oRgd35uZMRQbxlr-6S5HsH7mR4GhwPvAY2HF48GP_TJcKd88CV5Bon44faEbrcwiw2wiXt_fNwHu2-7Uslo0zlleMJoCgG-DtLFRTAHA13o-uOvyjbrhFXim_5Ik2AHBEAAbADATPP", obj_menu.encode("utf8"))
+# hztrip
+# appid: wx59d56a198f761599
+# appsecret: 46dfb719a323bb66b32af93211c5385b
+
+conn.request("POST", "/cgi-bin/menu/create?access_token=U5RPZ1Iwb0gMBcfsA4tkqWhOq_vLFnr6TJHKbmyNKheXoukK47yAO4VeMGmuUPmIS8LyIDYOWW8ujD7c8MZaA1JyI1L2yUqOK1AEI5Rhi6kPFKiAAAFVA", obj_menu.encode("utf8"))
 
 res = conn.getresponse()
 data = res.read()

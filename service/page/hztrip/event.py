@@ -86,7 +86,10 @@ class EventPageService(PageService):
         elif click_key == "yaohao":
             content += "杭州小客车摇号结果查询:\n1.输入姓名或个人申请编号\n市调控办每月26日组织摇号，如遇周末顺延\n"
         elif click_key == "pm25":
-            content += "查实时空气污染指数:\n输入城市中文名称，如杭州"
+            content += "查实时空气污染指数:\n输入城市中文名称，如杭州\n"
+        elif click_key == "contact":
+            res = yield self.wx_rep_image(msg)
+            return res
 
         content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
 
@@ -98,8 +101,6 @@ class EventPageService(PageService):
         """微信交互：回复文本消息
         :param msg: 消息
         :param text: 文本消息
-        :param nonce:
-        :param wechat:
         :return:
         """
 
@@ -111,7 +112,21 @@ class EventPageService(PageService):
                                             int(time.time()),
                                             text)
 
-        self.logger.debug("text_info: %s" % text_info)
+        raise gen.Return(text_info)
+
+    @gen.coroutine
+    def wx_rep_image(self, msg):
+        """微信交互：回复图片消息
+        微信号：hztrip 的二维码 media_id: iNlwLMK7LlEbn6PwA1uE0AEEBjRJdaMHdzrqC4eFD1SYPj_5fJIZRUuvenD25mB2
+        :param msg: 消息
+        :param text: 文本消息
+        :return:
+        """
+
+        text_info = wx_const.WX_IMAGE_REPLY % (msg.FromUserName,
+                                            msg.ToUserName,
+                                            int(time.time()),
+                                            "iNlwLMK7LlEbn6PwA1uE0AEEBjRJdaMHdzrqC4eFD1SYPj_5fJIZRUuvenD25mB2")
 
         raise gen.Return(text_info)
 
@@ -650,12 +665,10 @@ class EventPageService(PageService):
     def do_pm25(self, msg):
         """pm25查询"""
 
-        keyword = msg.Content.strip()
-
+        keyword = self._get_text(msg)
         pm25_cache = self.hztrip_cache.get_pm25_session()
 
         city_pm25 = pm25_cache.get(keyword)
-
         if not city_pm25:
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
                                                       msg.ToUserName,
