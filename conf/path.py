@@ -8,7 +8,8 @@
 # 外部服务地址
 BAIDU_WEBAPI_PLACE_POI_LIST = "http://api.map.baidu.com/place/v2/search"
 BAIDU_WEBAPI_PLACE_LNGLAT = "http://api.map.baidu.com/geocoder/v2/"
-BAIDU_GEOCONV_LNGLAT = "http://api.map.baidu.com/geoconv/v1/"
+BAIDU_WEBAPI_GEOCONV_LNGLAT = "http://api.map.baidu.com/geoconv/v1/"
+BAIDU_WEBAPI_DIRECTION = "http://api.map.baidu.com/direction/v1"
 
 # hzrip
 HZTRIP_STOP = "http://api.busditu.com/hangzhou/parking/nearby/"

@@ -65,3 +65,14 @@ def str_2_date(str_time, format):
         res_date_time = res_date_time.strftime(format)
     finally:
         return res_date_time
+
+def sec_2_time(seconds):
+    """
+    将秒数转换为时分秒
+    :param seconds:
+    :return:
+    """
+    m, s = divmod(seconds, 60)
+    h, m = divmod(m, 60)
+
+    return "%02d时%02d分%02d秒" % (h, m, s)
