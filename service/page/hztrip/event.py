@@ -229,9 +229,12 @@ class EventPageService(PageService):
         # 方向
         line_order = line_list[1] if len(line_list)>1 else 0
 
+        print (line_name)
         new_line_name = line_name.replace("(", "").replace(")","")
+        print (new_line_name)
         if new_line_name.isdigit():
-            keyword += "{}路".format(new_line_name)
+            new_line_name = "{}路".format(new_line_name)
+        print (new_line_name)
         line_cache = self.hztrip_cache.get_bus_lines(new_line_name)
         if not line_cache:
             yield self.hztrip_ds.get_bus_lines({
