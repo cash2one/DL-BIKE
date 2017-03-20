@@ -31,7 +31,7 @@ class EventPageService(PageService):
         :return:
         """
 
-        content = "对不起，不明白您的意思。系统可接受位置、文字、语音等方式查询\n" \
+        content = "对不起，不明白您的意思。请先选择查询菜单功能，再输入内容\n" \
                   "如果您想与我们合作或了解更多，可发邮件至pyx0622@gmail.com咨询"
         res = yield self.wx_rep_text(msg, content)
         return res
@@ -156,7 +156,7 @@ class EventPageService(PageService):
         elif session_key == "pm25":
             res = yield self.do_pm25(msg)
         else:
-            res = yield self.opt_default(msg, session_key)
+            res = yield self.opt_default(msg)
 
         return res
 
@@ -229,12 +229,9 @@ class EventPageService(PageService):
         # 方向
         line_order = line_list[1] if len(line_list)>1 else 0
 
-        print (line_name)
         new_line_name = line_name.replace("(", "").replace(")","")
-        print (new_line_name)
         if new_line_name.isdigit():
             new_line_name = "{}路".format(new_line_name)
-        print (new_line_name)
         line_cache = self.hztrip_cache.get_bus_lines(new_line_name)
         if not line_cache:
             yield self.hztrip_ds.get_bus_lines({
@@ -766,7 +763,7 @@ class EventPageService(PageService):
             text = keyword
             if type == "bike":
                 if keyword.isdigit():
-                    keyword += "自行车租赁点{}".format(keyword)
+                    keyword = "自行车租赁点{}".format(keyword)
 
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0:
@@ -782,7 +779,7 @@ class EventPageService(PageService):
             text = keyword
             if type == "bike":
                 if keyword.isdigit():
-                    keyword += "自行车租赁点{}".format(keyword)
+                    keyword = "自行车租赁点{}".format(keyword)
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0:
                 lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
