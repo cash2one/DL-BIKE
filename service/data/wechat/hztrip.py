@@ -195,7 +195,8 @@ class HztripDataService(DataService):
 
         if ret.result == 0 and ret.total:
             for v in ret.get("items"):
-                self.hztrip.set_bus_lines(v.get("name"), v)
+                new_line_name = v.get("name").replace("(", "").replace(")", "")
+                self.hztrip.set_bus_lines(new_line_name, v)
 
         if not ret:
             # yield self.del_ip_proxy(host)

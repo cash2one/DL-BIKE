@@ -229,12 +229,15 @@ class EventPageService(PageService):
         # 方向
         line_order = line_list[1] if len(line_list)>1 else 0
 
-        line_cache = self.hztrip_cache.get_bus_lines(line_name)
+        new_line_name = line_name.replace("(", "").replace(")","")
+        if new_line_name.isdigit():
+            keyword += "{}路".format(new_line_name)
+        line_cache = self.hztrip_cache.get_bus_lines(new_line_name)
         if not line_cache:
             yield self.hztrip_ds.get_bus_lines({
                 "routeName": line_name,
             })
-            line_cache = self.hztrip_cache.get_bus_lines(line_name)
+            line_cache = self.hztrip_cache.get_bus_lines(new_line_name)
 
         index = 1 if line_order else 0
         if line_cache and line_cache.get("routes"):
@@ -376,7 +379,7 @@ class EventPageService(PageService):
     @gen.coroutine
     def do_around(self, msg):
         """
-        按关键字，查找走遍的车站，线路
+        按关键字，查找周边的车站，线路
         :param msg:
         :return:
         """
@@ -501,7 +504,7 @@ class EventPageService(PageService):
         :return:
         """
 
-        keyword, lng, lat = yield self._get_lng_lat(msg)
+        keyword, lng, lat = yield self._get_lng_lat(msg, type="bike")
 
         res = yield self.hztrip_ds.get_bikes({
             "lng": lng,
@@ -520,8 +523,8 @@ class EventPageService(PageService):
                                                       str(time.time()),
                                                       len(data_list))
             for item in data_list:
-                title = "{0}_可租[{1}]_可还[{2}]".format(item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
-                description = "编号：{0}\n位置：{1}".format(item.get("number", ""), item.get("address",""))
+                title = "【{0}】{1}_可租[{2}]_可还[{3}]".format(item.get("number", ""), item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
+                description = "位置：{0}".format(item.get("address",""))
                 url = "http://api.map.baidu.com/marker?location={0},{1}&title={2}" \
                        "&content=[杭州公共出行]公共自行车租赁点&output=html".format(item.get("lat", 0), item.get("lon", 0), item.get("name", ""))
                 headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
@@ -735,7 +738,6 @@ class EventPageService(PageService):
         :return:  str
         """
 
-        self.logger.debug("_get_text: {}".format(msg))
         keyword = ""
         if msg.MsgType == "text":
             keyword = msg.Content.strip()
@@ -745,32 +747,41 @@ class EventPageService(PageService):
         return keyword.upper()
 
     @gen.coroutine
-    def _get_lng_lat(self, msg):
+    def _get_lng_lat(self, msg, type=None):
 
         """
         获得经纬度信息
         :param msg:
+        :param type: 调用方类型，如 bike, bus
         :return: lng, lat: 经度，纬度
         """
 
-        self.logger.debug("_get_lng_lat: {}".format(msg))
-
         lng, lat = 0, 0
-
+        text = ""
         if msg.MsgType == "text":
             keyword = msg.Content.strip()
+            text = keyword
+            if type == "bike":
+                if keyword.isdigit():
+                    keyword += "自行车租赁点{}".format(keyword)
+
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0:
                 lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
         elif msg.MsgType == "location":
             keyword = msg.Label.strip()
+            text = keyword
             res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
             if res.status == 0:
                 lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
         elif msg.MsgType == "voice":
             keyword = msg.Recognition.strip("。")
+            text = keyword
+            if type == "bike":
+                if keyword.isdigit():
+                    keyword += "自行车租赁点{}".format(keyword)
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0:
                 lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
 
-        return keyword.upper(), lng, lat
+        return text, lng, lat

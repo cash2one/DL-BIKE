@@ -155,7 +155,7 @@ def http_fetch(
             route, ujson.encode(data)))
         logger.warning("http_fetch httperror: {}".format(e))
 
-    raise gen.Return(False)
+    raise gen.Return(ObjectDict())
 
 
 @gen.coroutine
@@ -210,7 +210,7 @@ def _async_http_get(
         logger.warning("[_async_http_get][url: {}] ".format(url))
         logger.warning("_async_http_get httperror: {}".format(e))
 
-    raise gen.Return(False)
+    raise gen.Return(ObjectDict())
 
 
 @gen.coroutine
@@ -269,7 +269,7 @@ def _async_http_post(
                 url, ujson.encode(jdata)))
         logger.warning("_async_http_post httperror: {}".format(e))
 
-    raise gen.Return(False)
+    raise gen.Return(ObjectDict())
 
 
 def _objectdictify(result):
