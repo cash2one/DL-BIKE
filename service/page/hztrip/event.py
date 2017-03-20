@@ -116,7 +116,7 @@ class EventPageService(PageService):
     @gen.coroutine
     def wx_rep_image(self, msg):
         """微信交互：回复图片消息
-        微信号：hztrip 的二维码 media_id: iNlwLMK7LlEbn6PwA1uE0AEEBjRJdaMHdzrqC4eFD1SYPj_5fJIZRUuvenD25mB2
+        微信号：hztrip 的二维码 https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp
         :param msg: 消息
         :param text: 文本消息
         :return:
@@ -125,7 +125,7 @@ class EventPageService(PageService):
         text_info = wx_const.WX_IMAGE_REPLY % (msg.FromUserName,
                                             msg.ToUserName,
                                             int(time.time()),
-                                            "iNlwLMK7LlEbn6PwA1uE0AEEBjRJdaMHdzrqC4eFD1SYPj_5fJIZRUuvenD25mB2")
+                                            "https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp")
 
         raise gen.Return(text_info)
 
@@ -767,8 +767,6 @@ class EventPageService(PageService):
 
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0 and res.results:
-                print (res.get("results", []))
-                print (res.get("results", [])[0])
                 lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get("location", {}).get("lat", 0)
         elif msg.MsgType == "location":
             keyword = msg.Label.strip()
@@ -784,6 +782,6 @@ class EventPageService(PageService):
                     keyword = "公共自行车租赁点{}".format(keyword)
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0 and res.results:
-                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
+                lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get("location", {}).get("lat", 0)
 
         return text, lng, lat
