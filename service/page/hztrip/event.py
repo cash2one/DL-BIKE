@@ -87,7 +87,7 @@ class EventPageService(PageService):
         elif click_key == "pm25":
             content += "查实时空气污染指数:\n输入城市中文名称，如杭州\n"
         elif click_key == "contact":
-            text = "\n<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
+            text = "<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
             res = yield self.wx_rep_text(msg, text)
             return res
 
