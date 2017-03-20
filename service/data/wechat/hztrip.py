@@ -37,13 +37,16 @@ class HztripDataService(DataService):
             city = "杭州"
 
         params = ObjectDict({
-            "city": city,
-            "address": q,
+            "region": city,
+            "query": q,
+            "page_size": 1,
+            "page_num": 0,
+            "scope": 1,
             "output": "json",
             "ak": settings['baidu_ak'],
         })
 
-        ret = yield http_get(route=path.BAIDU_WEBAPI_PLACE_LNGLAT, jdata=params, timeout=40)
+        ret = yield http_get(route=path.BAIDU_WEBAPI_PLACE_POI_LIST, jdata=params, timeout=40)
         if ret:
             raise gen.Return(ret)
         else:

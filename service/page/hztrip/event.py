@@ -763,11 +763,13 @@ class EventPageService(PageService):
             text = keyword
             if type == "bike":
                 if keyword.isdigit():
-                    keyword = "自行车租赁点{}".format(keyword)
+                    keyword = "公共自行车租赁点{}".format(keyword)
 
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
-            if res.status == 0:
-                lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
+            if res.status == 0 and res.results:
+                print (res.get("results", []))
+                print (res.get("results", [])[0])
+                lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get("location", {}).get("lat", 0)
         elif msg.MsgType == "location":
             keyword = msg.Label.strip()
             text = keyword
@@ -779,9 +781,9 @@ class EventPageService(PageService):
             text = keyword
             if type == "bike":
                 if keyword.isdigit():
-                    keyword = "自行车租赁点{}".format(keyword)
+                    keyword = "公共自行车租赁点{}".format(keyword)
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
-            if res.status == 0:
+            if res.status == 0 and res.results:
                 lng, lat = res.result.get("location", {}).get("lng", 0), res.result.get("location", {}).get("lat", 0)
 
         return text, lng, lat
