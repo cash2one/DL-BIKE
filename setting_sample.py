@@ -44,4 +44,6 @@ settings['store_options'] = {
 }
 
 settings['proxy'] = "http://127.0.0.1:8016"
+settings['token'] = "63659a086f2011e5a2be00163e004a1f"
 settings['baidu_ak'] = "lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf"
+settings['soso_ak'] = "7CJBZ-N3MRU-LGGVA-2JIVK-BQLJK-CUF7Y"

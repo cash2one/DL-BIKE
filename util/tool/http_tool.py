@@ -89,8 +89,7 @@ def http_fetch(
         timeout=5,
         proxy_host=None,
         proxy_port=None,
-        headers=None,
-        method='POST'):
+        headers=None):
     """
     使用 www-form 形式异步请求，支持 GET，POST
     :param route:
@@ -100,8 +99,6 @@ def http_fetch(
     :param headers:
     :return:
     """
-    if method.lower() not in "get post":
-        raise ValueError("method is not in GET and POST")
 
     if data is None:
         data = ObjectDict()
@@ -115,30 +112,16 @@ def http_fetch(
     http_client = tornado.httpclient.AsyncHTTPClient()
 
     try:
-        if method.upper() == "GET":
-            if data:
-                route = "{}?{}".format(route, urlencode(data))
-
-            http_request = tornado.httpclient.HTTPRequest(
-                route,
-                method=method.upper(),
-                request_timeout=timeout,
-                headers=headers,
-                validate_cert=False,
-                proxy_host=proxy_host,
-                proxy_port=proxy_port
-            )
-        else:
-            http_request = tornado.httpclient.HTTPRequest(
-                route,
-                method=method.upper(),
-                body=urlencode(data),
-                request_timeout=timeout,
-                headers=headers,
-                validate_cert=False,
-                proxy_host=proxy_host,
-                proxy_port=proxy_port
-            )
+        http_request = tornado.httpclient.HTTPRequest(
+            route,
+            method="POST",
+            body=urlencode(data),
+            request_timeout=timeout,
+            headers=headers,
+            validate_cert=False,
+            proxy_host=proxy_host,
+            proxy_port=proxy_port
+        )
         response = yield http_client.fetch(http_request)
 
         if res_json:

@@ -10,10 +10,14 @@ BAIDU_WEBAPI_PLACE_POI_LIST = "http://api.map.baidu.com/place/v2/search"
 BAIDU_WEBAPI_GEOCONV_LNGLAT = "http://api.map.baidu.com/geoconv/v1/"
 BAIDU_WEBAPI_DIRECTION = "http://api.map.baidu.com/direction/v1"
 
+QQ_WEBAPI_PLACE_POI_LIST = "http://apis.map.qq.com/ws/geocoder/v1/"
+QQ_WEBAPI_GEOCONV_LNGLAT = "http://apis.map.qq.com/ws/coord/v1/translate"
+
 # hzrip
 HZTRIP_STOP = "http://api.busditu.com/hangzhou/parking/nearby/"
 HZTRIP_YAOHAO = "https://sp0.baidu.com/9_Q4sjW91Qh3otqbppnN2DJv/pae/common/api/yaohao"
-HZTRIP_BIKE = "http://c.ggzxc.com.cn/wz/np_getBikes.do"
+HZTRIP_BIKE = "http://c.ggzxc.com.cn/wz/np_getBikesByWeiXin.do"
+HZTRIP_BIKE_NO = "http://c.ggzxc.com.cn/wz/np_getNPByNum.do"
 HZTRIP_BUS = "https://publictransit.dtdream.com/v1/bus/{}"
 
 

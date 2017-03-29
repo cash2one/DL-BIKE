@@ -31,7 +31,7 @@ class EventPageService(PageService):
         :return:
         """
 
-        content = "对不起，不明白您的意思。请先选择查询菜单功能，再输入内容\n" \
+        content = "对不起，不明白您的意思。请先选择菜单功能，再输入查询内容\n" \
                   "如果您想与我们合作或了解更多，可发邮件至pyx0622@gmail.com咨询"
         res = yield self.wx_rep_text(msg, content)
         return res
@@ -505,12 +505,17 @@ class EventPageService(PageService):
         :return:
         """
 
-        keyword, lng, lat = yield self._get_lng_lat(msg, type="bike")
+        keyword, lng, lat = yield self._get_lng_lat(msg, type="soso")
 
-        res = yield self.hztrip_ds.get_bikes({
-            "lng": lng,
-            "lat": lat,
-        })
+        if keyword.isdigit():
+            res = yield self.hztrip_ds.get_bike_stations(msg.FromUserName, {
+                "bean.number": int(keyword)
+            })
+        else:
+            res = yield self.hztrip_ds.get_bikes(msg.FromUserName, {
+                "lng": lng,
+                "lat": lat,
+            })
 
         if not res.data:
             content = "抱歉，找不到【{}】附近的租赁点！输入更详细的地址，查找更精确\n\n" \
@@ -748,12 +753,12 @@ class EventPageService(PageService):
         return keyword.upper()
 
     @gen.coroutine
-    def _get_lng_lat(self, msg, type=None):
+    def _get_lng_lat(self, msg, type="baidu"):
 
         """
         获得经纬度信息
         :param msg:
-        :param type: 调用方类型，如 bike, bus
+        :param type: 经纬度类型，支持百度经纬度，微信经纬度（火星坐标）
         :return: lng, lat: 经度，纬度
         """
 
@@ -762,27 +767,37 @@ class EventPageService(PageService):
         if msg.MsgType == "text":
             keyword = msg.Content.strip()
             text = keyword
-            if type == "bike":
-                if keyword.isdigit():
-                    keyword = "公共自行车租赁点{}".format(keyword)
-
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0 and res.results:
                 lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get("location", {}).get("lat", 0)
+
+            if type == "soso":
+                res = yield self.hztrip_ds.get_soso_lnglat(lng, lat)
+                if res.status == 0 and res.locations:
+                    location = res.get("locations", [])[0] if len(res.get("locations", [])) > 0 else {}
+                    lng, lat = location.get("lng", 0), location.get("lat", 0)
+
         elif msg.MsgType == "location":
             keyword = msg.Label.strip()
             text = keyword
-            res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
-            if res.status == 0:
-                lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
+            if type == "baidu":
+                res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
+                if res.status == 0:
+                    lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
+            else:
+                lng, lat = msg.Location_Y, msg.Location_X
         elif msg.MsgType == "voice":
             keyword = msg.Recognition.strip("。")
             text = keyword
-            if type == "bike":
-                if keyword.isdigit():
-                    keyword = "公共自行车租赁点{}".format(keyword)
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0 and res.results:
                 lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get("location", {}).get("lat", 0)
+
+            if type == "soso":
+                res = yield self.hztrip_ds.get_soso_lnglat(lng, lat)
+                if res.status == 0 and res.locations:
+                    location = res.get("locations", [])[0] if len(res.get("locations", [])) > 0 else {}
+                    lng, lat = location.get("lng", 0), location.get("lat", 0)
+
 
         return text, lng, lat

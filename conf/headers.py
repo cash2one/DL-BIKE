@@ -94,7 +94,7 @@ DATA_SOURCE = ObjectDict({
             'accept': "application/json, text/javascript, */*; q=0.01",
             'x-requested-with': "XMLHttpRequest",
             'user-agent': "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5 Build/M4B30Z; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/55.0.2883.91 Mobile Safari/537.36 MicroMessenger/6.5.3.980 NetType/WIFI Language/zh_CN",
-            'referer': "http://c.ggzxc.com.cn/wz/skip_sitelist.do?redirectUrl=skip_sitelist.do",
+            'referer': "http://c.ggzxc.com.cn/wz/skip_sitelist.do",
         })
     }),
 })
