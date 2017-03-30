@@ -31,8 +31,10 @@ class EventPageService(PageService):
         :return:
         """
 
-        content = "对不起，不明白您的意思。请先选择菜单功能，再输入查询内容\n" \
-                  "如果您想与我们合作或了解更多，可发邮件至pyx0622@gmail.com咨询"
+        content = "对不起，不明白您的意思。请先选择菜单功能，再输入查询内容。" \
+                  "\n查实时公交，请选择菜单“查公交”->“实时公交”；" \
+                  "\n查公共自行车，请选择菜单“查自行车”；" \
+                  "\n查摇号，请选择菜单“更多”->“摇号查询”"
         res = yield self.wx_rep_text(msg, content)
         return res
 
