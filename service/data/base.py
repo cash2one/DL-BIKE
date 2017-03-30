@@ -58,15 +58,11 @@ class DataService:
         return filter(lambda x: not x.endswith("init__.py"), glob.glob(d))
 
     @gen.coroutine
-    def get_ip_proxy(self, count=50, types=0, protocol=1, country='国内'):
+    def get_ip_proxy(self):
         """
         获得代理 IP
-        referer: https://github.com/qiyeboy/IPProxyPool
-        http://127.0.0.1:8000/?types=0&protocol=1&count=10&country=国内
-        :param count: 数量
-        :param types: 0: 高匿,1:匿名,2 透明
-        :param protocol: 0: http, 1 https, 2 http/https
-        :param country: 取值为国内, 国外
+        https://github.com/jhao104/proxy_pool
+        http://121.40.219.23:5000/get_all
         :return:
         """
 
@@ -79,26 +75,21 @@ class DataService:
             else:
                 return "",""
         else:
-            params = ObjectDict({
-                "types": types,
-                "protocol": protocol,
-                "count": count,
-                # "country": country
-            })
 
-            ret = yield http_get(settings['proxy'], params, res_json=False)
+            ret = yield http_get("{}/{}".format(settings['proxy'], "get_all"), res_json=False)
             res_dict = ObjectDict()
             ret = ujson.decode(to_str(ret))
 
             for item in ret:
+                res_ip = re.split(":", item)
                 ip_dict = ObjectDict({
-                    "host": item[0],
-                    "port": item[1],
-                    "score": item[2]
+                    "host": res_ip[0],
+                    "port": int(res_ip[1])
                 })
                 res_dict.update({
-                    item[0]: ip_dict
+                    res_ip[0]: ip_dict
                 })
+
             self.ipproxy.set_ipproxy_session(res_dict)
 
             ip_proxys = list(res_dict.values())
@@ -109,12 +100,12 @@ class DataService:
                 return "",""
 
     @gen.coroutine
-    def del_ip_proxy(self, ip):
+    def del_ip_proxy(self, ip, port):
         """
         删除代理 IP
-        referer: https://github.com/qiyeboy/IPProxyPool
-        http://127.0.0.1:8000/delete?ip=111.40.84.73
-        :param ip: 类似192.168.1.1
+        referer: https://github.com/jhao104/proxy_pool
+        http://127.0.0.1:5000/delete?proxy=127.0.0.1:8080
+        :param ip: 类似192.168.1.1:8080
         :return:
         """
 
@@ -125,7 +116,7 @@ class DataService:
             self.ipproxy.set_ipproxy_session(ipproxy_session_dict)
 
         params = ObjectDict({
-            "ip": ip,
+            "proxy": "{}:{}".format(ip, port),
         })
 
         ret = yield http_get("{}/{}".format(settings['proxy'], "delete"), params, res_json=False)

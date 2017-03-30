@@ -73,7 +73,7 @@ class InfraDataService(DataService):
                              proxy_host=host, proxy_port=port)
 
         if not ret:
-            yield self.del_ip_proxy(host)
+            yield self.del_ip_proxy(host, port)
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
@@ -112,7 +112,7 @@ class InfraDataService(DataService):
         ret = yield http_fetch(path.BEIJING_NEARBY_LIST, params, headers=headers.DATA_SOURCE.beijing_app.header, timeout=30,
                                proxy_host=host, proxy_port=port)
         if not ret:
-            yield self.del_ip_proxy(host)
+            yield self.del_ip_proxy(host, port)
             raise gen.Return(ObjectDict())
 
         raise gen.Return(ret)
@@ -151,7 +151,7 @@ class InfraDataService(DataService):
         ret = yield http_fetch(path.XIAN_NEARBY_LIST, params, headers=headers.DATA_SOURCE.xian_app.header, timeout=30,
                                proxy_host=host, proxy_port=port)
         if not ret:
-            yield self.del_ip_proxy(host)
+            yield self.del_ip_proxy(host, port)
             raise gen.Return(ObjectDict())
 
         raise gen.Return(ret)

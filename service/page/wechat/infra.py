@@ -67,28 +67,3 @@ class InfraPageService(PageService):
 
         ret = yield self.infra_ds.get_nanjing_list()
         raise gen.Return(ret)
-
-    @gen.coroutine
-    def get_ip_proxy(self, count=5, types=0, protocol=1, country='国内'):
-        """
-        获得代理 IP
-        :param count: 数量
-        :param types: 0: 高匿,1:匿名,2 透明
-        :param protocol: 0: http, 1 https, 2 http/https
-        :param country: 取值为国内, 国外
-        :return:
-        """
-
-        ret = yield self.infra_ds.get_ip_proxy(count, types, protocol, country)
-        raise gen.Return(ret)
-
-    @gen.coroutine
-    def del_ip_proxy(self, ip):
-        """
-        删除无效的代理 IP
-        :param ip: 类似192.168.1.1
-        :return:
-        """
-
-        ret = yield self.infra_ds.del_ip_proxy(ip)
-        raise gen.Return(ret)
