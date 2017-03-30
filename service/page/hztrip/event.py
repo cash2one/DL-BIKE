@@ -54,7 +54,7 @@ class EventPageService(PageService):
         item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
             "杭州公共出行——公交车、公共自行车、停车位实时查询'",
             "杭州公共出行，可查实时公交、实时自行车、实时停车位信息，并提供汽车违章查询、杭州小客车摇号结果查询、空气质量查询等服务。"
-            "杭州出行、生活、旅行必备应用。\n\n点击菜单，按提示输入查询条件获得实时信息。\n"
+            "杭州出行、生活、旅行必备应用。\n\n点击底部菜单，按提示输入查询条件获得实时信息。\n"
             "任何建议、反馈可编辑\"re+内容\",如re谢谢",
             make_static_url("http://www.hztrip.org/image/banner.jpg"),
             "http://www.hztrip.org/?fr=wechat"
