@@ -41,7 +41,7 @@ class IpproxyCache(object):
             "value:{1} type:{2}".format(
                 self.ipproxy, value, type(value)))
 
-        self.redis.set(self.ipproxy, value, ttl=60*60*24)
+        self.redis.set(self.ipproxy, value, ttl=60*60*6)
         return True
 
     def del_ipproxy_session(self):

@@ -233,7 +233,7 @@ class EventPageService(PageService):
         line_order = line_list[1] if len(line_list)>1 else 0
 
         new_line_name = line_name.replace("(", "").replace(")","")
-        if new_line_name.isdigit():
+        if new_line_name.isdigit() or new_line_name[-1].isdigit():
             new_line_name = "{}路".format(new_line_name)
         line_cache = self.hztrip_cache.get_bus_lines(new_line_name)
         if not line_cache:
@@ -243,6 +243,7 @@ class EventPageService(PageService):
             line_cache = self.hztrip_cache.get_bus_lines(new_line_name)
 
         index = 1 if line_order else 0
+
         if line_cache and line_cache.get("routes"):
             route = line_cache.get("routes")[index]
             bus_res = yield self.hztrip_ds.get_bus_info({
@@ -475,7 +476,7 @@ class EventPageService(PageService):
 
             description += "\n打的: \n距离: {}公里，约耗时: {}\n打车费用: {}元（按驾车的最短路程计算）\n".format('%.2f' % (transfer_res.get("result",{}).get("taxi",{}).get("distance", 0)/1000),
                                                                                    sec_2_time(transfer_res.get("result", {}).get("taxi", {}).get("duration", 0)),
-                                                                                   transfer_res.get("result", {}).get("taxi", {}).get("detail", {})[0].get("total_price",0))
+                                                                                   transfer_res.get("result", {}).get("taxi", {}).get("detail", [])[0].get("total_price",0) if transfer_res.get("result", {}).get("taxi", {}).get("detail", []) else 0)
 
             description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n" \
                            "2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
@@ -780,7 +781,7 @@ class EventPageService(PageService):
                     lng, lat = location.get("lng", 0), location.get("lat", 0)
 
         elif msg.MsgType == "location":
-            keyword = msg.Label.strip()
+            keyword = msg.Label.strip() if msg.Label else ""
             text = keyword
             if type == "baidu":
                 res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
