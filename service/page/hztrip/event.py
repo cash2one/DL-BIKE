@@ -756,7 +756,7 @@ class EventPageService(PageService):
         return keyword.upper()
 
     @gen.coroutine
-    def _get_lng_lat(self, msg, type="baidu"):
+    def _get_lng_lat(self, msg, type="soso"):
 
         """
         获得经纬度信息
@@ -783,12 +783,13 @@ class EventPageService(PageService):
         elif msg.MsgType == "location":
             keyword = msg.Label.strip() if msg.Label else ""
             text = keyword
-            if type == "baidu":
+            if type == "soso":
+                lng, lat = msg.Location_Y, msg.Location_X
+            else:
                 res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
                 if res.status == 0:
                     lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
-            else:
-                lng, lat = msg.Location_Y, msg.Location_X
+
         elif msg.MsgType == "voice":
             keyword = msg.Recognition.strip("。")
             text = keyword
