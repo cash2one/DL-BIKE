@@ -26,3 +26,8 @@ DINGDA_NEARBY_LIST = "http://bike-a.api.dingdatech.com/service/bicycle/stations"
 BEIJING_NEARBY_LIST = "http://api.nengren-tech.com/bj_bicycleLease/query/queryStation.do"
 XIAN_NEARBY_LIST = "http://bike.phioc.cn/api/get_around"
 NANJING_LIST = "http://www.njlrsoft.cn/bicycle/assets/js/site.json"
+
+# wechat
+WECHAT_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={0}&secret=={1}"
+WECHAT_USER_INFO = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}&lang=zh_CN"
+WECHAT_TEMPALTE = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={0}"

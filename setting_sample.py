@@ -44,6 +44,8 @@ settings['store_options'] = {
 }
 
 settings['proxy'] = "http://121.40.219.23:5000"
-settings['token'] = "63659a086f2011e5a2be00163e004a1f"
 settings['baidu_ak'] = "lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf"
 settings['soso_ak'] = "7CJBZ-N3MRU-LGGVA-2JIVK-BQLJK-CUF7Y"
+
+settings['hztrip_token'] = "63659a086f2011e5a2be00163e004a1f"
+settings['xhjd_token'] = "wypcs110"

@@ -1,7 +1,5 @@
 # # coding=utf-8
 #
-# # Copyright 2016 MoSeeker
-#
 # import re
 # import ujson
 # import tornado.gen as gen

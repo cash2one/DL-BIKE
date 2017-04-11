@@ -196,7 +196,7 @@ class HztripDataService(DataService):
 
         """
         根据经纬度，查找杭州公共自行车租赁点实时数据
-        demo: http://c.ggzxc.com.cn/wz/np_getBikes.do?lng=120.17095&lat=30.246405&len=800
+        demo: http://c.ggzxc.com.cn/wz/np_getBikesByWeiXin.do?lng=121.377&lat=31.324736&len=800&_=1491833445547
         :param params:
         :return:
         """

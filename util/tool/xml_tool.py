@@ -1,7 +1,5 @@
 # coding=utf-8
 
-# Copyright 2016 MoSeeker
-
 import xml.etree.ElementTree as ET
 from util.common import ObjectDict
 

@@ -3,7 +3,7 @@
 # @Time    : 2/6/17 09:03
 # @Author  : panda (panyuxin@moseeker.com)
 # @File    : event.py
-# @DES     : 杭州公共出行微信公众号消息交互
+# @DES     : 湘湖警点微信公众号消息交互
 
 
 import traceback
@@ -13,7 +13,7 @@ from handler.metabase import MetaBaseHandler
 from util.common import ObjectDict
 from util.tool.xml_tool import parse_msg
 from util.wechat.msgcrypt import SHA1
-from cache.hztrip import HztripCache
+from cache.xhjd import XhjdCache
 
 
 class WechatOauthHandler(MetaBaseHandler):
@@ -24,7 +24,7 @@ class WechatOauthHandler(MetaBaseHandler):
         super(WechatOauthHandler, self).__init__(application, request, **kwargs)
 
         self.msg = None
-        self.hztrip = HztripCache()
+        self.xhjd = XhjdCache()
         self.key = None
 
     def check_xsrf_cookie(self):
@@ -51,8 +51,9 @@ class WechatOauthHandler(MetaBaseHandler):
         try:
             msg_type = self.msg['MsgType']
             if self.verification():
-                # session_key: bus; station; around; transfer; bike; park; yaohao; pm25;
-                session_key = self.hztrip.get_hztrip_session(self.current_user.openid)
+                # session_key: IDCardReservation; residenceReservation; accountResultCheck;
+                # IDCardResultCheck; alarmPosition; clueProvide; suggestion;
+                session_key = self.xhjd.get_xhjd_session(self.current_user.openid)
                 yield getattr(self, 'post_' + msg_type)(session_key)
             else:
                 self.logger.error(
@@ -137,7 +138,7 @@ class WechatOauthHandler(MetaBaseHandler):
         """自定义菜单事件
         用户点击自定义菜单后，微信会把点击事件推送给开发者，请注意，点击菜单弹出子菜单，不会产生上报"""
         self.key = self.msg['EventKey']
-        self.hztrip.set_hztrip_session(self.current_user.openid, self.key)
+        self.xhjd.set_xhjd_session(self.current_user.openid, self.key)
 
         res = yield self.event_ps.opt_click(self.msg, self.key)
         self.send_xml(res)
@@ -181,7 +182,7 @@ class WechatOauthHandler(MetaBaseHandler):
         :return:
         """
         # token = "63659a086f2011e5a2be00163e004a1f"
-        token = self.settings.get("token")
+        token = self.settings.get("xhjd_token")
 
         try:
             ret, hashstr = SHA1().getSHA1(token,
