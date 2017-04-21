@@ -11,7 +11,8 @@ routes = [
     # (r"/weapp",                                  "handler.weapp.weapp.WechatHandler")
 
     # hztrip
-    (r"/hztrip",                        "handler.wehztrip.event.WechatOauthHandler",  {"event": "wechat_hztrip"}),
+    (r"/hztrip",                 "handler.wehztrip.event.WechatOauthHandler",  {"event": "wechat_hztrip"}),
+    (r"/maya",                   "handler.maya.event.WechatOauthHandler",      {"event": "wechat_maya"}),
 
     # # job
     # (r"/job/api/positionfav",                   "handler.job.position_fav.PositionFavHandler"),
