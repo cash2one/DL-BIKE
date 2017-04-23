@@ -106,7 +106,6 @@ class XhjdEventPageService(PageService):
                               "工作人员将会在2个工作日内与您联系。\n户籍窗口联系电话0571-82301032"
 
         userinfo = yield self._get_user_info(msg.FromUserName)
-        print (userinfo)
         yield self.wypcs110content_ds.add_wypcs110content(fields={
             "openid": msg.FromUserName,
             "nickname": userinfo.nickname,
@@ -172,10 +171,10 @@ class XhjdEventPageService(PageService):
             }
         }
         # yield self._send_template("oznRwtzG0IxBPLlBH-oUWZnJo6Gk", template_id, url, data) # 项
-        yield self._send_template("oznRwt19ILiJzRW3ENy5miRWH3zQ", template_id, url, data) # 潘
-        # yield self._send_template("oznRwtwAyDAjF2gBZ1ws4VYZ8oyo", template_id, url, data) # 湘湖警点收听号1
-        # yield self._send_template("oznRwt6yoyAg_pw93kvMIVSy9qos", template_id, url, data) # 湘湖警点收听号2
-        # yield self._send_template("oznRwtzJyyqVXyxBSMFUOrkAYG4E", template_id, url, data) # 湘湖警点收听号2
+        # yield self._send_template("oznRwt19ILiJzRW3ENy5miRWH3zQ", template_id, url, data) # 潘
+        yield self._send_template("oznRwtwAyDAjF2gBZ1ws4VYZ8oyo", template_id, url, data) # 湘湖警点收听号1
+        yield self._send_template("oznRwt6yoyAg_pw93kvMIVSy9qos", template_id, url, data) # 湘湖警点收听号2
+        yield self._send_template("oznRwtzJyyqVXyxBSMFUOrkAYG4E", template_id, url, data) # 湘湖警点收听号2
         return res
 
     def _get_text(self, msg):
@@ -193,23 +192,6 @@ class XhjdEventPageService(PageService):
             keyword = msg.Recognition.strip("。")
 
         return keyword.upper()
-
-    @gen.coroutine
-    def _get_lng_lat(self, msg):
-
-        """
-        获得经纬度信息
-        :param msg:
-        :param type: 经纬度类型，支持百度经纬度，微信经纬度（火星坐标）
-        :return: lng, lat: 经度，纬度
-        """
-
-        lng, lat = 0, 0
-        res = yield self.hztrip_ds.get_bd_lnglat(msg.Location_Y, msg.Location_X)
-        if res.status == 0:
-            lng, lat = res.result[0].get("x", 0), res.result[0].get("y", 0)
-
-        return lng, lat
 
     @gen.coroutine
     def _get_user_info(self, openid):
