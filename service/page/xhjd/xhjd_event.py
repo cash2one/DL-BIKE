@@ -12,7 +12,7 @@ import conf.wechat as wx_const
 from util.tool.date_tool import curr_now_minute
 from service.page.base import PageService
 
-class EventPageService(PageService):
+class XhjdEventPageService(PageService):
 
     def __init__(self):
         super().__init__()
