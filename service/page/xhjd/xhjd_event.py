@@ -121,7 +121,6 @@ class XhjdEventPageService(PageService):
             "event": session_key,
             "text": msg.Content,
             "createTime": curr_now_minute()
-
         })
 
         res = yield self.wx_rep_text(msg, content)
@@ -138,31 +137,27 @@ class XhjdEventPageService(PageService):
         content = "您的位置已经收到，谢谢！"
         yield self.wx_rep_text(msg, content)
         userinfo = yield self._get_user_info(msg.FromUserName)
-        print (userinfo)
-        # yield self.wypcs110content_ds.add_wypcs110content(fields={
-        #     "openid": msg.FromUserName,
-        #     "nickname": userinfo.nickname,
-        #     "sex": userinfo.sex,
-        #     "city": userinfo.city,
-        #     "country": userinfo.country,
-        #     "province": userinfo.province,
-        #     "msgType": msg.MsgType,
-        #     "event": session_key,
-        #     "text": msg.Content,
-        #     "latitude": msg.Location_X,
-        #     "longitude": msg.Location_Y,
-        #     "label": msg.Label,
-        #     "createTime": curr_now_minute()
-        # })
+        yield self.wypcs110content_ds.add_wypcs110content(fields={
+            "openid": msg.FromUserName,
+            "nickname": userinfo.nickname,
+            "sex": userinfo.sex,
+            "city": userinfo.city,
+            "country": userinfo.country,
+            "province": userinfo.province,
+            "msgType": msg.MsgType,
+            "event": session_key,
+            "text": msg.Content,
+            "latitude": msg.Location_X,
+            "longitude": msg.Location_Y,
+            "label": msg.Label,
+            "createTime": curr_now_minute()
+        })
 
         # 发送警情消息模板
         url = "http://api.map.baidu.com/marker?location={},{}&title=用户的位置" \
-              "&coord_type=gcj02&output=html&src=wypcs110|wypcs110".format(msg.Location_X, msg.Location_Y)
+              "&content={}&coord_type=gcj02&output=html&src=wypcs110|wypcs110".format(msg.Location_X, msg.Location_Y, "警情")
         # template_id = "g58vKw9yJmFg33_Y6HBXUSy5wqTx7bcPAy6YZG0X-2Q"
         template_id = "2FAjF08wI4wWGSeeasQPFCmgUmDeLBI0v-sKouzCH9M"
-        print(url)
-        print(userinfo.nickname)
-        print(msg.Label)
         data = {
             "first": {
                 "value":"您的管辖范围有一起警情",
@@ -182,7 +177,6 @@ class XhjdEventPageService(PageService):
             }
         }
         res = yield self._send_template("oG4UGuAaZ58oTHNEUFZ_fLc3z7wI", template_id, url, data)
-
         return res
 
     def _get_text(self, msg):
