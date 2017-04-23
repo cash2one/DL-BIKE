@@ -2,7 +2,7 @@
 
 # @Time    : 2/6/17 09:03
 # @Author  : panda (panyuxin@moseeker.com)
-# @File    : event.py
+# @File    : xhjd_event.py
 # @DES     : 湘湖警点微信公众号消息交互
 
 
@@ -70,43 +70,43 @@ class WechatOauthHandler(MetaBaseHandler):
     @gen.coroutine
     def post_text(self, session_key):
         """文本消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_text(self.msg, session_key)
+        res = yield self.xhjd_event_ps.opt_text(self.msg, session_key)
         self.send_xml(res)
 
     @gen.coroutine
     def post_image(self, session_key):
         """图片消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_default(self.msg)
+        res = yield self.xhjd_event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
     def post_voice(self, session_key):
         """语音消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_default(self.msg)
+        res = yield self.xhjd_event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
     def post_video(self, session_key):
         """视频消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_default(self.msg)
+        res = yield self.xhjd_event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
     def post_shortvideo(self, session_key):
         """小视屏消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_default(self.msg)
+        res = yield self.xhjd_event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
     def post_location(self, session_key):
         """地理位置消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_location(self.msg, session_key)
+        res = yield self.xhjd_event_ps.opt_location(self.msg, session_key)
         self.send_xml(res)
 
     @gen.coroutine
     def post_link(self, session_key):
         """链接消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_default(self.msg)
+        res = yield self.xhjd_event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
@@ -118,19 +118,19 @@ class WechatOauthHandler(MetaBaseHandler):
     @gen.coroutine
     def event_subscribe(self):
         """关注事件"""
-        res = yield self.event_ps.opt_follow(self.msg)
+        res = yield self.xhjd_event_ps.opt_follow(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
     def event_unsubscribe(self):
         """取消关注事件"""
-        res = yield self.event_ps.opt_default(self.msg)
+        res = yield self.xhjd_event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
     def event_SCAN(self):
         """用户扫码事件"""
-        res = yield self.event_ps.opt_default(self.msg)
+        res = yield self.xhjd_event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
@@ -140,7 +140,7 @@ class WechatOauthHandler(MetaBaseHandler):
         self.key = self.msg['EventKey']
         self.xhjd.set_xhjd_session(self.current_user.openid, self.key)
 
-        res = yield self.event_ps.opt_click(self.msg, self.key)
+        res = yield self.xhjd_event_ps.opt_click(self.msg, self.key)
         self.send_xml(res)
 
     @gen.coroutine

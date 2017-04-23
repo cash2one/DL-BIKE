@@ -66,7 +66,7 @@ conn = http.client.HTTPSConnection("api.weixin.qq.com")
 # appid: wx59d56a198f761599
 # appsecret: 46dfb719a323bb66b32af93211c5385b
 
-conn.request("POST", "/cgi-bin/menu/create?access_token=lKAaBT9k2N9eOrST0H1MQNJ2W0LmZxJ8kXNq_C_qUEg7gsw3aiBCee6Z026U8YVdqj2JS5YpCHKmox_52OZgcldQQeIspQNYwhee_zyAGzhXgSWBKIJF0kR7n0f8mDfaLQKaABAHMG", obj_menu.encode("utf8"))
+conn.request("POST", "/cgi-bin/menu/create?access_token=Jzmy4lTq5fP6Qo1YKGJQUvxSMhzRAFBg9ACnIcTzFQK3gJJrVt48MrpKIMNyP-h3m8CBd9kbrMc6aWiVi0A4RDEZ6L9SDcSNNxiXk4_RrhpZexvlNesQ7kukQ5Il6raVUQCdACANJV", obj_menu.encode("utf8"))
 
 res = conn.getresponse()
 data = res.read()

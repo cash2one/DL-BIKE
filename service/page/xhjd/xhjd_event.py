@@ -2,7 +2,7 @@
 
 # @Time    : 3/12/17 16:53
 # @Author  : panda (panyuxin@moseeker.com)
-# @File    : event.py
+# @File    : xhjd_event.py
 # @DES     :
 
 import time
