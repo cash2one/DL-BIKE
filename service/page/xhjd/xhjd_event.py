@@ -117,8 +117,8 @@ class XhjdEventPageService(PageService):
             "city": userinfo.city,
             "country": userinfo.country,
             "province": userinfo.province,
-            "msgType": msg.msgType,
-            "event": msg.event,
+            "msgType": msg.MsgType,
+            "event": session_key,
             "text": msg.Content,
             "createTime": curr_now_minute()
 
@@ -147,8 +147,8 @@ class XhjdEventPageService(PageService):
             "city": userinfo.city,
             "country": userinfo.country,
             "province": userinfo.province,
-            "msgType": msg.msgType,
-            "event": msg.event,
+            "msgType": msg.MsgType,
+            "event": session_key,
             "text": msg.Content,
             "latitude": lat,
             "longitude": lng,
