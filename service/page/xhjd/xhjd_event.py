@@ -171,7 +171,7 @@ class XhjdEventPageService(PageService):
             }
         }
         # yield self._send_template("oznRwtzG0IxBPLlBH-oUWZnJo6Gk", template_id, url, data) # 项
-        # yield self._send_template("oznRwt19ILiJzRW3ENy5miRWH3zQ", template_id, url, data) # 潘
+        yield self._send_template("oznRwt19ILiJzRW3ENy5miRWH3zQ", template_id, url, data) # 潘
         yield self._send_template("oznRwtwAyDAjF2gBZ1ws4VYZ8oyo", template_id, url, data) # 湘湖警点收听号1
         yield self._send_template("oznRwt6yoyAg_pw93kvMIVSy9qos", template_id, url, data) # 湘湖警点收听号2
         yield self._send_template("oznRwtzJyyqVXyxBSMFUOrkAYG4E", template_id, url, data) # 湘湖警点收听号2

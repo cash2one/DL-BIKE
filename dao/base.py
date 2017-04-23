@@ -38,7 +38,7 @@ class BaseDao(DB):
         # self.logger.debug(
         #     "[debug][{0}][start][time: {1}][sql: {2}][params: {3}]".format(
         #         self.__class__.__module__, curr_now(), sql, params))
-        
+
         cursor = yield self.pool.execute(sql, params)
         raise gen.Return(cursor)
 
