@@ -16,8 +16,11 @@ class XhjdEventPageService(PageService):
 
     def __init__(self):
         super().__init__()
-        self.appid = "wxa3bf32fdbd79dc04"
-        self.appsecret = "848346ee2818483c2981243b20eba707"
+        # self.appid = "wxa3bf32fdbd79dc04"
+        # self.appsecret = "848346ee2818483c2981243b20eba707"
+
+        self.appid = "wx598e46db763b0023"
+        self.appsecret = "2e4a6062f383d0d3d96295a51e67b73c"
 
     @gen.coroutine
     def opt_default(self, msg):
@@ -107,7 +110,7 @@ class XhjdEventPageService(PageService):
 
         userinfo = yield self._get_user_info(msg.FromUserName)
         print (userinfo)
-        yield self.wypcs110content_ps.add_wypcs110content(fields={
+        yield self.wypcs110content_ds.add_wypcs110content(fields={
             "openid": msg.FromUserName,
             "nickname": userinfo.nickname,
             "sex": userinfo.sex,
@@ -137,7 +140,7 @@ class XhjdEventPageService(PageService):
         lng, lat = yield self._get_lng_lat(msg)
         userinfo = yield self._get_user_info(msg.FromUserName)
         print (userinfo)
-        yield self.wypcs110content_ps.add_wypcs110content(fields={
+        yield self.wypcs110content_ds.add_wypcs110content(fields={
             "openid": msg.FromUserName,
             "nickname": userinfo.nickname,
             "sex": userinfo.sex,
@@ -156,7 +159,8 @@ class XhjdEventPageService(PageService):
         # 发送警情消息模板
         url = "http://api.map.baidu.com/marker?location=%s,%s&title=用户的位置" \
               "&content=%s&coord_type=gcj02&output=html&src=wypcs110|wypcs110".format(lat, lng, msg.Label)
-        template_id = "g58vKw9yJmFg33_Y6HBXUSy5wqTx7bcPAy6YZG0X-2Q"
+        # template_id = "g58vKw9yJmFg33_Y6HBXUSy5wqTx7bcPAy6YZG0X-2Q"
+        template_id = "2FAjF08wI4wWGSeeasQPFCmgUmDeLBI0v-sKouzCH9M"
         data = {
             "first": {
                 "value":"您的管辖范围有一起警情",
@@ -175,7 +179,7 @@ class XhjdEventPageService(PageService):
                 "color": "#743A3A",
             }
         }
-        res = yield self._send_template("oznRwt19ILiJzRW3ENy5miRWH3zQ", template_id, url, data)
+        res = yield self._send_template("oG4UGuAaZ58oTHNEUFZ_fLc3z7wI", template_id, url, data)
 
         return res
 
