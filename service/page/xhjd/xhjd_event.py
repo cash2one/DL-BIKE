@@ -16,11 +16,8 @@ class XhjdEventPageService(PageService):
 
     def __init__(self):
         super().__init__()
-        # self.appid = "wxa3bf32fdbd79dc04"
-        # self.appsecret = "848346ee2818483c2981243b20eba707"
-
-        self.appid = "wx598e46db763b0023"
-        self.appsecret = "2e4a6062f383d0d3d96295a51e67b73c"
+        self.appid = "wxa3bf32fdbd79dc04"
+        self.appsecret = "848346ee2818483c2981243b20eba707"
 
     @gen.coroutine
     def opt_default(self, msg):
@@ -135,7 +132,7 @@ class XhjdEventPageService(PageService):
         :return:
         """
         content = "您的位置已经收到，谢谢！"
-        yield self.wx_rep_text(msg, content)
+        res = yield self.wx_rep_text(msg, content)
         userinfo = yield self._get_user_info(msg.FromUserName)
         yield self.wypcs110content_ds.add_wypcs110content(fields={
             "openid": msg.FromUserName,
@@ -155,8 +152,7 @@ class XhjdEventPageService(PageService):
         # 发送警情消息模板
         url = "http://api.map.baidu.com/marker?location={},{}&title=用户的位置" \
               "&content={}&coord_type=gcj02&output=html&src=wypcs110|wypcs110".format(msg.Location_X, msg.Location_Y, "警情")
-        # template_id = "g58vKw9yJmFg33_Y6HBXUSy5wqTx7bcPAy6YZG0X-2Q"
-        template_id = "2FAjF08wI4wWGSeeasQPFCmgUmDeLBI0v-sKouzCH9M"
+        template_id = "g58vKw9yJmFg33_Y6HBXUSy5wqTx7bcPAy6YZG0X-2Q"
         data = {
             "first": {
                 "value":"您的管辖范围有一起警情",
@@ -175,7 +171,11 @@ class XhjdEventPageService(PageService):
                 "color": "#743A3A",
             }
         }
-        res = yield self._send_template("oG4UGuAaZ58oTHNEUFZ_fLc3z7wI", template_id, url, data)
+        # yield self._send_template("oznRwtzG0IxBPLlBH-oUWZnJo6Gk", template_id, url, data) # 项
+        yield self._send_template("oznRwt19ILiJzRW3ENy5miRWH3zQ", template_id, url, data) # 潘
+        # yield self._send_template("oznRwtwAyDAjF2gBZ1ws4VYZ8oyo", template_id, url, data) # 湘湖警点收听号1
+        # yield self._send_template("oznRwt6yoyAg_pw93kvMIVSy9qos", template_id, url, data) # 湘湖警点收听号2
+        # yield self._send_template("oznRwtzJyyqVXyxBSMFUOrkAYG4E", template_id, url, data) # 湘湖警点收听号2
         return res
 
     def _get_text(self, msg):
