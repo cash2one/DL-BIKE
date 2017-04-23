@@ -5,15 +5,11 @@
 # @File    : event.py
 # @DES     :
 
-import re
 import time
-from datetime import datetime, timedelta
 from tornado import gen
 
 import conf.wechat as wx_const
-import conf.common as const
-from util.tool.url_tool import make_static_url
-from util.tool.date_tool import sec_2_time
+from util.tool.date_tool import curr_now_minute
 from service.page.base import PageService
 
 class EventPageService(PageService):
@@ -110,8 +106,76 @@ class EventPageService(PageService):
                               "工作人员将会在2个工作日内与您联系。\n户籍窗口联系电话0571-82301032"
 
         userinfo = yield self._get_user_info(msg.FromUserName)
+        print (userinfo)
+        yield self.wypcs110content_ps.add_wypcs110content(fields={
+            "openid": msg.FromUserName,
+            "nickname": userinfo.nickname,
+            "sex": userinfo.sex,
+            "city": userinfo.city,
+            "country": userinfo.country,
+            "province": userinfo.province,
+            "msgType": msg.msgType,
+            "event": msg.event,
+            "text": msg.Content,
+            "createTime": curr_now_minute()
+
+        })
 
         res = yield self.wx_rep_text(msg, content)
+
+        return res
+
+    @gen.coroutine
+    def opt_location(self, msg, session_key):
+        """针对用户的location消息，被动回复消息
+        :param msg: 消息
+        :param session_key:
+        :return:
+        """
+        content = "您的位置已经收到，谢谢！"
+        yield self.wx_rep_text(msg, content)
+        lng, lat = yield self._get_lng_lat(msg)
+        userinfo = yield self._get_user_info(msg.FromUserName)
+        print (userinfo)
+        yield self.wypcs110content_ps.add_wypcs110content(fields={
+            "openid": msg.FromUserName,
+            "nickname": userinfo.nickname,
+            "sex": userinfo.sex,
+            "city": userinfo.city,
+            "country": userinfo.country,
+            "province": userinfo.province,
+            "msgType": msg.msgType,
+            "event": msg.event,
+            "text": msg.Content,
+            "latitude": lat,
+            "longitude": lng,
+            "label": msg.Label,
+            "createTime": curr_now_minute()
+        })
+
+        # 发送警情消息模板
+        url = "http://api.map.baidu.com/marker?location=%s,%s&title=用户的位置" \
+              "&content=%s&coord_type=gcj02&output=html&src=wypcs110|wypcs110".format(lat, lng, msg.Label)
+        template_id = "g58vKw9yJmFg33_Y6HBXUSy5wqTx7bcPAy6YZG0X-2Q"
+        data = {
+            "first": {
+                "value":"您的管辖范围有一起警情",
+                "color" : "#743A3A",
+            },
+            "keyword1" : {
+                "value" :"微信报警位置标注",
+                "color" :"#743A3A",
+            },
+            "keyword2" :{
+                "value" :"",
+                "color" :"#743A3A",
+            },
+            "remark" :{
+                "value" :"微信用户：%s于%s在%s发出报警位置标注。请尽快赶到现场！".format(userinfo.nickname, curr_now_minute(), msg.Label),
+                "color": "#743A3A",
+            }
+        }
+        res = yield self._send_template("oznRwt19ILiJzRW3ENy5miRWH3zQ", template_id, url, data)
 
         return res
 

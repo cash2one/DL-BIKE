@@ -70,7 +70,7 @@ class WechatOauthHandler(MetaBaseHandler):
     @gen.coroutine
     def post_text(self, session_key):
         """文本消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_msg(self.msg, session_key)
+        res = yield self.event_ps.opt_text(self.msg, session_key)
         self.send_xml(res)
 
     @gen.coroutine
@@ -82,7 +82,7 @@ class WechatOauthHandler(MetaBaseHandler):
     @gen.coroutine
     def post_voice(self, session_key):
         """语音消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_msg(self.msg, session_key)
+        res = yield self.event_ps.opt_default(self.msg)
         self.send_xml(res)
 
     @gen.coroutine
@@ -100,7 +100,7 @@ class WechatOauthHandler(MetaBaseHandler):
     @gen.coroutine
     def post_location(self, session_key):
         """地理位置消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
-        res = yield self.event_ps.opt_msg(self.msg, session_key)
+        res = yield self.event_ps.opt_location(self.msg, session_key)
         self.send_xml(res)
 
     @gen.coroutine

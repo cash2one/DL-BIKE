@@ -12,21 +12,5 @@ routes = [
 
     # hztrip
     (r"/hztrip",                 "handler.wehztrip.event.WechatOauthHandler",  {"event": "wechat_hztrip"}),
-    (r"/maya",                   "handler.maya.event.WechatOauthHandler",      {"event": "wechat_maya"}),
-
-    # # job
-    # (r"/job/api/positionfav",                   "handler.job.position_fav.PositionFavHandler"),
-    # (r"/job/search",                            "handler.job.position_list.PositionListHandler"),
-    # (r"/job/?(.*)",                             "handler.job.position.PositionHandler"),
-    #
-    # # 公共方法
-    # (r"/common/?(.*)",                          "handler.common.common.CommonHandler"),
-    #
-    # # sitemap
-    # (r"/sitemap.xml",                           "handler.common.sitemap.SitemapHandler"),
-    # (r"/sitemap_all.xml",                       "handler.common.sitemap.SitemapAllHandler"),
-    #
-    # # 官网
-    # (r"/official/aboutus",                      "handler.official.index.AboutUsHandler"),
-    # (r"/?(.*)",                                 "handler.official.index.IndexHandler")
+    (r"/xhjd",                   "handler.xhjd.event.WechatOauthHandler",      {"event": "wechat_xhjd"})
 ]
