@@ -36,10 +36,10 @@ class IpproxyCache(object):
         if not isinstance(value, dict) or not value:
             return False
 
-        logger.debug(
-            "[IpproxyCache] set_ipproxy_session key:{0} "
-            "value:{1} type:{2}".format(
-                self.ipproxy, value, type(value)))
+        # logger.debug(
+        #     "[IpproxyCache] set_ipproxy_session key:{0} "
+        #     "value:{1} type:{2}".format(
+        #         self.ipproxy, value, type(value)))
 
         self.redis.set(self.ipproxy, value, ttl=60*60*6)
         return True

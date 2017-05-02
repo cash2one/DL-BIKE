@@ -126,8 +126,8 @@ def http_fetch(
 
         if res_json:
             #  返回结果为 JSON 形式
-            logger.debug("[http_fetch][url: {}][body: {}][ret: {}] ".format(
-                route, ujson.encode(data), ujson.decode(response.body)))
+            # logger.debug("[http_fetch][url: {}][body: {}][ret: {}] ".format(
+            #     route, ujson.encode(data), ujson.decode(response.body)))
             body = ujson.decode(response.body)
             raise gen.Return(_objectdictify(body))
         else:
@@ -181,12 +181,12 @@ def _async_http_get(
 
         if res_json:
             # 返回结果为 JSON 形式
-            logger.debug("[_async_http_get][url: {}][ret: {}] ".format(
-                url, ujson.decode(response.body)))
+            # logger.debug("[_async_http_get][url: {}][ret: {}] ".format(
+            #     url, ujson.decode(response.body)))
             body = ujson.decode(response.body)
             raise gen.Return(_objectdictify(body))
         else:
-            logger.debug("[_async_http_get][url: {}] ".format(url))
+            # logger.debug("[_async_http_get][url: {}] ".format(url))
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:
@@ -236,14 +236,14 @@ def _async_http_post(
 
         if res_json:
             #  返回结果为 JSON 形式
-            logger.debug("[_async_http_post][url: {}][body: {}][ret: {}] ".format(
-                url, ujson.encode(jdata), ujson.decode(response.body)))
+            # logger.debug("[_async_http_post][url: {}][body: {}][ret: {}] ".format(
+            #     url, ujson.encode(jdata), ujson.decode(response.body)))
             body = ujson.decode(response.body)
             raise gen.Return(_objectdictify(body))
         else:
-            logger.debug(
-                "[_async_http_post][url: {}][body: {}] ".format(
-                    url, ujson.encode(jdata)))
+            # logger.debug(
+            #     "[_async_http_post][url: {}][body: {}] ".format(
+            #         url, ujson.encode(jdata)))
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:

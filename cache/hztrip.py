@@ -43,10 +43,10 @@ class HztripCache(object):
             return False
 
         key = self.bus_line.format(bus_line)
-        logger.debug(
-            "[HztripCache] set_bus_lines key:{0} "
-            "value:{1} type:{2}".format(
-                key, value, type(value)))
+        # logger.debug(
+        #     "[HztripCache] set_bus_lines key:{0} "
+        #     "value:{1} type:{2}".format(
+        #         key, value, type(value)))
 
         self.redis.set(key, value, ttl=60*60*24)
         return True
@@ -69,10 +69,10 @@ class HztripCache(object):
             return False
 
         key = self.bus_stop.format(bus_stop)
-        logger.debug(
-            "[HztripCache] set_bus_stops key:{0} "
-            "value:{1} type:{2}".format(
-                key, value, type(value)))
+        # logger.debug(
+        #     "[HztripCache] set_bus_stops key:{0} "
+        #     "value:{1} type:{2}".format(
+        #         key, value, type(value)))
 
         self.redis.set(key, value, ttl=60*60*24)
         return True
@@ -92,10 +92,10 @@ class HztripCache(object):
         if not isinstance(value, dict) or not value:
             return False
 
-        logger.debug(
-            "[HztripCache] set_pm25_session key:{0} "
-            "value:{1} type:{2}".format(
-                self.pm25, value, type(value)))
+        # logger.debug(
+        #     "[HztripCache] set_pm25_session key:{0} "
+        #     "value:{1} type:{2}".format(
+        #         self.pm25, value, type(value)))
 
         self.redis.set(self.pm25, value, ttl=60*60*2)
         return True
@@ -124,10 +124,10 @@ class HztripCache(object):
 
         key = self.hztrip_session.format(openid)
 
-        logger.debug(
-            "[HztripCache] set_hztrip_session key:{0} "
-            "value:{1} type:{2}".format(
-                key, value, type(value)))
+        # logger.debug(
+        #     "[HztripCache] set_hztrip_session key:{0} "
+        #     "value:{1} type:{2}".format(
+        #         key, value, type(value)))
 
         self.redis.set(key, value)
         return True

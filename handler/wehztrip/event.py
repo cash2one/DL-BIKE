@@ -170,7 +170,7 @@ class WechatOauthHandler(MetaBaseHandler):
 
     def get_msg(self):
         from_xml = self.request.body
-        self.logger.debug("get_msg:{}".format(from_xml))
+        # self.logger.debug("get_msg:{}".format(from_xml))
         if not from_xml:
             return ObjectDict()
         return parse_msg(from_xml)
@@ -180,9 +180,10 @@ class WechatOauthHandler(MetaBaseHandler):
         验证 POST 数据是否真实有效
         :return:
         """
-        # token = "63659a086f2011e5a2be00163e004a1f"
+
         token = self.settings.get("hztrip_token")
 
+        hashstr = None
         try:
             ret, hashstr = SHA1().getSHA1(token,
                                           self.params.timestamp,
@@ -191,7 +192,4 @@ class WechatOauthHandler(MetaBaseHandler):
         except Exception as e:
             self.logger.error(traceback.format_exc())
 
-        if hashstr == self.params.signature:
-            return True
-
-        return False
+        return hashstr == self.params.signature

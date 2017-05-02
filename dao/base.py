@@ -97,7 +97,7 @@ class BaseDao(DB):
             response = [self.optResType(item, self.fields_map)
                         for item in response]
 
-        self.logger.debug("[debug][get_list_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
+        # self.logger.debug("[debug][get_list_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
         raise gen.Return(response)
 
     @gen.coroutine
@@ -131,7 +131,7 @@ class BaseDao(DB):
         else:
             response = self.optResType(response, self.fields_map)
 
-        self.logger.debug("[debug][get_record_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
+        # self.logger.debug("[debug][get_record_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
         raise gen.Return(response)
 
     @gen.coroutine
@@ -158,9 +158,9 @@ class BaseDao(DB):
         sql, params = self.insert(self.table, fields, options)
         cursor = yield self.query(sql, params)
         insert_id = cursor.lastrowid
-        self.logger.debug(
-            "[debug][insert_record][{0}][response: {1}]".format(
-                self.__class__.__module__, insert_id))
+        # self.logger.debug(
+        #     "[debug][insert_record][{0}][response: {1}]".format(
+        #         self.__class__.__module__, insert_id))
         raise gen.Return(insert_id)
 
     @gen.coroutine
@@ -195,9 +195,9 @@ class BaseDao(DB):
         cursor = yield self.query(sql, params_update)
         cursor.fetchone()
         rows_count = cursor.rowcount
-        self.logger.debug(
-            "[debug][update_by_conds][{0}][response: {1}]".format(
-                self.__class__.__module__, rows_count))
+        # self.logger.debug(
+        #     "[debug][update_by_conds][{0}][response: {1}]".format(
+        #         self.__class__.__module__, rows_count))
         if rows_count:
             raise gen.Return(True)
         else:
@@ -221,9 +221,9 @@ class BaseDao(DB):
         cursor = yield self.query(sql, params)
         cursor.fetchone()
         rows_count = cursor.rowcount
-        self.logger.debug(
-            "[debug][delete_by_conds][{0}][response: {1}]".format(
-                self.__class__.__module__, rows_count))
+        # self.logger.debug(
+        #     "[debug][delete_by_conds][{0}][response: {1}]".format(
+        #         self.__class__.__module__, rows_count))
         if rows_count:
             raise gen.Return(True)
         else:
@@ -252,7 +252,7 @@ class BaseDao(DB):
         sql = self.select_cnt(self.table, conds, fields, appends, index)
         cursor = yield self.query(sql, params)
         response = cursor.fetchone()
-        self.logger.debug("[debug][get_cnt_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
+        # self.logger.debug("[debug][get_cnt_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
         raise gen.Return(ObjectDict(response))
 
     @gen.coroutine
@@ -278,5 +278,5 @@ class BaseDao(DB):
         sql = self.select_sum(self.table, conds, fields, appends, index)
         cursor = yield self.query(sql, params)
         response = cursor.fetchone()
-        self.logger.debug("[debug][get_sum_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
+        # self.logger.debug("[debug][get_sum_by_conds][{0}][response: {1}]".format(self.__class__.__module__, response))
         raise gen.Return(ObjectDict(response))

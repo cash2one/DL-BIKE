@@ -45,10 +45,10 @@ class XhjdCache(object):
 
         key = self.xhjd_session.format(openid)
 
-        logger.debug(
-            "[XhjdCache] set_xhjd_session key:{0} "
-            "value:{1} type:{2}".format(
-                key, value, type(value)))
+        # logger.debug(
+        #     "[XhjdCache] set_xhjd_session key:{0} "
+        #     "value:{1} type:{2}".format(
+        #         key, value, type(value)))
 
         self.redis.set(key, value)
         return True
