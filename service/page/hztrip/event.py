@@ -81,7 +81,8 @@ class EventPageService(PageService):
         elif click_key == "transfer":
             content += "查公交换乘:\n输入起点和终点，并以空格分割，如留下 小车桥\n"
         elif click_key == "bike":
-            content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n3.用语音输入查询的地点\n\n提示：可点击结果查看具体租赁点地图\n"
+            content += "系统升级中\n"
+            # content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n3.用语音输入查询的地点\n\n提示：可点击结果查看具体租赁点地图\n"
         elif click_key == "park":
             content += "查实时停车位:\n1.输入具体地址\n2.发送您的位置信息\n3.用语音输入查询的地点\n"
         elif click_key == "yaohao":
