@@ -10,8 +10,8 @@ from service.data.base import DataService
 from cache.ipproxy import IpproxyCache
 from util.common import ObjectDict
 from util.tool.date_tool import curr_now
-from util.tool.str_tool import md5Encode, to_str
-from util.tool.http_tool import http_get, http_post, http_fetch
+from util.tool.str_tool import md5Encode
+from util.tool.http_tool import http_get, http_fetch
 
 
 class InfraDataService(DataService):
@@ -45,7 +45,9 @@ class InfraDataService(DataService):
             "page_size": page_size,
         })
 
-        ret = yield http_get(route=path.BAIDU_WEBAPI_PLACE_POI_LIST, jdata=params, timeout=40)
+        ret = yield http_get(route=path.BAIDU_WEBAPI_PLACE_POI_LIST,
+                             jdata=params,
+                             timeout=40)
         if ret:
             raise gen.Return(ret)
         else:
@@ -62,21 +64,28 @@ class InfraDataService(DataService):
         :return:
         """
 
-        params = ObjectDict({
-            "longitude": longitude,
-            "latitude": latitude,
-        })
+        try:
+            params = ObjectDict({
+                "longitude": longitude,
+                "latitude": latitude,
+            })
 
-        host, port = yield self.get_ip_proxy()
+            host, port = yield self.get_ip_proxy()
 
-        ret = yield http_get(path.DINGDA_NEARBY_LIST, params, headers=headers.DATA_SOURCE.dingda_app.header, timeout=30,
-                             proxy_host=host, proxy_port=port)
+            ret = yield http_get(path.DINGDA_NEARBY_LIST,
+                                 params,
+                                 headers=headers.DATA_SOURCE.dingda_app.header,
+                                 timeout=30,
+                                 proxy_host=host,
+                                 proxy_port=port)
 
-        if not ret:
+            if not ret:
+                yield self.del_ip_proxy(host, port)
+                raise gen.Return(ObjectDict())
+            raise gen.Return(ret)
+        except:
             yield self.del_ip_proxy(host, port)
             raise gen.Return(ObjectDict())
-        raise gen.Return(ret)
-
 
     @gen.coroutine
     def get_beijing_nearby(self, longitude, latitude):
@@ -97,25 +106,31 @@ class InfraDataService(DataService):
         :param latitude:
         :return:
         """
+        try:
+            params = ObjectDict({
+                "language": 0,
+                "localLongitude": longitude,
+                "localLatitude": latitude,
+                "md5": md5Encode(str(latitude)),
+                "scale": 1000,
+                "time": curr_now()
+            })
 
-        params = ObjectDict({
-            "language": 0,
-            "localLongitude": longitude,
-            "localLatitude": latitude,
-            "md5": md5Encode(str(latitude)),
-            "scale": 1000,
-            "time": curr_now()
-        })
+            host, port = yield self.get_ip_proxy()
 
-        host, port = yield self.get_ip_proxy()
-
-        ret = yield http_fetch(path.BEIJING_NEARBY_LIST, params, headers=headers.DATA_SOURCE.beijing_app.header, timeout=30,
-                               proxy_host=host, proxy_port=port)
-        if not ret:
+            ret = yield http_fetch(path.BEIJING_NEARBY_LIST,
+                                   params,
+                                   headers=headers.DATA_SOURCE.beijing_app.header,
+                                   timeout=30,
+                                   proxy_host=host,
+                                   proxy_port=port)
+            if not ret:
+                yield self.del_ip_proxy(host, port)
+                raise gen.Return(ObjectDict())
+            raise gen.Return(ret)
+        except:
             yield self.del_ip_proxy(host, port)
             raise gen.Return(ObjectDict())
-
-        raise gen.Return(ret)
 
     @gen.coroutine
     def get_xian_nearby(self, longitude, latitude):
@@ -140,21 +155,27 @@ class InfraDataService(DataService):
         :param latitude:
         :return:
         """
+        try:
+            params = ObjectDict({
+                "longitude": longitude,
+                "latitude": latitude,
+            })
 
-        params = ObjectDict({
-            "longitude": longitude,
-            "latitude": latitude,
-        })
+            host, port = yield self.get_ip_proxy()
 
-        host, port = yield self.get_ip_proxy()
-
-        ret = yield http_fetch(path.XIAN_NEARBY_LIST, params, headers=headers.DATA_SOURCE.xian_app.header, timeout=30,
-                               proxy_host=host, proxy_port=port)
-        if not ret:
+            ret = yield http_fetch(path.XIAN_NEARBY_LIST,
+                                   params,
+                                   headers=headers.DATA_SOURCE.xian_app.header,
+                                   timeout=30,
+                                   proxy_host=host,
+                                   proxy_port=port)
+            if not ret:
+                yield self.del_ip_proxy(host, port)
+                raise gen.Return(ObjectDict())
+            raise gen.Return(ret)
+        except:
             yield self.del_ip_proxy(host, port)
             raise gen.Return(ObjectDict())
-
-        raise gen.Return(ret)
 
     @gen.coroutine
     def get_nanjing_list(self):
@@ -173,7 +194,10 @@ class InfraDataService(DataService):
         :return:
         """
 
-        ret = yield http_get(path.NANJING_LIST, headers=headers.DATA_SOURCE.nanjing_wechat.header, res_json=False, timeout=30)
+        ret = yield http_get(path.NANJING_LIST,
+                             headers=headers.DATA_SOURCE.nanjing_wechat.header,
+                             res_json=False,
+                             timeout=30)
         ret = ret.decode('utf-8-sig') # 去除 dom 头
         if not ret:
             raise gen.Return(ObjectDict())
