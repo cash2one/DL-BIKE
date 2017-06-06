@@ -225,8 +225,7 @@ def _async_http_post(
         http_request = tornado.httpclient.HTTPRequest(
             url,
             method=method.upper(),
-            # body=ujson.encode(jdata),
-            body=ujson.dumps(jdata, ensure_ascii=False, encoding="utf-8"),
+            body=ujson.encode(jdata),
             request_timeout=timeout,
             headers=headers,
             validate_cert=False,
