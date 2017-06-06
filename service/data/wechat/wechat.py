@@ -3,6 +3,7 @@
 from tornado import gen
 
 import conf.path as path
+from setting import settings
 from service.data.base import DataService
 from util.common import ObjectDict
 from util.common.decorator import cache
@@ -68,3 +69,14 @@ class WechatDataService(DataService):
             raise gen.Return(ret)
         else:
             raise gen.Return(ObjectDict())
+
+    @gen.coroutine
+    def send_custom(self, jdata):
+        """
+        发送客服消息 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547&token=&lang=zh_CN
+        :return:
+        """
+
+        access_token_res = yield self.get_access_token(settings['hztrip_appid'], settings['hztrip_appsecret'])
+        ret = yield http_post(path.WX_CUSTOM_SEND.format(access_token_res.access_token), jdata)
+        raise gen.Return(ret)

@@ -49,4 +49,5 @@ settings['soso_ak'] = "7CJBZ-N3MRU-LGGVA-2JIVK-BQLJK-CUF7Y"
 
 settings['hztrip_token'] = "63659a086f2011e5a2be00163e004a1f"
 settings['xhjd_token'] = "wypcs110"
+settings['hztrip_appid'] = "wx59d56a198f761599"
 settings['hztrip_appsecret'] = "cc1ef16876f29a2b6e745a962cea985e"

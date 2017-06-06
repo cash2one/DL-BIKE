@@ -142,6 +142,9 @@ class WechatOauthHandler(MetaBaseHandler):
         res = yield self.event_ps.opt_click(self.msg, self.key)
         self.send_xml(res)
 
+        # 发送客服消息
+        yield self.event_ps.wx_custom_send(self.msg)
+
     @gen.coroutine
     def event_VIEW(self):
         """自定义菜单事件
