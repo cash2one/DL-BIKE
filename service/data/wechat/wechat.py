@@ -78,5 +78,5 @@ class WechatDataService(DataService):
         """
 
         access_token_res = yield self.get_access_token(settings['hztrip_appid'], settings['hztrip_appsecret'])
-        ret = yield http_post(path.WX_CUSTOM_SEND.format(access_token_res.access_token), jdata, headers={"Content-type": "application/json;charset:UTF-8"})
+        ret = yield http_post(path.WX_CUSTOM_SEND.format(access_token_res.access_token), jdata)
         raise gen.Return(ret)

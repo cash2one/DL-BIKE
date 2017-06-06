@@ -96,7 +96,7 @@ class EventPageService(PageService):
             res = yield self.wx_rep_image(msg)
             return res
 
-        # content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
+        content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
 
         res = yield self.wx_rep_text(msg, content)
         return res
@@ -150,7 +150,7 @@ class EventPageService(PageService):
         :return:
         """
 
-        text = "杭州公共出行 abv"
+        text = "杭州公共出行"
 
         jdata = ObjectDict({
             "touser": msg.FromUserName,

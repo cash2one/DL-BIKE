@@ -14,7 +14,7 @@ from setting import settings
 from service.data.base import DataService
 from cache.hztrip import HztripCache
 from util.common import ObjectDict
-from util.tool.http_tool import http_get, http_post, http_fetch
+from util.tool.http_tool import http_get
 from util.common.decorator import cache
 
 
