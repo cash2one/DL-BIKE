@@ -150,7 +150,7 @@ class EventPageService(PageService):
         :return:
         """
 
-        text = "杭州公共出行"
+        text = "杭州公共出行".encode("utf-8")
 
         jdata = ObjectDict({
             "touser": msg.FromUserName,
