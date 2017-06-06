@@ -17,7 +17,7 @@ from cache.hztrip import HztripCache
 from util.tool.url_tool import make_static_url
 from util.tool.date_tool import sec_2_time
 from util.common import ObjectDict
-from util.tool.str_tool import to_str
+from util.tool.str_tool import to_str, to_bytes
 
 class EventPageService(PageService):
 
@@ -150,7 +150,7 @@ class EventPageService(PageService):
         :return:
         """
 
-        text = "杭州公共出行".decode("gbk").encode("utf-8")
+        text = to_bytes("杭州公共出行")
 
         jdata = ObjectDict({
             "touser": msg.FromUserName,
