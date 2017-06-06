@@ -91,6 +91,7 @@ class EventPageService(PageService):
         elif click_key == "contact":
             # text = "<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
             # res = yield self.wx_rep_text(msg, text)
+            self.logger.debug("contact")
             res = yield self.wx_rep_image(msg)
             return res
 
@@ -120,7 +121,7 @@ class EventPageService(PageService):
     @gen.coroutine
     def wx_rep_image(self, msg):
         """微信交互：回复图片消息
-        微信号：hztrip 的二维码 https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp
+        微信号：hztrip 的二维码 9fTQ1RS4vuNQxxt9MlAHk6bb-RZwaYY5EHT4uHEqfoVMtXtnfG8O9K_4c3v5Ofdn
         :param msg: 消息
         :param text: 文本消息
         :return:
@@ -129,8 +130,9 @@ class EventPageService(PageService):
         text_info = wx_const.WX_IMAGE_REPLY % (msg.FromUserName,
                                             msg.ToUserName,
                                             int(time.time()),
-                                            "https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp")
+                                            "9fTQ1RS4vuNQxxt9MlAHk6bb-RZwaYY5EHT4uHEqfoVMtXtnfG8O9K_4c3v5Ofdn")
 
+        self.logger.debug("text_info:{}".format(text_info))
         raise gen.Return(text_info)
 
     @gen.coroutine
