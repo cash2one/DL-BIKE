@@ -5,9 +5,9 @@
 # @File    : event.py
 # @DES     : 杭州公共出行微信公众号消息交互
 
-
+import time
 import traceback
-from tornado import gen
+from tornado import gen, ioloop
 
 from handler.metabase import MetaBaseHandler
 from util.common import ObjectDict
@@ -141,10 +141,12 @@ class WechatOauthHandler(MetaBaseHandler):
 
         res = yield self.event_ps.opt_click(self.msg, self.key)
         self.send_xml(res)
+        self.flush()
+
+        ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
 
         # 发送客服消息
-        yield gen.sleep(0.01)
-        yield self.event_ps.wx_custom_send(self.msg)
+        # yield self.event_ps.wx_custom_send(self.msg)
 
     @gen.coroutine
     def event_VIEW(self):
