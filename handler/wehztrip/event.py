@@ -143,10 +143,8 @@ class WechatOauthHandler(MetaBaseHandler):
         self.send_xml(res)
         self.flush()
 
-        ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
-
         # 发送客服消息
-        # yield self.event_ps.wx_custom_send(self.msg)
+        ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
 
     @gen.coroutine
     def event_VIEW(self):

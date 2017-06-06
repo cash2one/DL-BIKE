@@ -149,7 +149,7 @@ class EventPageService(PageService):
         :return:
         """
 
-        text = "<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'> ADS</a>"
+        text = "<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'>{}</a>".format("杭州公共出行")
 
         jdata = ObjectDict({
             "touser": msg.FromUserName,
