@@ -143,6 +143,7 @@ class WechatOauthHandler(MetaBaseHandler):
         self.send_xml(res)
 
         # 发送客服消息
+        yield gen.sleep(0.01)
         yield self.event_ps.wx_custom_send(self.msg)
 
     @gen.coroutine
