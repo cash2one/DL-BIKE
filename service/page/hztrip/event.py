@@ -17,7 +17,6 @@ from cache.hztrip import HztripCache
 from util.tool.url_tool import make_static_url
 from util.tool.date_tool import sec_2_time
 from util.common import ObjectDict
-from util.tool.str_tool import to_str, to_bytes
 
 class EventPageService(PageService):
 
