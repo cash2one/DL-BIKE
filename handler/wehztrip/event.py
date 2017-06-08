@@ -72,6 +72,9 @@ class WechatOauthHandler(MetaBaseHandler):
         res = yield self.event_ps.opt_msg(self.msg, session_key)
         self.send_xml(res)
 
+        # 发送客服消息
+        ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
+
     @gen.coroutine
     def post_image(self, session_key):
         """图片消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
@@ -83,6 +86,9 @@ class WechatOauthHandler(MetaBaseHandler):
         """语音消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
         res = yield self.event_ps.opt_msg(self.msg, session_key)
         self.send_xml(res)
+
+        # 发送客服消息
+        ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
 
     @gen.coroutine
     def post_video(self, session_key):
@@ -101,6 +107,9 @@ class WechatOauthHandler(MetaBaseHandler):
         """地理位置消息, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140453&t=0.33078310940365907"""
         res = yield self.event_ps.opt_msg(self.msg, session_key)
         self.send_xml(res)
+
+        # 发送客服消息
+        ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
 
     @gen.coroutine
     def post_link(self, session_key):
@@ -141,10 +150,6 @@ class WechatOauthHandler(MetaBaseHandler):
 
         res = yield self.event_ps.opt_click(self.msg, self.key)
         self.send_xml(res)
-        self.flush()
-
-        # 发送客服消息
-        ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
 
     @gen.coroutine
     def event_VIEW(self):

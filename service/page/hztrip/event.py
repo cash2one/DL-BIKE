@@ -136,7 +136,7 @@ class EventPageService(PageService):
         raise gen.Return(text_info)
 
     @gen.coroutine
-    def wx_custom_send(self, msg):
+    def wx_custom_send(self, msg, text=None):
         """微信交互：发送客服消息 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547&token=&lang=zh_CN
         demo
         {
@@ -149,8 +149,8 @@ class EventPageService(PageService):
         }
         :return:
         """
-
-        text = "<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'>微信查杭州实时公交、实时自行车、实时停车位</a>"
+        if not text:
+            text = "<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'>微信查杭州实时公交、实时自行车、实时停车位</a>"
 
         jdata = ObjectDict({
             "touser": msg.FromUserName,
@@ -161,10 +161,7 @@ class EventPageService(PageService):
         })
 
         res = yield self.wechat_ds.send_custom(jdata)
-
-        self.logger.debug("res:{}".format(res))
         raise gen.Return(res)
-
 
     @gen.coroutine
     def opt_msg(self, msg, session_key):
