@@ -353,8 +353,13 @@ class EventPageService(PageService):
 
         index = 0 if stop_cache and int(stop_order)>len(stop_cache.get("stops")) else int(stop_order)
 
+        self.logger.debug("stop_order:{}".format(stop_order))
+        self.logger.debug("index:{}".format(index))
+        self.logger.debug("stop_cache:{}".format(stop_cache))
+
         if stop_cache and stop_cache.get("stops"):
             route = stop_cache.get("stops")[index]
+            self.logger.debug("route:{}".format(route))
             stop_res = yield self.hztrip_ds.get_stop_info({
                 "amapStopId": route.get("amapId"),
             })
