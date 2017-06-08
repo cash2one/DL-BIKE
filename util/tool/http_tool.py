@@ -14,6 +14,7 @@ from tornado.httputil import url_concat
 from app import logger
 import conf.headers as const_headers
 from util.common import ObjectDict
+from util.tool.json_tool import json_dumps
 
 
 @gen.coroutine
@@ -225,7 +226,8 @@ def _async_http_post(
         http_request = tornado.httpclient.HTTPRequest(
             url,
             method=method.upper(),
-            body=ujson.encode(jdata),
+            # body=ujson.encode(jdata),
+            body=json_dumps(jdata),
             request_timeout=timeout,
             headers=headers,
             validate_cert=False,
