@@ -351,7 +351,7 @@ class EventPageService(PageService):
             })
             stop_cache = self.hztrip_cache.get_bus_stops(stop_name)
 
-        index = 0 if stop_cache and stop_order>len(stop_cache.get("stops")) else stop_order
+        index = 0 if stop_cache and int(stop_order)>len(stop_cache.get("stops")) else int(stop_order)
 
         if stop_cache and stop_cache.get("stops"):
             route = stop_cache.get("stops")[index]
