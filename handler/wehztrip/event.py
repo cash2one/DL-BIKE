@@ -54,7 +54,6 @@ class WechatOauthHandler(MetaBaseHandler):
                 # session_key: bus; station; around; transfer; bike; park; yaohao; pm25;
                 session_key = self.hztrip.get_hztrip_session(self.current_user.openid)
                 yield getattr(self, 'post_' + msg_type)(session_key)
-                yield gen.sleep(1)
                 yield self.event_ps.wx_custom_send(self.msg)
             else:
                 self.logger.error(
