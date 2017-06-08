@@ -54,7 +54,6 @@ class WechatOauthHandler(MetaBaseHandler):
                 # session_key: bus; station; around; transfer; bike; park; yaohao; pm25;
                 session_key = self.hztrip.get_hztrip_session(self.current_user.openid)
                 yield getattr(self, 'post_' + msg_type)(session_key)
-                yield self.event_ps.wx_custom_send(self.msg)
             else:
                 self.logger.error(
                     "[wechat_oauth]verification failed:{}".format(
@@ -114,6 +113,7 @@ class WechatOauthHandler(MetaBaseHandler):
         """微信事件, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140454&t=0.6181039380535693"""
         event = self.msg['Event']
         yield getattr(self, 'event_' + event)()
+        yield self.event_ps.wx_custom_send(self.msg)
     #
     @gen.coroutine
     def event_subscribe(self):
