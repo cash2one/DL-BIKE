@@ -63,7 +63,7 @@ obj_menu = """{
 			{
 			   "type":"view",
 			   "name":"赞助",
-			   "url":"http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=208675856&idx=1&sn=92a8a58ef849c1d3e3909a6a3dd75af8#rd"
+			   "url":"https://mp.weixin.qq.com/s/Wm3HR2mgVXrqxQkKTv5c-w"
 			},
 			{
 			   "type":"click",

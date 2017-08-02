@@ -58,7 +58,7 @@ class EventPageService(PageService):
             "杭州出行、生活、旅行必备应用。\n\n点击底部菜单，按提示输入查询条件获得实时信息。\n"
             "任何建议、反馈可编辑\"re+内容\",如re谢谢",
             make_static_url("http://www.hztrip.org/image/banner.jpg"),
-            "http://www.hztrip.org/?fr=wechat"
+            "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
         )
         news += item
 
@@ -90,10 +90,10 @@ class EventPageService(PageService):
         elif click_key == "pm25":
             content += "查实时空气污染指数:\n输入城市中文名称，如杭州\n"
         elif click_key == "contact":
-            # text = "<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
-            # res = yield self.wx_rep_text(msg, text)
-            res = yield self.wx_rep_image(msg)
-            return res
+            text = "<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
+            res = yield self.wx_rep_text(msg, text)
+            # res = yield self.wx_rep_image(msg)
+            # return res
 
         # content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
 
@@ -131,6 +131,8 @@ class EventPageService(PageService):
                                             msg.ToUserName,
                                             int(time.time()),
                                             "9fTQ1RS4vuNQxxt9MlAHk6bb-RZwaYY5EHT4uHEqfoVMtXtnfG8O9K_4c3v5Ofdn")
+        # self.logger.debug("image:" + text_info)
+        # self.logger.debug("msg:" + msg)
 
         raise gen.Return(text_info)
 
@@ -309,7 +311,7 @@ class EventPageService(PageService):
                 description += "\n当前暂无车辆实时信息\n" if not is_realtime else ""
             description += "\n小提示:\n1.查询反向线路信息，请输入“{} {}”，关键词按空格分割\n2.可在底部菜单中切换到“电子站牌”，" \
                            "查询车站所有线路实时到站".format(route.get("routeName"), 1 if index==0 else 0)
-            url = "http://www.hztrip.org/?fr=wechat"
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
@@ -391,7 +393,7 @@ class EventPageService(PageService):
             for idx, val in enumerate(stop_cache.get("stops")):
                 description += "{} {}\n".format(val.get("stopName"), idx)
             description += "\n2.可在底部菜单中切换到“实时公交”，查询实时公交到站"
-            url = "http://www.hztrip.org/?fr=wechat"
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                 title,
@@ -510,7 +512,7 @@ class EventPageService(PageService):
 
             description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n" \
                            "2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
-            url = "http://www.hztrip.org/?fr=wechat"
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
@@ -612,7 +614,7 @@ class EventPageService(PageService):
                                                                                                item.get("Distance"),
                                                                                                item.get("Type"))
 
-            url = "http://www.hztrip.org/?fr=wechat"
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = make_static_url("http://www.hztrip.org/image/banner.jpg")
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
@@ -718,7 +720,7 @@ class EventPageService(PageService):
             title = "抱歉，找不到【{}】的空气污染指数".format(keyword)
             description = "请正确输入查询城市，如杭州"
 
-            url = "http://www.hztrip.org/?fr=wechat"
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
@@ -755,7 +757,7 @@ class EventPageService(PageService):
 
 
             description += "\n数据更新时间: {} \n数据来源于pm25.in \n★可输入城市名，查询国内各城市实时空气污染指数".format(update_time)
-            url = "http://www.hztrip.org/?fr=wechat"
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
