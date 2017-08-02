@@ -93,7 +93,7 @@ class EventPageService(PageService):
             text = "<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
             res = yield self.wx_rep_text(msg, text)
             # res = yield self.wx_rep_image(msg)
-            # return res
+            return res
 
         # content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
 
