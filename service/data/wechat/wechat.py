@@ -100,7 +100,7 @@ class WechatDataService(DataService):
             "openid_list": openid,
             "tagid": tagid,
         })
-        self.logger.debug(jdata)
+        # self.logger.debug(jdata)
         access_token_res = yield self.get_access_token(settings['hztrip_appid'], settings['hztrip_appsecret'])
         ret = yield http_post(path.WX_BATCHTAGGING.format(access_token_res.access_token), jdata)
         raise gen.Return(ret)
