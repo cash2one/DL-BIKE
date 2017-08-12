@@ -213,6 +213,9 @@ class EventPageService(PageService):
             "stopName": keyword,
         })
 
+        # 加标签：公交群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 103)
+
         if not line_res.get("items") and not stop_res.get("items"):
             content = "抱歉，找不到【{}】的线路或车站信息！继续输入更详细的关键词，查找更精确\n" \
                       "如B1路, 小车桥等".format(keyword)
@@ -257,6 +260,9 @@ class EventPageService(PageService):
         :param msg:
         :return:
         """
+        # 加标签：公交群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 103)
+
         keyword = self._get_text(msg)
         line_list = re.split(" ", keyword)
         # 线路名
@@ -355,6 +361,9 @@ class EventPageService(PageService):
 
         index = 0 if stop_cache and int(stop_order)>=len(stop_cache.get("stops")) else int(stop_order)
 
+        # 加标签：公交群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 103)
+
         if stop_cache and stop_cache.get("stops"):
             route = stop_cache.get("stops")[index]
             stop_res = yield self.hztrip_ds.get_stop_info({
@@ -427,6 +436,9 @@ class EventPageService(PageService):
             "lat": lat,
         })
 
+        # 加标签：公交群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 103)
+
         if not around_res.get("items") or around_res.get("result") != 0:
             content = "抱歉，找不到【{}】附近的线路或车站信息！继续输入更详细的关键词，查找更精确\n" \
                       "如小车桥等".format(keyword)
@@ -492,6 +504,9 @@ class EventPageService(PageService):
             "destination": end_name,
         })
 
+        # 加标签：公交群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 103)
+
         if transfer_res and transfer_res.get("status") == 0:
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
                                                       msg.ToUserName,
@@ -552,6 +567,9 @@ class EventPageService(PageService):
                 "lat": lat,
             })
 
+        # 加标签：自行车群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 102)
+
         if not res.data:
             content = "抱歉，找不到【{}】附近的租赁点！输入更详细的地址，查找更精确\n\n" \
                       "查询实时自行车租赁点: \n1.输入详细的街道或小区\n2.发送您的位置信息".format(keyword)
@@ -592,6 +610,9 @@ class EventPageService(PageService):
             "longitude": lng,
             "latitude": lat,
         })
+
+        # 加标签：停车群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 104)
 
         if not res.List:
             content = "抱歉，找不到【{}】附近的停车位！输入更详细的地址，查找更精确\n\n" \
@@ -637,7 +658,8 @@ class EventPageService(PageService):
             "name": keyword,
         })
 
-        yield self.wechat_ds.send_tagging(msg.ToUserName)
+        # 加标签：摇号群
+        yield self.wechat_ds.send_tagging(msg.FromUserName, 101)
 
         if res.status != '0' or not res.data[0].get("disp_data", ""):
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,

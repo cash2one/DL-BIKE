@@ -82,11 +82,23 @@ class WechatDataService(DataService):
         raise gen.Return(ret)
 
     @gen.coroutine
-    def send_tagging(self, openid):
+    def send_tagging(self, openid, tagid):
+        """
+        给粉丝打标签 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140837
+        其中，对于杭州公共出行的tagid:
+        100：赞助群
+        101：摇号群
+        102：自行车群
+        103：公交群
+        104：停车群
+        :param openid:
+        :param tagid:
+        :return:
+        """
 
         jdata = ObjectDict({
-            "openid_list": ObjectDict(openid),
-            "tagid": 101,
+            "openid_list": openid,
+            "tagid": tagid,
         })
         self.logger.debug(jdata)
         access_token_res = yield self.get_access_token(settings['hztrip_appid'], settings['hztrip_appsecret'])
