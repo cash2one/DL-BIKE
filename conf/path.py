@@ -32,3 +32,4 @@ WECHAT_ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client
 WECHAT_USER_INFO = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}&lang=zh_CN"
 WECHAT_TEMPALTE = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={0}"
 WX_CUSTOM_SEND = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={0}"
+WX_BATCHTAGGING = "https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token={0}"

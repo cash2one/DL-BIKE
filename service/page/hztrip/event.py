@@ -74,7 +74,7 @@ class EventPageService(PageService):
         if click_key == "search":
             content += "查车站，线路名称:\n输入线路或车站，如B1路, 小车桥\n"
         elif click_key == "bus":
-            content += "查公交实时到站:\n准确输入公交线路，如900路\n"
+            content += "查公交实时到站:\n准确输入公交线路，如193路\n"
         elif click_key == "stop":
             content += "查车站电子站牌:\n准确输入车站名，如小车桥\n"
         elif click_key == "around":
@@ -636,6 +636,8 @@ class EventPageService(PageService):
         res = yield self.hztrip_ds.get_yaohao({
             "name": keyword,
         })
+
+        yield self.wechat_ds.send_tagging(msg.ToUserName)
 
         if res.status != '0' or not res.data[0].get("disp_data", ""):
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,

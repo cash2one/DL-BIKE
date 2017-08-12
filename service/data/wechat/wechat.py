@@ -80,3 +80,16 @@ class WechatDataService(DataService):
         access_token_res = yield self.get_access_token(settings['hztrip_appid'], settings['hztrip_appsecret'])
         ret = yield http_post(path.WX_CUSTOM_SEND.format(access_token_res.access_token), jdata)
         raise gen.Return(ret)
+
+    @gen.coroutine
+    def send_tagging(self, openid):
+
+        jdata = ObjectDict({
+            "openid_list": ObjectDict(openid),
+            "tagid": 101,
+        })
+        self.logger.debug(jdata)
+        access_token_res = yield self.get_access_token(settings['hztrip_appid'], settings['hztrip_appsecret'])
+        ret = yield http_post(path.WX_BATCHTAGGING.format(access_token_res.access_token), jdata)
+        raise gen.Return(ret)
+
