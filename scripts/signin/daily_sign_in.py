@@ -231,6 +231,29 @@ def xiami_sign_in():
     data = res.read()
     print("[xiami][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
+def futunn_sign_in():
+    """富途牛牛签到"""
+    conn = http.client.HTTPSConnection("www.futunn.com")
+
+    headers = {
+        'accept': "application/json, text/javascript, */*; q=0.01",
+        'cookie': "_csrf=33G4bJIuSNeTM4e_4m7CkYRR65kdNyMp; UM_distinctid=15eff539f49dc-0c553eb610b8e5-63151074-1fa400-15eff539f4a989; tgw_l7_route=7587343559275141d1207d24944b360a; PHPSESSID=peht8qfnglfihn3b06m4ge76r3; web_sig=e5gMo5GN67FeOP96rOSniWe%2FoRDE0Symz8LXoAUb14jig3i9vfLm%2BQHjpumdaYiAUrONciE051723gKKFq8lBcf9q5tlz7TYEz6NOXls2ACMRQlEhm4Nu2Hs0DYVEmkE; uid=7172359; ci_sig=U8JbOVn43QlNJTSpL6yfHydNbGxhPTEwMDAwNTM4JmI9MjAxMTM2Jms9QUtJRENXblN2cWJ4UDkza3lYdW55ZTNNYXVJUWp2angydFlEJmU9MTUxMDExNDIyMiZ0PTE1MDc1MjIyMjImcj0yNDUyNDcwMjImdT0mZj0%3D; FUTU_TOOL_STAT_UNIQUE_ID=15075222235699620; CNZZDATA1256186977=204886084-1507517439-https%253A%252F%252Fpassport.futu5.com%252F%7C1507693377",
+        'host': "www.futunn.com",
+        'referer': "https://www.futunn.com/account/home",
+        'user-agent': "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
+        'x-requested-with': "XMLHttpRequest",
+        'dnt': "1",
+        'cache-control': "no-cache",
+        'postman-token': "1abbe95f-0d9f-4b73-bd8e-9e7042f635c5"
+    }
+
+    conn.request("GET", "/site/sign-in", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[futunn][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
 
 if __name__ == '__main__':
 
@@ -244,4 +267,5 @@ if __name__ == '__main__':
     baidumap_sign_in()
     umetrip_sign_in()
     xiami_sign_in()
+    futunn_sign_in()
 
