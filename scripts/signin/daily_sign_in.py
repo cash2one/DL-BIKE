@@ -37,13 +37,13 @@ def smzdm_sign_in():
     """什么值得买客户端签到"""
     conn = http.client.HTTPSConnection("api.smzdm.com")
 
-    payload = "f=iphone&sk=uiWkBkg57AMGgHLwyyG2m1qDxYhzQNRLBxZfKVS4%252BIx1%2FMNqprtg4BKecGkdxDTy&token=54537f7044811152704&v=5.0&weixin=1"
+    payload = "f=iphone&sign=7DC26095717492A87146E9D4D71AA598&sk=uiWkBkg57AP5tggciZymf6DkP9ohEFVwAdlOglDChPPdRpXLw2xaIUFxAfCs8bzi&time=1507907588&token=MmQ0ZDB8MTUwODk5MzQ2OXw2NDE4MjE0MDEyfDQzMTJkMWNjMDU0NGJjNzcxOGYxNDJlMzgwODE1MTRh&v=8.3&weixin=1"
 
     headers = {
         'host': "api.smzdm.com",
         'content-type': "application/x-www-form-urlencoded",
-        'cookie': "device_id=0ggWhPmKxHzTDvKF24YJ3y6Py1Qv9dNyjVHDEwazEAUN9a5RZWpvpQ==; device_name=iPhone 6s; device_push=notifications_are_disabled; device_s=4AV2/Xtutz19ebZ6LkBPT5PdjEzAF2arHXBblhuQMRuYGa4RMTPgI1zQhJe81ZkHz8fVBPKucw=; device_smzdm=iphone; device_smzdm_version=7.6; device_system_version=10.2.1; device_type=iPhone8,1; login=1; network=WiFi_Net; partner_id=0; partner_name=AppStore; sess=54537f7044811152704; smzdm_id=6418214012; __ckguid=lpi28Cg154wJ7N4VkL4H6N4; __jsluid=ab4c1ed89fd3fb715b47dd3f4f402848; __ckguid=ecu4hlnBgB7f1VftHOl3Co2; _ga=GA1.2.1848225762.1447993948; Hm_lvt_9b7ac3d38f30fe89ff0b8a0546904e58=1482416015; smzdm_user_source=AEF63FB28C36CAC0B5F09EC24FEEC252",
-        'user-agent': "smzdm_iPhone/7.6 (iPhone; iOS 10.2.1; Scale/2.00)smzdmapp",
+        'cookie': "ab_test=b; device_id=uDk0xR1zF3nHICXl8eYhCaLUYGRXo4TppwRA8BMFort5um+s9s/lIw==; device_name=iPhone 6s; device_push=notifications_are_disabled; device_s=uDk0xR1zF3nHICXl8eYhCaLUYGRXo4TppwRA8BMForudSM4DDGPB3wFJMeDGKwRzZuH3pEdyh8=; device_smzdm=iphone; device_smzdm_version=8.3; device_system_version=11.0.3; device_type=iPhone8,1; login=1; network=WiFi_Net; partner_id=0; partner_name=AppStore; phone_sort=6; sess=MmQ0ZDB8MTUwODk5MzQ2OXw2NDE4MjE0MDEyfDQzMTJkMWNjMDU0NGJjNzcxOGYxNDJlMzgwODE1MTRh; smzdm_id=6418214012; ga=GA1.2.1324618150.1503809524; Hm_lvt9b7ac3d38f30fe89ff0b8a0546904e58=1507648237; device_id=6055455861507648237322450ae0292c4aeeb071ca659e6e0ea6cfd11; sess=MmQ0ZDB8MTUxMTUzNjIzMnw2NDE4MjE0MDEyfGQ5ZmZlNWQ2OTE1NWZmNjRhMmNlMjdiZTljYTk3OTEz; user=sina_tgrlc%7C6418214012; smzdm_user_source=98EFC26EF7B3DE478B9FEDB199BC5FB2; ckguid=57u5eKxRhNAlwkb2V1PE4nw7; jsluid=2bfd8c8f629d4da9206e1a788bd9fc4e",
+        'user-agent': "SMZDM/8.3 (iPhone; iOS 11.0.3; Scale/2.00)",
         'accept-language': "zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8",
     }
 
@@ -133,9 +133,9 @@ def ctrip_sign_in():
         'host': "m.ctrip.com",
         'content-type': "application/json",
         'origin': "file://",
-        'cookie': "MKT_Pagesource=H5; _jzqco=%7C%7C%7C%7C1489215185494%7C1.905210666.1455900703011.1489215216335.1489215229617.1489215216335.1489215229617.0.0.0.32.32; cticket=83B18B3D138789BD220EC796908422BAFAE5CCC3779EC87911823971FFE6EDBE; isNonUser=false; _n_cid=12021067210004192157; _abtest_userid=467b8ea3-4289-4840-978d-0ead9501dc78; _ga=GA1.2.499933121.1444525450; __zpspc=9.1.1444525449.1444525449.1%234%7C%7C%7C%7C%7C%23; _bfa=1.1444525448857.2mqlyq.1.1444525448857.1444525448857.1.1",
+        'cookie': "_jzqco=%7C%7C%7C%7C1507944112259%7C1.905210666.1455900703011.1507697742717.1507944111182.1507697742717.1507944111182.0.0.0.44.44; MKT_Pagesource=H5; _bfa=1.1444525448857.2mqlyq.1.1444525448857.1507944111034.6.8.10320668463; cticket=83B18B3D138789BD220EC796908422BA759D34559608972085D5FE39FBF9C670; isNonUser=false; _n_cid=12021067210004192157; _RF1=180.153.219.16; _RGUID=7a4492c4-fc70-4794-9745-2411e3573f4c; _RSG=KU4SyJia4f7CzpLZ7195T9; page_time=1502104817001%2C1505881602136%2C1507697734006%2C1507697742882; fingerprint=DBTAlxNWxRDvawFA3Fom1492435801299; wdata_token=SXv3jUHG4yxA95tiH411bYckGc90mCNRup8yjuGxfGT5dFW1492435801301; _ga=GA1.2.499933121.1444525450",
         'accept': "application/json",
-        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2_1 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508_eb64__Ctrip_CtripWireless_7.1.2",
+        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508_eb64__Ctrip_CtripWireless_7.7.1_CtripAPP_iOS_soa",
     }
 
     conn.request("POST", "/restapi/soa2/11631/json/CheckIn", payload, headers)
@@ -178,7 +178,7 @@ def baidumap_sign_in():
     headers = {
         'host': "client.map.baidu.com",
         'content-type': "application/x-www-form-urlencoded",
-        'cookie': "BDUSS=XRBMzJBRUFIcnhEVGtwS1JOS3ZENERGQmcxN2ZYYkdVSHlKRGc1OTh4QWYyYWRZSVFBQUFBJCQAAAAAAAAAAAEAAAAf3ZwJt7nQobezAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB9MgFgfTIBYQ; BAIDUID=1D43E5A7AB576D4D145FE1F0C0F0E710:FG=1; BIDUPSID=236E51D87EDDDBED261296F61F127CE5; PSTM=1450593054",
+        'cookie': "BDUSS=Edxc1MtQWszRHJzbU9CNG9Da1E5cDhxWn5nT2tYYUZPUmhlc0NDbWZ0VWhWYUpaTUFBQUFBJCQAAAAAAAAAAAEAAAAf3ZwJt7nQobezAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACHIelkhyHpZd; BAIDUID=1D43E5A7AB576D4D145FE1F0C0F0E710:FG=1; BIDUPSID=236E51D87EDDDBED261296F61F127CE5; PSTM=1450593054",
         'user-agent': "IphoneCom/9.7.3 (iPhone; iOS 10.2.1; Scale/2.00)",
         'accept-language': "zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8",
     }
@@ -243,8 +243,7 @@ def futunn_sign_in():
         'user-agent': "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
         'x-requested-with': "XMLHttpRequest",
         'dnt': "1",
-        'cache-control': "no-cache",
-        'postman-token': "1abbe95f-0d9f-4b73-bd8e-9e7042f635c5"
+        'cache-control': "no-cache"
     }
 
     conn.request("GET", "/site/sign-in", headers=headers)
@@ -255,17 +254,88 @@ def futunn_sign_in():
     print("[futunn][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
 
+def mafengwo_fengmi_sign_in():
+    """马蜂窝蜂蜜 ios 客户端签到"""
+    conn = http.client.HTTPSConnection("m.mafengwo.cn")
+
+    headers = {
+        'cookie': "CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507944455; isDownClick_adis_baidu=1; CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507906637; PHPSESSID=rit18t5uu47vntk6ds4u5f7ij2; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __mfwlt=1507945330; __mfwlv=1507945330; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; __mfwvn=6; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; mfw_uid=9154997; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-10+23%3A07%3A02%22%3B%7D; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B",
+        'user-agent': "Safari Mozilla/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Mobile/15A432 mfwappcode/cn.mafengwo.www mfwappver/8.0.4 mfwjssdk/1.1 mfwappjsapi/1.3",
+        'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
+        'accept': "application/json, text/javascript, */*; q=0.01",
+        'cache-control': "no-cache"
+    }
+
+    conn.request("GET", "/sales/activity/ajax.php?act=aSetHoneyCenterUserInfo", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[mafengwo_fengmi][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+def mafengwo_zhuanpan_sign_in():
+    """马蜂窝蜂蜜转盘 ios 客户端签到"""
+    conn = http.client.HTTPSConnection("m.mafengwo.cn")
+
+    payload = "act=honeyTurntable&async=false&key=sales%3Aactivity%3Ahoney_center"
+
+    headers = {
+        'host': "m.mafengwo.cn",
+        'content-type': "application/x-www-form-urlencoded; charset=UTF-8",
+        'accept': "application/json, text/javascript, */*; q=0.01",
+        'x-requested-with': "XMLHttpRequest",
+        'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
+        'user-agent': "Safari Mozilla/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Mobile/15A432 mfwappcode/cn.mafengwo.www mfwappver/8.0.4 mfwjssdk/1.1 mfwappjsapi/1.3",
+        'cookie': "CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507942948; isDownClick_adis_baidu=1; CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507906637; PHPSESSID=rit18t5uu47vntk6ds4u5f7ij2; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __mfwlt=1507945330; __mfwlv=1507945330; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; __mfwvn=6; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; mfw_uid=9154997; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-10+23%3A07%3A02%22%3B%7D; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B",
+        'cache-control': "no-cache"
+    }
+
+    conn.request("POST", "/sales/activity/ajax.php", payload, headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[mafengwo_zhuanpan][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+def fliggy_sigin_in():
+    """阿里旅行网页签到"""
+
+    conn = http.client.HTTPSConnection("ffa.fliggy.com")
+
+    headers = {
+        'dnt': "1",
+        'accept-encoding': "gzip, deflate, br",
+        'accept-language': "zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.4",
+        'user-agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
+        'accept': "*/*",
+        'referer': "https://www.fliggy.com/mytrip/?spm=181.7091613.191938.39.140f2ea5SmtANE",
+        'authority': "ffa.fliggy.com",
+        'cookie': "hng=CN%7Czh-CN%7CCNY%7C156; uc1=cart_m=0&cookie14=UoTcCDbeYacXvg%3D%3D&lng=zh_CN&cookie16=VFC%2FuZ9az08KUQ56dCrZDlbNdA%3D%3D&existShop=true&cookie21=Vq8l%2BKCLjhZM&tag=8&cookie15=URm48syIIVrSKA%3D%3D&pas=0; uc3=sg2=V32Qr6DJ1TF4tL4LLd9j2i2CL159T9HpyqGS1jHsKGE%3D&nk2=qiAkoSc8&id2=UoMyzEOwbMhK&vt3=F8dBzLBA5lWNqSUbnVE%3D&lg2=VT5L2FSpMGV7TQ%3D%3D; tracknick=%5Cu4E0A%5Cu9053%5Cu9752; _l_g_=Ug%3D%3D; ck1=; unb=129390726; lgc=%5Cu4E0A%5Cu9053%5Cu9752; cookie1=BqbiJw1u%2BhPvU%2FqsokBrIei8lU5vYBvYsRV9Bl%2Fs4vk%3D; login=true; cookie17=UoMyzEOwbMhK; cookie2=1e35418b9c8ee8e725c965c3549dac39; _nk_=%5Cu4E0A%5Cu9053%5Cu9752; t=527bbe3dd43099eae1134460e7f4ccee; uss=ACjg%2B1KIqjLu0CPylLk5ikdcGqAvQfCQycfyNGe9VARxQSarJ%2BDjNMbplA%3D%3D; skt=d2f5703c9ff4c717; _tb_token_=7a697bb3304eb; cna=9TkxEtVPm30CAbSZ2xAI6rET; isg=AoiIZwYzRUoMvamFPCL_zVQBWfBame0_cRFVmEI5S4P7HS2H50OXyg5f68OW",
+        'cache-control': "no-cache"
+    }
+
+    conn.request("GET", "/json/checkinInfo.htm?_ksTS=1507947064019_591&callback=jsonp592&channel=522", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[fliggy][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+
 if __name__ == '__main__':
 
     qyer_sign_in()
     smzdm_sign_in()
     music_163_sign_in()
     nuomi_sign_in()
-    gewara_sign_in()
-    ctrip_sign_in()
+    #gewara_sign_in()
+    #ctrip_sign_in()
     jd_sign_in()
     baidumap_sign_in()
     umetrip_sign_in()
     xiami_sign_in()
     futunn_sign_in()
+    mafengwo_fengmi_sign_in()
+    mafengwo_zhuanpan_sign_in()
+    fliggy_sigin_in()
 
