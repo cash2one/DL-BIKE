@@ -284,8 +284,12 @@ class EventPageService(PageService):
 
         if line_cache and line_cache.get("routes"):
             route = line_cache.get("routes")[index]
+            if not route:
+                content = "当前线路为单向线路"
+                res = yield self.wx_rep_text(msg, content)
+                return res
             bus_res = yield self.hztrip_ds.get_bus_info({
-                "routeId": route.get("routeId"),
+                "routeId": route.get("routeId", 0),
             })
 
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
