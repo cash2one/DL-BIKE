@@ -321,6 +321,26 @@ def fliggy_sigin_in():
 
     print("[fliggy][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
+def qyer_helper_sign_in():
+    """行程助手ios客户的签到"""
+
+    conn = http.client.HTTPSConnection("m.qyer.com")
+
+    headers = {
+        'host': "m.qyer.com",
+        'cookie': "_guid=e6249f6d-ace5-cc55-725d-716b4afefef7; init_refer=; new_session=1; new_uv=29; session_time=1507946370.232; __utma=253397513.2072125957.1482678099.1507871724.1507946370.28; __utmb=253397513.1.10.1507946370; __utmc=253397513; __utmt=1; __utmz=253397513.1482678099.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); cdb_auth=d338y0TTubO70bytOC8pwlbuJxrFGzp1pVabGUqNzMTQmb4yf3sdi53Cn7nBl2lcnZqLUDDibZdBZHYcJc%2FbF6ieppkA7g; als=0",
+        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Mobile/15A432 Planer/2.8.6",
+        'x-requested-with': "XMLHttpRequest",
+        'cache-control': "no-cache",
+        'postman-token': "0d7959f0-547f-6665-3ff4-e3c823f9109c"
+    }
+
+    conn.request("GET", "/plan/require/app/encourage.php?action=signin&fromdevice=2", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print("[qyer_help][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
 if __name__ == '__main__':
 
@@ -337,5 +357,6 @@ if __name__ == '__main__':
     futunn_sign_in()
     mafengwo_fengmi_sign_in()
     mafengwo_zhuanpan_sign_in()
-    fliggy_sigin_in()
+    # fliggy_sigin_in()
+    qyer_helper_sign_in()
 
