@@ -13,5 +13,5 @@ routes = [
     # hztrip
     (r"/hztrip",                 "handler.wehztrip.event.WechatOauthHandler",  {"event": "wechat_hztrip"}),
     (r"/xhjd",                   "handler.xhjd.event.WechatOauthHandler",      {"event": "wechat_xhjd"})
-    # (r"/thepaper",               "handler.paper.event.WechatOauthHandler",      {"event": "wechat_xhjd"})
+    (r"/thepaper",               "handler.paper.paper.PaperHandler",           {"event": "paper_paper"})
 ]

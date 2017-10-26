@@ -1,0 +1,35 @@
+# coding=utf-8
+
+import hashlib
+from tornado import gen
+from handler.base import BaseHandler
+from util.common.decorator import handle_response
+from util.tool.http_tool import http_get
+
+
+class PaperHandler(BaseHandler):
+
+    @handle_response
+    @gen.coroutine
+    def get(self, *args, **kwargs):
+        """
+        公众平台接入
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        self.logger.debug("request: {}".format(self.request))
+
+        # html = yield http_get(route='http://bjggzxc.btic.org.cn/Bicycle/views/wdStatus.html', timeout=10)
+        # # print (html)
+        #
+        # self.logger.debug("com: %s" % self.constant.BEIJING_JSON_HEADERS)
+        #
+        # self.send_json_success({
+        #     "hai": 1,
+        #     "html": html
+        # })
+        # if self.get_argument("echostr", "") and self._verify_wexin_request():
+        #     ret = self.get_argument("echostr", "", True)
+        #     self.write(ret)
