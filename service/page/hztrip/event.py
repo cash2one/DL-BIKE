@@ -90,9 +90,14 @@ class EventPageService(PageService):
         elif click_key == "pm25":
             content += "查实时空气污染指数:\n输入城市中文名称，如杭州\n"
         elif click_key == "contact":
-            text = "<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
-            res = yield self.wx_rep_text(msg, text)
-            # res = yield self.wx_rep_image(msg)
+            # text = "<a href='https://mmbiz.qlogo.cn/mmbiz_jpg/rqSdaj2zr5MPkcDRoNAtAI73jicgTvT7YDqsicmL8fLPw1qwNl6ryKSp7837Nia8qicPwJuZGAukDbkoDhHItdhiaibQ/0?wx_fmt=jp'>扫码关注勾搭作者</a>"
+            # res = yield self.wx_rep_text(msg, text)
+            # # res = yield self.wx_rep_image(msg)
+            # return res
+            res = yield self.wx_rep_image(msg, "x1Y4q2BTfy8rtp92TKQ1V9BjK17rA7YdrZyoXEEourSdv9zqmmEJQIrPlDjijNFe")
+            return res
+        elif click_key == "good":
+            res = yield self.wx_rep_image(msg, "KJV0heXwdRhXyOy-c46E-Ey76DCHygrlU8GSDCb6c4Aupp4gi1nCuAQhAMNhp2M_")
             return res
 
         # content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"
@@ -119,21 +124,20 @@ class EventPageService(PageService):
         raise gen.Return(text_info)
 
     @gen.coroutine
-    def wx_rep_image(self, msg):
+    def wx_rep_image(self, msg, media_id):
         """微信交互：回复图片消息
         微信号：hztrip 的二维码 9fTQ1RS4vuNQxxt9MlAHk6bb-RZwaYY5EHT4uHEqfoVMtXtnfG8O9K_4c3v5Ofdn
         :param msg: 消息
         :param text: 文本消息
+        :param media_id: 图片id
         :return:
         """
 
         text_info = wx_const.WX_IMAGE_REPLY % (msg.FromUserName,
                                             msg.ToUserName,
                                             int(time.time()),
-                                            "9fTQ1RS4vuNQxxt9MlAHk6bb-RZwaYY5EHT4uHEqfoVMtXtnfG8O9K_4c3v5Ofdn")
-        # self.logger.debug("image:" + text_info)
-        # self.logger.debug("msg:" + msg)
-
+                                            media_id)
+        self.logger.debug("image:" + text_info)
         raise gen.Return(text_info)
 
     @gen.coroutine

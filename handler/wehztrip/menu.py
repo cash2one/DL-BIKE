@@ -61,9 +61,9 @@ obj_menu = """{
 			   "key":"pm25"
 			},
 			{
-			   "type":"view",
-			   "name":"赞助",
-			   "url":"https://mp.weixin.qq.com/s/Wm3HR2mgVXrqxQkKTv5c-w"
+			   "type":"click",
+			   "name":"赞赏",
+			   "key":"good"
 			},
 			{
 			   "type":"click",
@@ -80,9 +80,9 @@ conn = http.client.HTTPSConnection("api.weixin.qq.com")
 
 # hztrip
 # appid: wx59d56a198f761599
-# appsecret: 46dfb719a323bb66b32af93211c5385b
+# appsecret: cc1ef16876f29a2b6e745a962cea985e
 
-conn.request("POST", "/cgi-bin/menu/create?access_token=lKAaBT9k2N9eOrST0H1MQNJ2W0LmZxJ8kXNq_C_qUEg7gsw3aiBCee6Z026U8YVdqj2JS5YpCHKmox_52OZgcldQQeIspQNYwhee_zyAGzhXgSWBKIJF0kR7n0f8mDfaLQKaABAHMG", obj_menu.encode("utf8"))
+conn.request("POST", "/cgi-bin/menu/create?access_token=ego2hAI2JdiXgt7pz5wlEwO7l-wjNvJw1cVq9ltEwuw3sPtfa5zZZJnMcwWJIkeppndEncXJhRi1jPD9wnZ3WWaD6A-h3jwZLDCqzFrJeG7JeCNyErIkQaJkr95Xv_9GQFIdAGAGVY", obj_menu.encode("utf8"))
 
 res = conn.getresponse()
 data = res.read()
