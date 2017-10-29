@@ -32,9 +32,9 @@ class Paper(Parser):
     def get_papers(self):
 
         keys = self.paper.get_paper_sessions()
+        self.logger.debug("all redis key:{}".format(keys))
         for key in keys:
             value = self.paper.get_paper_session_by_key(key)
-            self.logger.debug("all redis key:{} value:{}".format(key, value))
             if time.time() - value['time'] >= 60 * 30:
                 # 每隔半小时运行一次
                 # 根据刷榜次数得出每次刷榜次数
