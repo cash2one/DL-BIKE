@@ -259,11 +259,14 @@ def mafengwo_fengmi_sign_in():
     conn = http.client.HTTPSConnection("m.mafengwo.cn")
 
     headers = {
-        'cookie': "CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507944455; isDownClick_adis_baidu=1; CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507906637; PHPSESSID=rit18t5uu47vntk6ds4u5f7ij2; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __mfwlt=1507945330; __mfwlv=1507945330; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; __mfwvn=6; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; mfw_uid=9154997; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-10+23%3A07%3A02%22%3B%7D; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B",
-        'user-agent': "Safari Mozilla/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Mobile/15A432 mfwappcode/cn.mafengwo.www mfwappver/8.0.4 mfwjssdk/1.1 mfwappjsapi/1.3",
-        'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
         'accept': "application/json, text/javascript, */*; q=0.01",
-        'cache-control': "no-cache"
+        'x-requested-with': "XMLHttpRequest",
+        'user-agent': "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5 Build/M4B30Z; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36 mfwappcode/com.mfw.roadbook mfwappver/8.0.4 mfwversioncode/445 mfwsdk/20140507 channel/TengXun mfwjssdk/1.1 mfwappjsapi/1.2",
+        'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
+        'accept-encoding': "gzip, deflate",
+        'accept-language': "zh-CN,en-US;q=0.8",
+        'cookie': "mafengwo=4046e81abb616be756f33797083d5326_9154997_59f5bbaeee7bf0.02684591_59f5bbaeee7c53.01923061",
+        'cache-control': "no-cache",
     }
 
     conn.request("GET", "/sales/activity/ajax.php?act=aSetHoneyCenterUserInfo", headers=headers)
@@ -280,14 +283,17 @@ def mafengwo_zhuanpan_sign_in():
     payload = "act=honeyTurntable&async=false&key=sales%3Aactivity%3Ahoney_center"
 
     headers = {
-        'host': "m.mafengwo.cn",
-        'content-type': "application/x-www-form-urlencoded; charset=UTF-8",
+        'content-length': "66",
         'accept': "application/json, text/javascript, */*; q=0.01",
+        'origin': "https://m.mafengwo.cn",
         'x-requested-with': "XMLHttpRequest",
+        'user-agent': "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5 Build/M4B30Z; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Mobile Safari/537.36 mfwappcode/com.mfw.roadbook mfwappver/8.0.4 mfwversioncode/445 mfwsdk/20140507 channel/TengXun mfwjssdk/1.1 mfwappjsapi/1.2",
+        'content-type': "application/x-www-form-urlencoded; charset=UTF-8",
         'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
-        'user-agent': "Safari Mozilla/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Mobile/15A432 mfwappcode/cn.mafengwo.www mfwappver/8.0.4 mfwjssdk/1.1 mfwappjsapi/1.3",
-        'cookie': "CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507942948; isDownClick_adis_baidu=1; CNZZDATA30081550=cnzz_eid%3D1740933682-1446645899-%26ntime%3D1507906637; PHPSESSID=rit18t5uu47vntk6ds4u5f7ij2; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __mfwlt=1507945330; __mfwlv=1507945330; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; __mfwvn=6; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; mfw_uid=9154997; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-10+23%3A07%3A02%22%3B%7D; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B",
-        'cache-control': "no-cache"
+        'accept-encoding': "gzip, deflate",
+        'accept-language': "zh-CN,en-US;q=0.8",
+        'cookie': "mafengwo=4046e81abb616be756f33797083d5326_9154997_59f5bbaeee7bf0.02684591_59f5bbaeee7c53.01923061",
+        'cache-control': "no-cache",
     }
 
     conn.request("POST", "/sales/activity/ajax.php", payload, headers)

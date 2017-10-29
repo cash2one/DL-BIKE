@@ -22,9 +22,6 @@ from scripts.parser import Parser
 
 
 class Paper(Parser):
-    """
-    pm25每小时更新一次
-    """
 
     paper = PaperCache()
 
