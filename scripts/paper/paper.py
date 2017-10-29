@@ -43,13 +43,13 @@ class Paper(Parser):
                 while i < degree:
                     read_ret = yield self.paper_ps.read_article(value['id'])
 
-                    if i % 2 == 0:
+                    if i % 40 == 0:
                         vote_ret = yield self.paper_ps.add_vote(value['id'])
                         self.logger.debug("add_vote id:{} ret:{}".format(value['id'], vote_ret))
                     # 刷榜成功才计数
                     if read_ret:
                         i += 1
-                    time.sleep(random.randint(0, 20))
+                    time.sleep(random.randint(0, 12))
 
     @gen.coroutine
     def runner(self):
