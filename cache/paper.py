@@ -48,7 +48,7 @@ class PaperCache(object):
         if not isinstance(value, dict):
             return False
 
-        self.redis.set(self.paper.format(id), value, ttl=3*24*60*60)
+        self.redis.set(self.paper.format(id), value, ttl=3 * 24 * 60 * 60)
         return True
 
     def del_paper_session(self, id):

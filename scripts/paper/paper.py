@@ -35,15 +35,16 @@ class Paper(Parser):
         for key in keys:
             value = self.paper.get_paper_session_by_key(key)
             self.logger.debug("all redis key:{} value:{}".format(key, value))
-            if time.time() - value['time'] >= 60 * 30:
+            if time.time() - value['time'] >= 3:
                 # 每隔半小时运行一次
                 # 根据刷榜次数得出每次刷榜次数
                 self.logger.debug("start redis key:{} value:{}".format(key, value))
+                # 先清除该 redis 记录，避免被其他进程消费
+                self.paper.del_paper_session(value['id'])
                 degree = round(value['quality'] / (3 * 24 * 2))
                 i = 0
                 while i < degree:
                     read_ret = yield self.paper_ps.read_article(value['id'])
-                    self.logger.debug("read_article id:{} ret:{}".format(value['id'], read_ret))
 
                     if i % 40 == 0:
                         vote_ret = yield self.paper_ps.add_vote(value['id'])
@@ -51,7 +52,7 @@ class Paper(Parser):
                     # 刷榜成功才计数
                     if read_ret:
                         i += 1
-                    time.sleep(random.randint(0, 8))
+                    time.sleep(random.randint(0, 6))
 
                 jdata = ObjectDict({
                     "id": value['id'],
