@@ -137,7 +137,6 @@ class EventPageService(PageService):
                                             msg.ToUserName,
                                             int(time.time()),
                                             media_id)
-        self.logger.debug("image:" + text_info)
         raise gen.Return(text_info)
 
     @gen.coroutine

@@ -277,6 +277,7 @@ class MetaBaseHandler(AtomHandler):
                 request.headers.get('X-Real-Ip') or
                 request.remote_ip
             ),
+            event="{}_{}".format(self._event, request.method),
             user_id=self.current_user.wxuser.id if self.current_user.wxuser else 0,
             type_wechat=self._in_wechat,
             type_mobile=self._client_type,

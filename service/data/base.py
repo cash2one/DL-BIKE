@@ -19,13 +19,11 @@ from app import logger, redis
 from setting import settings
 from util.common import ObjectDict
 from util.common.singleton import Singleton
-from util.tool.str_tool import to_str
 from util.tool.http_tool import http_get
 from cache.ipproxy import IpproxyCache
 
 
 class DataService:
-
     __metaclass__ = Singleton
 
     def __init__(self):
@@ -61,63 +59,41 @@ class DataService:
     def get_ip_proxy(self):
         """
         获得代理 IP
-        https://github.com/jhao104/proxy_pool
-        http://121.40.219.23:5000/get_all
+        referer: https://github.com/qiyeboy/IPProxyPool
+        http://121.40.219.23:8100?count=10
         :return:
         """
 
         ipproxy_session_dict = self.ipproxy.get_ipproxy_session()
+        self.logger.debug("ipproxy_session_dict:{}".format(ipproxy_session_dict))
         if ipproxy_session_dict:
-            ip_proxys = list(ipproxy_session_dict.values())
-            if len(ip_proxys) > 3:
-                ip_proxy = ip_proxys[random.randint(0,2)]
-                return ip_proxy.get("host"), ip_proxy.get("port")
-            else:
-                return "",""
+            host, value = random.choice(list(ipproxy_session_dict.items()))
+            return value['host'], value['port']
+
         else:
 
-            ret = yield http_get("{}/{}".format(settings['proxy'], "get_all"), res_json=False)
-            res_dict = ObjectDict()
-            ret = ujson.decode(to_str(ret))
+            jdata = ObjectDict({
+                'count': 50,  # 数量
+                'protocol': 0,  # 0: http, 1 https, 2 http/https
+                # 'types': 2, # 0: 高匿,1:匿名,2 透明
+            })
 
+            ret = yield http_get(settings['proxy'], jdata)
+
+            res_dict = ObjectDict()
             for item in ret:
-                res_ip = re.split(":", item)
                 ip_dict = ObjectDict({
-                    "host": res_ip[0],
-                    "port": int(res_ip[1])
+                    "host": item[0],
+                    "port": item[1],
                 })
                 res_dict.update({
-                    res_ip[0]: ip_dict
+                    item[0]: ip_dict
                 })
 
             self.ipproxy.set_ipproxy_session(res_dict)
 
-            ip_proxys = list(res_dict.values())
-            if len(ip_proxys) > 3:
-                ip_proxy = ip_proxys[random.randint(0,2)]
-                return ip_proxy.get("host"), ip_proxy.get("port")
+            if res_dict:
+                host, value = random.choice(list(res_dict.items()))
+                return value['host'], value['port']
             else:
-                return "",""
-
-    @gen.coroutine
-    def del_ip_proxy(self, ip, port):
-        """
-        删除代理 IP
-        referer: https://github.com/jhao104/proxy_pool
-        http://127.0.0.1:5000/delete?proxy=127.0.0.1:8080
-        :param ip: 类似192.168.1.1:8080
-        :return:
-        """
-
-        ipproxy_session_dict = self.ipproxy.get_ipproxy_session()
-
-        if ipproxy_session_dict:
-            ipproxy_session_dict.pop(ip, None)
-            self.ipproxy.set_ipproxy_session(ipproxy_session_dict)
-
-        params = ObjectDict({
-            "proxy": "{}:{}".format(ip, port),
-        })
-
-        ret = yield http_get("{}/{}".format(settings['proxy'], "delete"), params, res_json=False)
-        raise gen.Return(ret)
+                return "", ""

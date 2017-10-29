@@ -171,7 +171,6 @@ class WechatOauthHandler(MetaBaseHandler):
 
     def get_msg(self):
         from_xml = self.request.body
-        self.logger.debug("get_msg:{}".format(from_xml))
         if not from_xml:
             return ObjectDict()
         return parse_msg(from_xml)

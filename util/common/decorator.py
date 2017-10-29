@@ -100,39 +100,3 @@ def cache(prefix=None, key=None, ttl=60, hash=True, lock=True, separator=":"):
         return func_wrapper
 
     return cache_inner
-
-# def authenticated(func):
-#     """
-#     判断用户是否登录
-#     若在非微信环境（即手机浏览器等）用户未登录，
-#     则跳转到配置到 setting 的登录 url。`login url <RequestHandler.get_login_url>`
-#     若在企业号的服务号环境，则进行静默授权
-#     """
-#
-#     @functools.wraps(func)
-#     @gen.coroutine
-#     def wrapper(self, *args, **kwargs):
-#         self.logger.debug("!!!!!!authenticated: %s" % self.current_user)
-#         if self.current_user.sysuser and self.in_wechat:
-#             if self._authable and not self.current_user.wxuser and self.request.method in ("GET", "HEAD"):
-#                 # 该企业号是服务号，静默授权
-#                 self._oauth_service.weapp = self.current_user.weapp
-#                 self._oauth_service.state = to_hex(self.current_user.qxuser.unionid)
-#                 url = self._oauth_service.get_oauth_code_base_url()
-#                 self.redirect(url)
-#                 return
-#
-#         elif not self.current_user.sysuser:
-#             if self.request.method in ("GET", "HEAD"):
-#                 redirect_url = make_url(const.USER_LOGIN, self.params, escape=['next_url'])
-#
-#                 redirect_url += "&" + urlencode(
-#                     dict(next_url=self.request.uri))
-#                 self.redirect(redirect_url)
-#                 return
-#             else:
-#                 self.send_json_error(message=const.NOT_AUTHORIZED)
-#
-#         yield func(self, *args, **kwargs)
-#
-#     return wrapper

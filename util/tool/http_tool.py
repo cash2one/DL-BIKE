@@ -3,7 +3,6 @@
 
 """基础服务 api 调用工具"""
 
-import traceback
 import ujson
 from urllib.parse import urlencode
 
@@ -11,10 +10,12 @@ import tornado.httpclient
 from tornado import gen
 from tornado.httputil import url_concat
 
+from app import settings
 from app import logger
 import conf.headers as const_headers
 from util.common import ObjectDict
 from util.tool.json_tool import json_dumps
+from cache.ipproxy import IpproxyCache
 
 
 @gen.coroutine
@@ -81,7 +82,6 @@ def http_patch(
     ret = yield _async_http_post(route, jdata, res_json, headers, timeout=timeout, proxy_host=proxy_host, proxy_port=proxy_port, method='PATCH')
     raise gen.Return(ret)
 
-
 @gen.coroutine
 def http_fetch(
         route,
@@ -135,9 +135,9 @@ def http_fetch(
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:
-        logger.warning("[http_fetch][url: {}][body: {}]".format(
-            route, ujson.encode(data)))
-        logger.warning("http_fetch httperror: {}".format(e))
+        yield del_ip_proxy(proxy_host)
+        logger.warning("[http_fetch][url: {}] ".format(route))
+        logger.warning("[http_fetch]httperror: {}".format(e))
 
     raise gen.Return(ObjectDict())
 
@@ -148,7 +148,7 @@ def _async_http_get(
         jdata=None,
         res_json=True,
         headers=None,
-        timeout=5,
+        timeout=10,
         proxy_host=None,
         proxy_port=None,
         method='GET'):
@@ -191,6 +191,7 @@ def _async_http_get(
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:
+        yield del_ip_proxy(proxy_host)
         logger.warning("[_async_http_get][url: {}] ".format(url))
         logger.warning("_async_http_get httperror: {}".format(e))
 
@@ -226,7 +227,6 @@ def _async_http_post(
         http_request = tornado.httpclient.HTTPRequest(
             url,
             method=method.upper(),
-            # body=ujson.encode(jdata),
             body=json_dumps(jdata),
             request_timeout=timeout,
             headers=headers,
@@ -249,10 +249,12 @@ def _async_http_post(
             raise gen.Return(response.body)
 
     except tornado.httpclient.HTTPError as e:
+        yield del_ip_proxy(proxy_host)
         logger.warning(
             "[_async_http_post][url: {}][body: {}] ".format(
                 url, ujson.encode(jdata)))
         logger.warning("_async_http_post httperror: {}".format(e))
+
 
     raise gen.Return(ObjectDict())
 
@@ -260,14 +262,30 @@ def _async_http_post(
 def _objectdictify(result):
     """将结果 ObjectDict 化"""
     ret = result
-    try:
-        if isinstance(result, list):
-            ret = [ObjectDict(e) for e in result]
-        elif isinstance(result, dict):
-            ret = ObjectDict(result)
-        else:
-            pass
-    except Exception as e:
-        logger.error(traceback.format_exc())
-    finally:
-        return ret
+    if isinstance(result, dict):
+        ret = ObjectDict(result)
+    return ret
+
+@gen.coroutine
+def del_ip_proxy(ip):
+    """
+    删除代理 IP
+    referer: https://github.com/qiyeboy/IPProxyPool
+    http://127.0.0.1:8100/delete?ip=120.92.3.127
+    :param ip: 类似192.168.1.1:8080
+    :return:
+    """
+
+    ipproxy_session_dict = IpproxyCache().get_ipproxy_session()
+    if ipproxy_session_dict:
+        ipproxy_session_dict.pop(ip, None)
+        logger.debug("del_ip_proxy ipproxy_session_dict:{}".format(ipproxy_session_dict))
+        IpproxyCache().set_ipproxy_session(ipproxy_session_dict)
+
+    params = ObjectDict({
+        "ip": ip,
+    })
+
+    ret = yield http_get("{}/{}".format(settings['proxy'], "delete"), params, res_json=False)
+    logger.debug("del_ip_proxy id:{} ret:{}".format(ip, ret))
+    raise gen.Return(ret)

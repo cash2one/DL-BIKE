@@ -9,6 +9,7 @@ from service.page.wechat.station import StationPageService
 from service.page.wechat.user import UserPageService
 from service.page.wechat.infra import InfraPageService
 from service.page.wechat.region import RegionPageService
+from service.page.paper.paper import PaperPageService
 
 class Parser():
 
@@ -19,6 +20,7 @@ class Parser():
         self.user_ps = UserPageService()
         self.infra_ps = InfraPageService()
         self.region_ps = RegionPageService()
+        self.paper_ps = PaperPageService()
         self.logger = logger
         self.const = const
 

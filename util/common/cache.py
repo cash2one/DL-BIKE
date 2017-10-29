@@ -79,6 +79,9 @@ class BaseRedis(object):
         key = self.key_name(key)
         return self._redis.incr(key)
 
+    def keys(self, pattern):
+        return self._redis.keys(pattern)
+
     def exists(self, key):
         key = self.key_name(key)
         return self._redis.exists(key)

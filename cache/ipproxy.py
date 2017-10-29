@@ -33,15 +33,10 @@ class IpproxyCache(object):
         :return:
         """
 
-        if not isinstance(value, dict) or not value:
+        if not isinstance(value, dict):
             return False
 
-        # logger.debug(
-        #     "[IpproxyCache] set_ipproxy_session key:{0} "
-        #     "value:{1} type:{2}".format(
-        #         self.ipproxy, value, type(value)))
-
-        self.redis.set(self.ipproxy, value, ttl=60*60*6)
+        self.redis.set(self.ipproxy, value, ttl=15*60)
         return True
 
     def del_ipproxy_session(self):

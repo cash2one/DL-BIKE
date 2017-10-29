@@ -43,7 +43,7 @@ settings['store_options'] = {
     'max_connections': 500
 }
 
-settings['proxy'] = "http://121.40.219.23:5000"
+settings['proxy'] = "http://121.40.219.23:8100"
 settings['baidu_ak'] = "lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf"
 settings['soso_ak'] = "7CJBZ-N3MRU-LGGVA-2JIVK-BQLJK-CUF7Y"
 
