@@ -65,7 +65,6 @@ class DataService:
         """
 
         ipproxy_session_dict = self.ipproxy.get_ipproxy_session()
-        self.logger.debug("ipproxy_session_dict:{}".format(ipproxy_session_dict))
         if ipproxy_session_dict:
             host, value = random.choice(list(ipproxy_session_dict.items()))
             return value['host'], value['port']

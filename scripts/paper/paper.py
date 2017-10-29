@@ -33,19 +33,19 @@ class Paper(Parser):
         keys = self.paper.get_paper_sessions()
         for key in keys:
             value = self.paper.get_paper_session_by_key(key)
+            self.logger.debug("all redis key:{} value:{}".format(key, value))
             if time.time() - value['time'] >= 60 * 30:
                 # 每隔半小时运行一次
                 # 根据刷榜次数得出每次刷榜次数
-                self.logger.debug("redis key:{} value:{}".format(key, value))
+                self.logger.debug("start redis key:{} value:{}".format(key, value))
                 degree = round(value['quality'] / (3 * 24 * 2))
-                self.logger.debug("degree:{}".format(degree))
                 i = 0
                 while i < degree:
                     read_ret = yield self.paper_ps.read_article(value['id'])
 
                     if i % 2 == 0:
                         vote_ret = yield self.paper_ps.add_vote(value['id'])
-                        self.logger.debug("add_vote ret:{}".format(vote_ret))
+                        self.logger.debug("add_vote id:{} ret:{}".format(value['id'], vote_ret))
                     # 刷榜成功才计数
                     if read_ret:
                         i += 1
