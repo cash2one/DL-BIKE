@@ -16,6 +16,7 @@ from tornado import gen
 from tornado.ioloop import IOLoop
 from cache.paper import PaperCache
 from util.tool.date_tool import curr_now
+from util.common import ObjectDict
 
 from scripts.parser import Parser
 
@@ -42,6 +43,7 @@ class Paper(Parser):
                 i = 0
                 while i < degree:
                     read_ret = yield self.paper_ps.read_article(value['id'])
+                    self.logger.debug("read_article id:{} ret:{}".format(value['id'], read_ret))
 
                     if i % 40 == 0:
                         vote_ret = yield self.paper_ps.add_vote(value['id'])
@@ -49,7 +51,14 @@ class Paper(Parser):
                     # 刷榜成功才计数
                     if read_ret:
                         i += 1
-                    time.sleep(random.randint(0, 12))
+                    time.sleep(random.randint(0, 8))
+
+                jdata = ObjectDict({
+                    "id": value['id'],
+                    "quality": value['quality'] - degree,
+                    "time": time.time(),
+                })
+                self.paper.set_paper_session(value['id'], jdata)
 
     @gen.coroutine
     def runner(self):

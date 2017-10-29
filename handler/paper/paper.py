@@ -5,7 +5,6 @@ from tornado import gen
 from handler.base import BaseHandler
 from util.common.decorator import handle_response
 from util.common import ObjectDict
-from util.tool.date_tool import curr_now
 from cache.paper import PaperCache
 
 
