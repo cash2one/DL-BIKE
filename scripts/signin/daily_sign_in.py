@@ -265,7 +265,7 @@ def mafengwo_fengmi_sign_in():
         'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
         'accept-encoding': "gzip, deflate",
         'accept-language': "zh-CN,en-US;q=0.8",
-        'cookie': "mafengwo=4046e81abb616be756f33797083d5326_9154997_59f5bbaeee7bf0.02684591_59f5bbaeee7c53.01923061",
+        'cookie': '__idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; PHPSESSID=82cf136e74qjc3rg79qlg5qh35; mfw_uid=9154997; __mfwlt=1509330923; __mfwlv=1509330923; __mfwvn=20; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-25+22%3A21%3A00%22%3B%7D; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15',
         'cache-control': "no-cache",
     }
 
@@ -292,7 +292,7 @@ def mafengwo_zhuanpan_sign_in():
         'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
         'accept-encoding': "gzip, deflate",
         'accept-language': "zh-CN,en-US;q=0.8",
-        'cookie': "mafengwo=4046e81abb616be756f33797083d5326_9154997_59f5bbaeee7bf0.02684591_59f5bbaeee7c53.01923061",
+        'cookie': '__idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; PHPSESSID=82cf136e74qjc3rg79qlg5qh35; mfw_uid=9154997; __mfwlt=1509330923; __mfwlv=1509330923; __mfwvn=20; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-25+22%3A21%3A00%22%3B%7D; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15',
         'cache-control': "no-cache",
     }
 
@@ -361,7 +361,7 @@ def chexiang_sign_in():
         'origin': "https://h.jia.chexiang.com",
         'user-agent': "{  \"clientId\" : \"93c36ab85c994b04b184c3653297eaed\",  \"deviceId\" : \"723D3C53-952C-4FF2-8C80-EE0D47788F4B\",  \"appCode\" : \"MongoToC\",  \"plateformType\" : \"ios\",  \"signature\" : \"2009CFFC21D78FE8B8C0A0B1E5741ACF\",  \"origin\" : \"Mozilla\/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit\/604.1.38 (KHTML, like Gecko) Mobile\/15A432\",  \"userToken\" : \"MTAwMDU5ZWNhNzg4NWE2MzRlODgxMDY1MjMwNSLkvLka68lia3_un5ki1aVctZjN\",  \"sourceCode\" : \"APPStore\",  \"deviceManufacturer\" : \"iPhone\",  \"appVersion\" : \"4.3.1\",  \"userAccount\" : \"17621856713\",  \"signVersion\" : \"0.2\"}",
         'referer': "https://h.jia.chexiang.com/cx/cxj/cxjweb/checkins/checkins.shtml?userInfo=JTdCJTIyc291cmNlVHlwZSUyMiUzQSUyMjIlMjIlMkMlMjJsb2NhbFglMjIlM0ElMjIxMjEuMzc3NDAxJTIyJTJDJTIybG9jYWxZJTIyJTNBJTIyMzEuMzI0Mzk4JTIyJTJDJTIybW9iaWxlUGhvbmUlMjIlM0ElMjIxNzYyMTg1NjcxMyUyMiUyQyUyMmNpdHlOYW1lJTIyJTNBJTIyJUU0JUI4JThBJUU2JUI1JUI3JUU1JUI4JTgyJTIyJTJDJTIydXNlcklkJTIyJTNBJTIyS0h5OTJnJTJGV2UxTXRYbTRBUWVmRld3JTNEJTNEJTIyJTJDJTIyZXF1SWQlMjIlM0ElMjI3MjNEM0M1My05NTJDLTRGRjItOEM4MC1FRTBENDc3ODhGNEIlMjIlMkMlMjJjdXN0TmFtZSUyMiUzQSUyMiUyMiU3RA==",
-        'cookie': "bbbbbbbbbbbbbbb=FBPCLEANECANEKGKGANFDOHOLKAIOANNHHLFKFHCLEIDLDPJPGKMMGADNJCAENKPOHFHICCDBGBLPOFPGJANFNAKDBMBACPEKOFMNLHOIJNPPNNPDIFHEMFNHLFIBNCP; scookie2=1508939705297; sc_s=MTAwMDU5ZWNhNzg4NWE2MzRlODgxMDY1MjMwNSLkvLka68lia3_un5ki1aVctZjN; wemall_equid_c=723D3C53-952C-4FF2-8C80-EE0D47788F4B; wemall_openid_c=\"\"; wemall_opentype_c=6; wemall_userkey_c=1b16cfc3-de9d-4b47-83e4-394987e54452; scookie0=e76ce162653a4567830485d52b594433; scookie1=1508939704850; user_trace_cookie=CiCcVFnwl6uJPGd3EhXFAg==; _ga=GA1.2.1017692364.1508681626; COOKIE_USER_CARD_CITYID=310100; COOKIE_USER_CARD_CITYID=310100; analysis_sign=10652305; wemall_cxid_c=10652305; wcid=08A1DE46-CBFF-4960-AEAC-E4037E1A3E36",
+        'cookie': 'user_trace_cookie=CiCcDln3NDBJpVSRMEexAg==; analysis_sign=10652305; wemall_cxid_c=10652305; wemall_equid_c=723D3C53-952C-4FF2-8C80-EE0D47788F4B; wemall_openid_c=""; wemall_opentype_c=6; wemall_userkey_c=62882c7f-3644-46d1-ad1c-c8131d339161; _ga=GA1.2.1080391224.1509372664; _gid=GA1.2.879806854.1509372664; wcid=26D47ADB-80AD-4FAF-BD19-06952B0647E7',
         'cache-control': "no-cache",
     }
     conn.request("POST", "/water/addWater.htm", payload, headers)
