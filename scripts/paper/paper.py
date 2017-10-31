@@ -17,6 +17,7 @@ from tornado.ioloop import IOLoop
 from cache.paper import PaperCache
 from util.tool.date_tool import curr_now
 from util.common import ObjectDict
+from util.tool.json_tool import json_dumps
 
 from scripts.parser import Parser
 
@@ -32,6 +33,7 @@ class Paper(Parser):
         self.logger.debug("all redis key:{}".format(keys))
         for key in keys:
             value = self.paper.get_paper_session_by_key(key)
+            self.logger.debug("valid redis key:{} difftime:{}".format(key, time.time() - value['time']))
             if time.time() - value['time'] >= 60 * 30:
                 # 每隔半小时运行一次
                 # 根据刷榜次数得出每次刷榜次数
@@ -57,6 +59,7 @@ class Paper(Parser):
                     "time": time.time(),
                 })
                 self.paper.set_paper_session(value['id'], jdata)
+                self.logger.debug("end redis key:{} value:{}".format(key, json_dumps(jdata)))
 
     @gen.coroutine
     def runner(self):
