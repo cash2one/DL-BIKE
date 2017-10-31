@@ -274,7 +274,7 @@ def mafengwo_fengmi_sign_in():
     res = conn.getresponse()
     data = res.read()
 
-    print("[mafengwo_fengmi][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+    print("[mafengwo_fengmi][time:{}][res:{}]".format(curr_now(), data))
 
 def mafengwo_zhuanpan_sign_in():
     """马蜂窝蜂蜜转盘 ios 客户端签到"""
@@ -301,7 +301,7 @@ def mafengwo_zhuanpan_sign_in():
     res = conn.getresponse()
     data = res.read()
 
-    print("[mafengwo_zhuanpan][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+    print("[mafengwo_zhuanpan][time:{}][res:{}]".format(curr_now(), data))
 
 def fliggy_sigin_in():
     """阿里旅行网页签到"""
