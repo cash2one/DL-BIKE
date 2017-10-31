@@ -21,8 +21,8 @@ def qyer_sign_in():
         'host': "open.qyer.com",
         'accept': "*/*",
         'connection': "keep-alive",
-        'cookie': "__utma=253397513.1667471721.1476627137.1486093623.1486177584.17; __utmb=253397513.1.10.1486177584; __utmc=253397513; __utmt=1; __utmz=253397513.1476627137.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _guid=c50082bd-15a4-c693-dc03-24ffffdcfad0; init_refer=; new_session=1; new_uv=17; session_time=1486177583; cdb_auth=2fd7%2BuJDATGAZtUZ0sEocWnV6ZVZ79H5s14PpNFflLUhPiIP%2B6uVCZhQfqg1CEo2fqc3dWPe6fqcql919ot4FPqJEJd3fA; als=0",
-        'user-agent': "QYER/7.4 (iPhone; iOS 10.2.1; Scale/2.00)",
+        'cookie': 'als=0; _guid=c50082bd-15a4-c693-dc03-24ffffdcfad0; init_refer=; new_session=1; new_uv=32; session_time=1509463301.126; __utma=253397513.1667471721.1476627137.1507943677.1509463300.32; __utmb=253397513.1.10.1509463300; __utmc=253397513; __utmt=1; __utmz=253397513.1476627137.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); cdb_auth=f865Zzg1iKKqjyGeI%2BFCAAjOHMUi5kKpmzy%2BCaSC7kBfXWQ8NTfbshapHz7Q09%2BBI8G88gltuMU9igrvFlCDRNrpcl6P7A; cdb_cookietime=2952000; _fmdata=F602CAD3DC0947ADDC728EFB1EE7D8CDB56E1F3A38DE5E22D1E03FA75AB7EB02EBF6A966EEA46ADD01E8A2D76E141A7546FF8737A1689E3D; fingerprint=49Gr28qN1TX5HNm3pSBhKvL1z2epS3TfkVgIaAGU6FIlZl3t1486992556072; wdata_token=49Gr28qN1TX5HNm3pSBhKvL1z2eptaQgegUzJdCwC1waqD2I1486992556074',
+        'user-agent': "QYER/7.12.4 (iPhone; iOS 11.0.3; Scale/2.00)",
     }
 
     conn.request("POST", "/qyer/mileage/sign/add_mileage", payload, headers)
