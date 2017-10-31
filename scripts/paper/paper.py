@@ -33,33 +33,33 @@ class Paper(Parser):
         self.logger.debug("all redis key:{}".format(keys))
         for key in keys:
             value = self.paper.get_paper_session_by_key(key)
-            self.logger.debug("valid redis key:{} difftime:{}".format(key, time.time() - value['time']))
-            if time.time() - value['time'] >= 60 * 30:
-                # 每隔半小时运行一次
-                # 根据刷榜次数得出每次刷榜次数
-                self.logger.debug("start redis key:{} value:{}".format(key, value))
-                # 先清除该 redis 记录，避免被其他进程消费
-                self.paper.del_paper_session(value['id'])
-                degree = round(value['quality'] / (3 * 24 * 2))
-                i = 0
-                while i < degree:
-                    read_ret = yield self.paper_ps.read_article(value['id'])
+            # 脚本每隔半小时运行一次
+            # 根据刷榜次数得出每次刷榜次数
+            self.logger.debug("start redis key:{} value:{}".format(key, value))
+            # 先清除该 redis 记录，避免被其他进程消费
+            self.paper.del_paper_session(value['id'])
+            if value['quality'] == 0:
+                continue
+            degree = round(value['quality'] / (3 * 24 * 2))
+            i = 0
+            while i < degree:
+                read_ret = yield self.paper_ps.read_article(value['id'])
 
-                    if i % 40 == 0:
-                        vote_ret = yield self.paper_ps.add_vote(value['id'])
-                        self.logger.debug("add_vote id:{} ret:{}".format(value['id'], vote_ret))
-                    # 刷榜成功才计数
-                    if read_ret:
-                        i += 1
-                    time.sleep(random.randint(0, 6))
+                if i % 40 == 0:
+                    vote_ret = yield self.paper_ps.add_vote(value['id'])
+                    self.logger.debug("add_vote id:{} ret:{}".format(value['id'], vote_ret))
+                # 刷榜成功才计数
+                if read_ret:
+                    i += 1
+                time.sleep(random.randint(0, 6))
 
-                jdata = ObjectDict({
-                    "id": value['id'],
-                    "quality": value['quality'] - degree,
-                    "time": time.time(),
-                })
-                self.paper.set_paper_session(value['id'], jdata)
-                self.logger.debug("end redis key:{} value:{}".format(key, json_dumps(jdata)))
+            jdata = ObjectDict({
+                "id": value['id'],
+                "quality": value['quality'] - degree,
+                "time": time.time(),
+            })
+            self.paper.set_paper_session(value['id'], jdata)
+            self.logger.debug("end redis key:{} value:{}".format(key, json_dumps(jdata)))
 
     @gen.coroutine
     def runner(self):
