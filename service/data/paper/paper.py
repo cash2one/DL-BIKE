@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from tornado import gen
+from selenium import webdriver
 
 import conf.path as path
 from service.data.base import DataService
@@ -49,3 +50,20 @@ class PaperDataService(DataService):
                                proxy_port=port)
 
         raise gen.Return(ret)
+
+    @gen.coroutine
+    def refresh_article(self, id):
+        """
+        利用selenium刷新网页
+        :param id:
+        :return:
+        """
+
+        host, port = yield self.get_ip_proxy()
+        proxy = "{}:{}".format(host,port)
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--proxy-server=http://%s' % proxy)
+        chrome = webdriver.Chrome(chrome_options=chrome_options)
+        chrome.get(path.PAPER_ARTICLE.format(id))
+
+        raise gen.Return(True)

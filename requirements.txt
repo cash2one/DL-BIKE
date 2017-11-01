@@ -6,3 +6,4 @@ redis==2.10.5
 requests==2.12.1
 pycurl==7.43.0
 pycrypto==2.6.1
+selenium==3.6.0
