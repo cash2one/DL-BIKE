@@ -255,7 +255,7 @@ def futunn_sign_in():
 
 
 def mafengwo_fengmi_sign_in():
-    """马蜂窝蜂蜜 ios 客户端签到"""
+    """马蜂窝蜂蜜 ios 客户端签到，已经迁移到/home/script/mafengwo/daka.sh"""
     conn = http.client.HTTPSConnection("m.mafengwo.cn")
 
     headers = {
@@ -277,7 +277,7 @@ def mafengwo_fengmi_sign_in():
     print("[mafengwo_fengmi][time:{}][res:{}]".format(curr_now(), data))
 
 def mafengwo_zhuanpan_sign_in():
-    """马蜂窝蜂蜜转盘 ios 客户端签到"""
+    """马蜂窝蜂蜜转盘 ios 客户端签到，已经迁移到/home/script/mafengwo/daka.sh"""
     conn = http.client.HTTPSConnection("m.mafengwo.cn")
 
     payload = "act=honeyTurntable&async=false&key=sales%3Aactivity%3Ahoney_center"
@@ -382,8 +382,8 @@ if __name__ == '__main__':
     umetrip_sign_in()
     xiami_sign_in()
     futunn_sign_in()
-    mafengwo_fengmi_sign_in()
-    mafengwo_zhuanpan_sign_in()
+    # mafengwo_fengmi_sign_in()
+    # mafengwo_zhuanpan_sign_in()
     # fliggy_sigin_in()
     qyer_helper_sign_in()
     chexiang_sign_in()
