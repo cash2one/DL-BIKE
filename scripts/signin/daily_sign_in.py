@@ -14,15 +14,13 @@ def qyer_sign_in():
     """穷游客户端签到"""
     conn = http.client.HTTPConnection("open.qyer.com")
 
-    payload = "account_s=fef74474cd9678792d86e83dfafbfb9e&client_id=qyer_ios&client_secret=cd254439208ab658ddf9&count=20&lat=31.19774147548028&lon=121.4274459760588&oauth_token=0b03e0779e7c7daf114945ef1df24ec6&page=1&track_app_channel=AppStore&track_app_version=7.4&track_device_info=iPhone&track_deviceid=39DA2458-316C-70AE-F956-B3C46ED9CCE6&track_os=ios10.2.1&track_user_id=1793208&v=1"
+    payload = "account_s=d4b8bdffe123e59822189fc878684c92&client_id=qyer_ios&client_secret=cd254439208ab658ddf9&count=10&lat=31.32464130009987&lon=121.3770824615204&oauth_token=d68628153128a7c6ae071a958c45fc66&page=1&track_app_channel=App%2520Store&track_app_version=7.13&track_device_info=iPhone%25206s&track_deviceid=38601B3A-6E65-D001-D3F2-923F657474BB&track_os=ios%252011.1.2&track_user_id=1793208&v=1"
 
     headers = {
         'content-type': "application/x-www-form-urlencoded",
-        'host': "open.qyer.com",
-        'accept': "*/*",
-        'connection': "keep-alive",
-        'cookie': 'als=0; _guid=c50082bd-15a4-c693-dc03-24ffffdcfad0; init_refer=; new_session=1; new_uv=32; session_time=1509463301.126; __utma=253397513.1667471721.1476627137.1507943677.1509463300.32; __utmb=253397513.1.10.1509463300; __utmc=253397513; __utmt=1; __utmz=253397513.1476627137.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); cdb_auth=f865Zzg1iKKqjyGeI%2BFCAAjOHMUi5kKpmzy%2BCaSC7kBfXWQ8NTfbshapHz7Q09%2BBI8G88gltuMU9igrvFlCDRNrpcl6P7A; cdb_cookietime=2952000; _fmdata=F602CAD3DC0947ADDC728EFB1EE7D8CDB56E1F3A38DE5E22D1E03FA75AB7EB02EBF6A966EEA46ADD01E8A2D76E141A7546FF8737A1689E3D; fingerprint=49Gr28qN1TX5HNm3pSBhKvL1z2epS3TfkVgIaAGU6FIlZl3t1486992556072; wdata_token=49Gr28qN1TX5HNm3pSBhKvL1z2eptaQgegUzJdCwC1waqD2I1486992556074',
-        'user-agent': "QYER/7.12.4 (iPhone; iOS 11.0.3; Scale/2.00)",
+        'cookie': "_guid=c50082bd-15a4-c693-dc03-24ffffdcfad0; init_refer=; new_session=0; new_uv=35; session_time=1510998580.82; __utma=253397513.1667471721.1476627137.1510202366.1510998580.35; __utmb=253397513.5.10.1510998580; __utmc=253397513; __utmz=253397513.1476627137.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmt=1; cdb_auth=ac59zSMQMS73YB4sk8aNNKblOWdf3Mx0S7WpVrWaO5Hzhgv7rTBg8Uc1hOpX%2FHdfy5kkjY0n9Z5Ol346KYX7gweBFaJDQQ; cdb_cookietime=2952000; PHPSESSID=11634ccdbbba362ca67ef1d9e158912b; als=0",
+        'user-agent': "QYER/7.13 (iPhone; iOS 11.1.2; Scale/2.00)",
+        'cache-control': "no-cache",
     }
 
     conn.request("POST", "/qyer/mileage/sign/add_mileage", payload, headers)
@@ -265,8 +263,7 @@ def mafengwo_fengmi_sign_in():
         'referer': "https://m.mafengwo.cn/sales/activity/honey_center/",
         'accept-encoding': "gzip, deflate",
         'accept-language': "zh-CN,en-US;q=0.8",
-        'cookie': '__idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; PHPSESSID=82cf136e74qjc3rg79qlg5qh35; mfw_uid=9154997; __mfwlt=1509330923; __mfwlv=1509330923; __mfwvn=20; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-25+22%3A21%3A00%22%3B%7D; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15',
-        'cache-control': "no-cache",
+        'cookie': "__idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; PHPSESSID=82cf136e74qjc3rg79qlg5qh35; mfw_uid=9154997; __mfwlt=1509330923; __mfwlv=1509330923; __mfwvn=20; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-25+22%3A21%3A00%22%3B%7D; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15",
     }
 
     conn.request("GET", "/sales/activity/ajax.php?act=aSetHoneyCenterUserInfo", headers=headers)
@@ -293,7 +290,6 @@ def mafengwo_zhuanpan_sign_in():
         'accept-encoding': "gzip, deflate",
         'accept-language': "zh-CN,en-US;q=0.8",
         'cookie': '__idfa=00000000-0000-0000-0000-000000000000; __idfv=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; __openudid=F6005B42-8F41-4C6F-80A4-6AD190FD3A7F; PHPSESSID=82cf136e74qjc3rg79qlg5qh35; mfw_uid=9154997; __mfwlt=1509330923; __mfwlv=1509330923; __mfwvn=20; oad_n=a%3A3%3A%7Bs%3A3%3A%22oid%22%3Bi%3A2581%3Bs%3A2%3A%22dm%22%3Bs%3A16%3A%22mapi.mafengwo.cn%22%3Bs%3A2%3A%22ft%22%3Bs%3A19%3A%222017-10-25+22%3A21%3A00%22%3B%7D; UM_distinctid=15ec2f6c660146-00efefec2d986d-251f7468-3d10d-15ec2f6c662128; __mfwurd=a%3A3%3A%7Bs%3A6%3A%22f_time%22%3Bi%3A1506509504%3Bs%3A9%3A%22f_rdomain%22%3Bs%3A13%3A%22m.mafengwo.cn%22%3Bs%3A6%3A%22f_host%22%3Bs%3A1%3A%22m%22%3B%7D; __mfwuuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15; uva=s%3A108%3A%22a%3A3%3A%7Bs%3A2%3A%22lt%22%3Bi%3A1506509504%3Bs%3A10%3A%22last_refer%22%3Bs%3A40%3A%22https%3A%2F%2Fm.mafengwo.cn%2Fsales%2F2217861.html%22%3Bs%3A5%3A%22rhost%22%3BN%3B%7D%22%3B; mfw_uuid=59c7a7b7-5904-55f5-cbea-9460f64e4e15',
-        'cache-control': "no-cache",
     }
 
     conn.request("POST", "/sales/activity/ajax.php", payload, headers)
