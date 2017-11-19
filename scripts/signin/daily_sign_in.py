@@ -365,6 +365,33 @@ def chexiang_sign_in():
     data = res.read()
     print("[chexiang][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
+def wangyi_yanxuan_sign_in():
+    """
+    网易严选 ios 客户端签到
+    :return:
+    """
+
+    conn = http.client.HTTPSConnection("m.you.163.com")
+
+    headers = {
+        'host': "m.you.163.com",
+        'origin': "https://m.you.163.com",
+        'cookie': "YanXuanLoginCookie=;NTES_SESS=Zbc8pKdyyzKXqesDh_VyzqaB9r6OztabSFHQOH8cJYFWsX2.THks9.yGS6hzvLwyB48ojkkbp.cfA2xhw0O3eNWF9oWjKWPv33GCRLQB7ZhkBgs45MdiBN1esBZEmM_6pQRTNU6RjDPKi6CPTdDY_YvDI;P_INFO=pyx0622@163.com|1510797375|0|yanxuan|11&18|shh&1510797375&yanxuan#shh&null#10#0#0|&0|yanxuan|pyx0622@163.com;S_INFO=1510797375|0|0&20##|pyx0622|;yx_aui=df8a8f11-b0ee-4754-bf98-fdf847b83d6f;; yx_csrf=299ab4569fb0e0879850fad3252e31fc; yx_username=pyx0622%40163.com; yx_sid=8fa1df6d-dd17-4082-b981-3ee02ef13500",
+        'accept': "application/json, text/javascript, */*; q=0.01",
+        'user-agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 11_1_2 like Mac OS X) AppleWebKit/604.3.5 (KHTML, like Gecko) Mobile/15B202 yanxuan/3.4.5 device-id/8b691970806b9d545a35785d3328e4c9 app-chan-id/AppStore (abTest;[{\"groupId\":\"YX_CART_001\",\"testIdList\":[{\"testId\":\"001\"}]}])",
+        'referer': "https://m.you.163.com/points/index",
+        'accept-language': "zh-cn",
+        'x-requested-with': "XMLHttpRequest",
+    }
+
+    conn.request("POST", "/xhr/points/sign.json?csrf_token=299ab4569fb0e0879850fad3252e31fc", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+    print("[wangyiyanxuan][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
+
+
+
 if __name__ == '__main__':
 
     qyer_sign_in()
@@ -383,4 +410,5 @@ if __name__ == '__main__':
     # fliggy_sigin_in()
     qyer_helper_sign_in()
     chexiang_sign_in()
+    wangyi_yanxuan_sign_in()
 
