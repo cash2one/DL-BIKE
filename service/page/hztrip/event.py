@@ -94,10 +94,10 @@ class EventPageService(PageService):
             # res = yield self.wx_rep_text(msg, text)
             # # res = yield self.wx_rep_image(msg)
             # return res
-            res = yield self.wx_rep_image(msg, "x1Y4q2BTfy8rtp92TKQ1V9BjK17rA7YdrZyoXEEourSdv9zqmmEJQIrPlDjijNFe")
+            res = yield self.wx_rep_image(msg, "o3ERCv0Z01payyqgdMz1y_Gn7SOB4J3NHvfMRJa8JN0")
             return res
         elif click_key == "good":
-            res = yield self.wx_rep_image(msg, "KJV0heXwdRhXyOy-c46E-Ey76DCHygrlU8GSDCb6c4Aupp4gi1nCuAQhAMNhp2M_")
+            res = yield self.wx_rep_image(msg, "o3ERCv0Z01payyqgdMz1y03aWGmbd7wqnOwVLtYUGIg")
             return res
 
         # content += "\n<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'># 微信查杭州实时公交、实时自行车、实时停车位</a>"

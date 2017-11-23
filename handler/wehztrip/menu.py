@@ -11,15 +11,15 @@ obj_menu = """{
       {
 		   "name":"查公交",
 		   "sub_button":[
-		   	{
-			   "type":"click",
-			   "name":"搜索",
-			   "key":"search"
-			},
 			{
 			   "type":"click",
 			   "name":"实时公交",
 			   "key":"bus"
+			},
+			{
+			   "type":"click",
+			   "name":"搜索",
+			   "key":"search"
 			},
 			{
 			   "type":"click",
@@ -45,6 +45,16 @@ obj_menu = """{
 	   {
 		   "name":"更多",
 		   "sub_button":[
+		   	{
+			   "type":"click",
+			   "name":"摇号查询",
+			   "key":"yaohao"
+			},
+			{
+			   "type":"click",
+			   "name":"领红包",
+			   "key":"good"
+			},
 			{
 			   "type":"click",
 			   "name":"查停车位",
@@ -52,18 +62,8 @@ obj_menu = """{
 			},
 			{
 			   "type":"click",
-			   "name":"摇号查询",
-			   "key":"yaohao"
-			},
-			{
-			   "type":"click",
 			   "name":"空气污染",
 			   "key":"pm25"
-			},
-			{
-			   "type":"click",
-			   "name":"赞赏",
-			   "key":"good"
 			},
 			{
 			   "type":"click",
@@ -82,7 +82,7 @@ conn = http.client.HTTPSConnection("api.weixin.qq.com")
 # appid: wx59d56a198f761599
 # appsecret: cc1ef16876f29a2b6e745a962cea985e
 
-conn.request("POST", "/cgi-bin/menu/create?access_token=ego2hAI2JdiXgt7pz5wlEwO7l-wjNvJw1cVq9ltEwuw3sPtfa5zZZJnMcwWJIkeppndEncXJhRi1jPD9wnZ3WWaD6A-h3jwZLDCqzFrJeG7JeCNyErIkQaJkr95Xv_9GQFIdAGAGVY", obj_menu.encode("utf8"))
+conn.request("POST", "/cgi-bin/menu/create?access_token=TjxPmwAesSqbgUyK6R8K9vbqWbO4p_dot_YBYLekML0yChZU6sJlyO51y9D8ME6zRhfQO6ULHt7-5Lao9BU2kcZCVYXbVTITBqdov8HWmWZaTV2nQGmG1cqZ5R6HrGTsQRFiAAAUVJ", obj_menu.encode("utf8"))
 
 res = conn.getresponse()
 data = res.read()
