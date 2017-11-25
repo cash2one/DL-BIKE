@@ -14,11 +14,11 @@ def qyer_sign_in():
     """穷游客户端签到"""
     conn = http.client.HTTPConnection("open.qyer.com")
 
-    payload = "account_s=d4b8bdffe123e59822189fc878684c92&client_id=qyer_ios&client_secret=cd254439208ab658ddf9&count=10&lat=31.32464130009987&lon=121.3770824615204&oauth_token=d68628153128a7c6ae071a958c45fc66&page=1&track_app_channel=App%2520Store&track_app_version=7.13&track_device_info=iPhone%25206s&track_deviceid=38601B3A-6E65-D001-D3F2-923F657474BB&track_os=ios%252011.1.2&track_user_id=1793208&v=1"
+    payload = "account_s=d4b8bdffe123e59822189fc878684c92&client_id=qyer_ios&client_secret=cd254439208ab658ddf9&count=10&lat=31.32445412096989&lon=121.3770580946573&oauth_token=3d6506d91d2e67b557abbf36bf4daf89&page=1&track_app_channel=App%2520Store&track_app_version=7.13&track_device_info=iPhone%25206s&track_deviceid=38601B3A-6E65-D001-D3F2-923F657474BB&track_os=ios%252011.1.2&track_user_id=1793208&v=1"
 
     headers = {
         'content-type': "application/x-www-form-urlencoded",
-        'cookie': "_guid=c50082bd-15a4-c693-dc03-24ffffdcfad0; init_refer=; new_session=0; new_uv=35; session_time=1510998580.82; __utma=253397513.1667471721.1476627137.1510202366.1510998580.35; __utmb=253397513.5.10.1510998580; __utmc=253397513; __utmz=253397513.1476627137.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmt=1; cdb_auth=ac59zSMQMS73YB4sk8aNNKblOWdf3Mx0S7WpVrWaO5Hzhgv7rTBg8Uc1hOpX%2FHdfy5kkjY0n9Z5Ol346KYX7gweBFaJDQQ; cdb_cookietime=2952000; PHPSESSID=11634ccdbbba362ca67ef1d9e158912b; als=0",
+        'cookie': "_guid=c50082bd-15a4-c693-dc03-24ffffdcfad0; init_refer=; new_session=0; new_uv=38; session_time=1511610057.705; __utma=253397513.1667471721.1476627137.1511575432.1511610057.38; __utmb=253397513.2.10.1511610057; __utmc=253397513; __utmz=253397513.1476627137.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmt=1; cdb_auth=50e3qR2KWNxppwLK1u5mZ%2BoBODXhPp3mIq76u0dTMY%2Fi2O1oWzbDeiozsDEJu78xdOwA0wyH5cI8nz0eSAhwS8nVlPMRmg; cdb_cookietime=2952000; PHPSESSID=c124fc260c5b570abbaed7157ab0f90b; als=0",
         'user-agent': "QYER/7.13 (iPhone; iOS 11.1.2; Scale/2.00)",
         'cache-control': "no-cache",
     }
@@ -395,20 +395,20 @@ def wangyi_yanxuan_sign_in():
 if __name__ == '__main__':
 
     qyer_sign_in()
-    smzdm_sign_in()
-    music_163_sign_in()
-    nuomi_sign_in()
-    #gewara_sign_in()
-    #ctrip_sign_in()
-    jd_sign_in()
-    baidumap_sign_in()
-    umetrip_sign_in()
-    xiami_sign_in()
-    futunn_sign_in()
-    # mafengwo_fengmi_sign_in()
-    # mafengwo_zhuanpan_sign_in()
-    # fliggy_sigin_in()
-    qyer_helper_sign_in()
-    chexiang_sign_in()
-    wangyi_yanxuan_sign_in()
+    # smzdm_sign_in()
+    # music_163_sign_in()
+    # nuomi_sign_in()
+    # #gewara_sign_in()
+    # #ctrip_sign_in()
+    # jd_sign_in()
+    # baidumap_sign_in()
+    # umetrip_sign_in()
+    # xiami_sign_in()
+    # futunn_sign_in()
+    # # mafengwo_fengmi_sign_in()
+    # # mafengwo_zhuanpan_sign_in()
+    # # fliggy_sigin_in()
+    # qyer_helper_sign_in()
+    # chexiang_sign_in()
+    # wangyi_yanxuan_sign_in()
 
