@@ -154,7 +154,8 @@ class EventPageService(PageService):
         :return:
         """
         if not text:
-            text = "<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'>微信查杭州实时公交、实时自行车、实时停车位</a>"
+            text = "小伙伴们，给大家发红包喽！人人可领，领完就能用。祝大家领取的红包金额大大大！#吱口令#长按复制此消息，打开支付宝就能领取！yLl4je03Ux"
+            # text = "<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'>微信查杭州实时公交、实时自行车、实时停车位</a>"
 
         jdata = ObjectDict({
             "touser": msg.FromUserName,
