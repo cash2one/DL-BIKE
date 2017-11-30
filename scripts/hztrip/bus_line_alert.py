@@ -45,16 +45,16 @@ class BusLineAlert(Parser):
 
             msg = ObjectDict(
                 MsgType='text',
-                Content=value['keyword'],
+                Content=value['content'],
                 FromUserName=value['FromUserName'],
                 ToUserName=value['ToUserName']
             )
-            news_info = yield self.hztrip_event_ps.do_bus(msg)
+            news_array = yield self.hztrip_event_ps.do_bus(msg)
             self.logger.debug("msg:{}".format(msg))
-            self.logger.debug("news_info:{}".format(news_info))
-            res = yield self.hztrip_event_ps.wx_custom_send(msg, news_info)
+            self.logger.debug("news_info:{}".format(news_array))
+            res = yield self.hztrip_event_ps.wx_custom_send_news(msg, news_array)
             self.logger.debug("res:{}".format(res))
-            self.hztrip.set_hztrip_bus_line_alert(value['openid'], value['keyword'], value['quality'] + 1)
+            self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'], value['quality'] + 1, alert_time=value['time'])
 
     @gen.coroutine
     def runner(self):

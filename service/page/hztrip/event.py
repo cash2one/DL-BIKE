@@ -140,8 +140,8 @@ class EventPageService(PageService):
         raise gen.Return(text_info)
 
     @gen.coroutine
-    def wx_custom_send(self, msg, text=None):
-        """微信交互：发送客服消息 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547&token=&lang=zh_CN
+    def wx_custom_send_text(self, msg, text=None):
+        """微信交互：发送文本客服消息 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547&token=&lang=zh_CN
         demo
         {
             "touser":"OPENID",
@@ -162,6 +162,43 @@ class EventPageService(PageService):
             "msgtype": "text",
             "text": ObjectDict({
                 "content": text
+            })
+        })
+
+        res = yield self.wechat_ds.send_custom(jdata)
+        raise gen.Return(res)
+
+    @gen.coroutine
+    def wx_custom_send_news(self, msg, news):
+        """微信交互：发送图文客服消息 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547
+        demo
+        {
+            "touser":"OPENID",
+            "msgtype":"news",
+            "news":{
+                "articles": [
+                 {
+                     "title":"Happy Day",
+                     "description":"Is Really A Happy Day",
+                     "url":"URL",
+                     "picurl":"PIC_URL"
+                 },
+                 {
+                     "title":"Happy Day",
+                     "description":"Is Really A Happy Day",
+                     "url":"URL",
+                     "picurl":"PIC_URL"
+                 }
+                 ]
+            }
+        }
+        :return:
+        """
+        jdata = ObjectDict({
+            "touser": msg.FromUserName,
+            "msgtype": "news",
+            "news": ObjectDict({
+                "articles": news
             })
         })
 
@@ -258,7 +295,7 @@ class EventPageService(PageService):
             return news_info
 
     @gen.coroutine
-    def do_bus(self, msg):
+    def do_bus(self, msg, rsp_array=False):
         """
         查实时线路信息
         :param msg:
@@ -332,17 +369,24 @@ class EventPageService(PageService):
             url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
 
-            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += item
+            if not rsp_array:
+                item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                    title,
+                    description,
+                    headimg,
+                    url
+                )
+                news += item
 
-            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-            return news_info
-
+                news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+                return news_info
+            else:
+                return ObjectDict(
+                    title=title,
+                    description=description,
+                    url=url,
+                    picurl=headimg,
+                )
         else:
             content = "抱歉，找不到线路【{}】！输入更详细的线路名，查找更精确\n" \
                       "如B1路, B支3路区间, 193路\n\n小提示: \n如不清楚线路名称，" \

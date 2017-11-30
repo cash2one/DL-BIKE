@@ -113,7 +113,7 @@ class WechatOauthHandler(MetaBaseHandler):
         """微信事件, referer: https://mp.weixin.qq.com/wiki?action=doc&id=mp1421140454&t=0.6181039380535693"""
         event = self.msg['Event']
         yield getattr(self, 'event_' + event)()
-        yield self.event_ps.wx_custom_send(self.msg)
+        yield self.event_ps.wx_custom_send_text(self.msg)
     #
     @gen.coroutine
     def event_subscribe(self):
@@ -144,7 +144,7 @@ class WechatOauthHandler(MetaBaseHandler):
         self.send_xml(res)
 
         # 发送客服消息
-        # ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send(self.msg))
+        # ioloop.IOLoop.instance().add_timeout(time.time() + 2, self.event_ps.wx_custom_send_text(self.msg))
 
     @gen.coroutine
     def event_VIEW(self):

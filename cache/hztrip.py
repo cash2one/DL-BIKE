@@ -134,7 +134,7 @@ class HztripCache(object):
         self.redis.set(key, value)
         return True
 
-    def set_hztrip_bus_line_alert(self, from_username, to_username, content, quality=0):
+    def set_hztrip_bus_line_alert(self, from_username, to_username, content, quality=0, alert_time=None):
         """
         设置实时公交的提醒
         :param openid:
@@ -145,42 +145,43 @@ class HztripCache(object):
         if not to_username or not from_username or not content:
             return False
 
+        if not alert_time:
+            alert_time = time.time() - 15 * 60
+
         value = ObjectDict(
             FromUserName=from_username,
             ToUserName=to_username,
             content=content,
-            time=time.time() - 15 * 60, # 第二天提前15分钟推送实时公交提醒
+            time=alert_time, # 第二天提前15分钟推送实时公交提醒
             quality=quality,
         )
 
         key = self.bus_line_alert.format(from_username, md5Encode(content))
 
-        logger.debug(
-            "[HztripCache] set_hztrip_bus_line_alert key:{0} "
-            "value:{1} type:{2}".format(
-                key, value, type(value)))
+        # logger.debug(
+        #     "[HztripCache] set_hztrip_bus_line_alert key:{0} "
+        #     "value:{1} type:{2}".format(
+        #         key, value, type(value)))
 
         self.redis.set(key, value)
         return True
 
     def get_hztrip_bus_line_alerts(self):
-        """获得 bus_line 的所有 session 信息"""
-        key = self.bus_line_alert.format("*", "*")
-        logger.debug(
-            "[HztripCache] get_hztrip_bus_line_alerts key:{0}".format(key))
-        bus_lines = self.redis.get(key)
-        return bus_lines
+        """获得 bus_line 的所有 keys 信息"""
+        pattern = "{}_hztrip_busline_alert_*".format(self.redis._PREFIX)
+        paper = self.redis.keys(pattern)
+        return paper
 
     def get_hztrip_bus_line_alert_by_key(self, key):
         """获得 bus_line 的 session 信息"""
         logger.debug(
             "[HztripCache] get_hztrip_bus_line_alert_by_key key:{0}".format(key))
-        bus_line = self.redis.get(key)
+        bus_line = self.redis.get(key, prefix=False)
         return bus_line
 
     def del_hztrip_bus_line_alert_by_key(self, key):
         """删除 bus_line 的 session 信息"""
         logger.debug(
             "[HztripCache] del_hztrip_bus_line_alert_by_key key:{0}".format(key))
-        self.redis.delete(key)
+        self.redis.delete(key, prefix=False)
         return True
