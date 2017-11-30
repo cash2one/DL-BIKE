@@ -447,4 +447,4 @@ class HztripDataService(DataService):
                 curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and comm.BUS_LINE_ALERT_EVENING_PEAK_END):
             self.hztrip.set_hztrip_bus_line_alert(from_username, to_username, content)
 
-        raise True
+        raise gen.Return(True)
