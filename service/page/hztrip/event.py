@@ -322,7 +322,11 @@ class EventPageService(PageService):
                         is_realtime = True
                         description += "   ↓----行驶中，距下一站{}米----↓\n".format(item.get("buses",[])[0].get("nextDistance"))
 
-                description += "\n当前暂无车辆实时信息\n" if not is_realtime else ""
+                if not is_realtime:
+                    description += "\n当前暂无车辆实时信息\n"
+                else:
+                    # 添加第二天的实时公交提醒
+                    yield self.hztrip_ds.add_bus_line_alert(msg.FromUserName, msg.ToUserName, msg.keyword)
             description += "\n小提示:\n1.查询反向线路信息，请输入“{} {}”，关键词按空格分割\n2.可在底部菜单中切换到“电子站牌”，" \
                            "查询车站所有线路实时到站".format(route.get("routeName"), 1 if index==0 else 0)
             url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"

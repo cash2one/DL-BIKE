@@ -10,6 +10,7 @@ from service.page.wechat.user import UserPageService
 from service.page.wechat.infra import InfraPageService
 from service.page.wechat.region import RegionPageService
 from service.page.paper.paper import PaperPageService
+from service.page.hztrip.event import EventPageService
 
 class Parser():
 
@@ -21,6 +22,7 @@ class Parser():
         self.infra_ps = InfraPageService()
         self.region_ps = RegionPageService()
         self.paper_ps = PaperPageService()
+        self.hztrip_event_ps = EventPageService()
         self.logger = logger
         self.const = const
 

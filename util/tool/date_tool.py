@@ -24,6 +24,9 @@ def curr_now_pure():
 def curr_now_dateonly():
     return datetime.now().strftime(const.TIME_FORMAT_DATEONLY)
 
+def curr_now_minuteonly():
+    return datetime.now().strftime(const.TIME_MINUTE_ONLY)
+
 
 def curr_now_minute():
     return datetime.now().strftime(const.TIME_FORMAT_MINUTE)

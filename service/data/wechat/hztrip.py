@@ -10,16 +10,17 @@ from tornado import gen
 
 import conf.path as path
 import conf.headers as headers
+import conf.common as comm
 from setting import settings
 from service.data.base import DataService
 from cache.hztrip import HztripCache
 from util.common import ObjectDict
 from util.tool.http_tool import http_get
 from util.common.decorator import cache
+from util.tool.date_tool import curr_now_minuteonly
 
 
 class HztripDataService(DataService):
-
     hztrip = HztripCache()
 
     """对接网络请求服务"""
@@ -292,7 +293,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
         raise gen.Return(ret)
 
-    @cache(ttl=20)
+    @cache(ttl=10)
     @gen.coroutine
     def get_bus_info(self, params=None):
 
@@ -431,3 +432,19 @@ class HztripDataService(DataService):
             raise gen.Return(ret)
         else:
             raise gen.Return(ObjectDict())
+
+    @gen.coroutine
+    def add_bus_line_alert(self, openid, msg):
+        """
+        对早高峰，晚高峰的查询实时公交的用户，添加第二天的实时消息提醒
+        :param openid:
+        :param msg:
+        :return:
+        """
+
+        curr_minute = curr_now_minuteonly()
+        if (curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
+                curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and comm.BUS_LINE_ALERT_EVENING_PEAK_END):
+            self.hztrip.set_hztrip_bus_line_alert(openid, msg)
+
+        raise True

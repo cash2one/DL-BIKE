@@ -5,10 +5,11 @@
 # @File    : hztrip.py
 # @DES     :
 
-
+import time
 from app import redis
 from app import logger
 from util.common import ObjectDict
+from util.tool.str_tool import md5Encode
 
 
 class HztripCache(object):
@@ -23,6 +24,7 @@ class HztripCache(object):
         self.hztrip_session = "hztrip_{}"
         self.bus_line = "hztrip_bus_line_{}"
         self.bus_stop = "hztrip_bus_stop_{}"
+        self.bus_line_alert = "hztrip_busline_alert_{}_{}"
         self.redis = redis
 
     def get_bus_lines(self, bus_line):
@@ -130,4 +132,49 @@ class HztripCache(object):
         #         key, value, type(value)))
 
         self.redis.set(key, value)
+        return True
+
+    def set_hztrip_bus_line_alert(self, from_username, to_username, content, quality=0):
+        """
+        设置实时公交的提醒
+        :param openid:
+        :param msg:
+        :return:
+        """
+
+        if not to_username or not from_username or not content:
+            return False
+
+        value = ObjectDict(
+            FromUserName=from_username,
+            ToUserName=to_username,
+            content=content,
+            time=time.time() - 15 * 60, # 第二天提前15分钟推送实时公交提醒
+            quality=quality,
+        )
+
+        key = self.bus_line_alert.format(from_username, md5Encode(content))
+
+        logger.debug(
+            "[HztripCache] set_hztrip_bus_line_alert key:{0} "
+            "value:{1} type:{2}".format(
+                key, value, type(value)))
+
+        self.redis.set(key, value)
+        return True
+
+    def get_hztrip_bus_line_alerts(self):
+        """获得 bus_line 的所有 session 信息"""
+        key = self.bus_line_alert.format("*", "*")
+        bus_lines = self.redis.get(key)
+        return bus_lines
+
+    def get_hztrip_bus_line_alert_by_key(self, key):
+        """获得 bus_line 的 session 信息"""
+        bus_line = self.redis.get(key, prefix=False)
+        return bus_line
+
+    def del_hztrip_bus_line_alert_by_key(self, key):
+        """删除 bus_line 的 session 信息"""
+        self.redis.delete(key, prefix=False)
         return True
