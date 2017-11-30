@@ -434,7 +434,7 @@ class HztripDataService(DataService):
             raise gen.Return(ObjectDict())
 
     @gen.coroutine
-    def add_bus_line_alert(self, openid, msg):
+    def add_bus_line_alert(self, from_username, to_username, content):
         """
         对早高峰，晚高峰的查询实时公交的用户，添加第二天的实时消息提醒
         :param openid:
@@ -445,6 +445,6 @@ class HztripDataService(DataService):
         curr_minute = curr_now_minuteonly()
         if (curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
                 curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and comm.BUS_LINE_ALERT_EVENING_PEAK_END):
-            self.hztrip.set_hztrip_bus_line_alert(openid, msg)
+            self.hztrip.set_hztrip_bus_line_alert(from_username, to_username, content)
 
         raise True
