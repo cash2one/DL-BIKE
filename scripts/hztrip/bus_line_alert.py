@@ -49,10 +49,10 @@ class BusLineAlert(Parser):
                 FromUserName=value['FromUserName'],
                 ToUserName=value['ToUserName']
             )
-            news_array = yield self.hztrip_event_ps.do_bus(msg)
+            news_array = yield self.hztrip_event_ps.do_bus(msg,rsp_array=True)
             self.logger.debug("msg:{}".format(msg))
             self.logger.debug("news_info:{}".format(news_array))
-            res = yield self.hztrip_event_ps.wx_custom_send_news(msg, news_array)
+            res = yield self.hztrip_event_ps.wx_custom_send_news(msg, [news_array])
             self.logger.debug("res:{}".format(res))
             self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'], value['quality'] + 1, alert_time=value['time'])
 

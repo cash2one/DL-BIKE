@@ -202,6 +202,8 @@ class EventPageService(PageService):
             })
         })
 
+        self.logger.debug("wx_custom_send_news:{}".format(jdata))
+
         res = yield self.wechat_ds.send_custom(jdata)
         raise gen.Return(res)
 
