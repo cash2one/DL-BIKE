@@ -56,16 +56,16 @@ class BusLineAlert(Parser):
             self.logger.debug("res:{}".format(res))
             self.hztrip.set_hztrip_bus_line_alert(value['openid'], value['keyword'], value['quality'] + 1)
 
-        @gen.coroutine
-        def runner(self):
-            try:
-                self.logger.debug("[BusLineAlert]start in:{}".format(curr_now()))
-                yield self.get_papers()
-            except Exception as e:
-                self.logger.error(traceback.format_exc())
-            finally:
-                IOLoop.instance().stop()
-                self.logger.debug("[BusLineAlert]end in:{}".format(curr_now()))
+    @gen.coroutine
+    def runner(self):
+        try:
+            self.logger.debug("[BusLineAlert]start in:{}".format(curr_now()))
+            yield self.get_bus_line_alerts()
+        except Exception as e:
+            self.logger.error(traceback.format_exc())
+        finally:
+            IOLoop.instance().stop()
+            self.logger.debug("[BusLineAlert]end in:{}".format(curr_now()))
 
 
 if __name__ == "__main__":

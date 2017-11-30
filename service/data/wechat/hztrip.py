@@ -443,8 +443,12 @@ class HztripDataService(DataService):
         """
 
         curr_minute = curr_now_minuteonly()
+        self.logger.debug("add_bus_line_alert:{}".format(curr_minute))
         if (curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
                 curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and comm.BUS_LINE_ALERT_EVENING_PEAK_END):
+            self.logger.debug(from_username)
+            self.logger.debug(to_username)
+            self.logger.debug(content)
             self.hztrip.set_hztrip_bus_line_alert(from_username, to_username, content)
 
         raise gen.Return(True)

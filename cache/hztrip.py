@@ -166,15 +166,21 @@ class HztripCache(object):
     def get_hztrip_bus_line_alerts(self):
         """获得 bus_line 的所有 session 信息"""
         key = self.bus_line_alert.format("*", "*")
+        logger.debug(
+            "[HztripCache] get_hztrip_bus_line_alerts key:{0}".format(key))
         bus_lines = self.redis.get(key)
         return bus_lines
 
     def get_hztrip_bus_line_alert_by_key(self, key):
         """获得 bus_line 的 session 信息"""
-        bus_line = self.redis.get(key, prefix=False)
+        logger.debug(
+            "[HztripCache] get_hztrip_bus_line_alert_by_key key:{0}".format(key))
+        bus_line = self.redis.get(key)
         return bus_line
 
     def del_hztrip_bus_line_alert_by_key(self, key):
         """删除 bus_line 的 session 信息"""
-        self.redis.delete(key, prefix=False)
+        logger.debug(
+            "[HztripCache] del_hztrip_bus_line_alert_by_key key:{0}".format(key))
+        self.redis.delete(key)
         return True
