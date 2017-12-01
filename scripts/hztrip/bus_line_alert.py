@@ -20,7 +20,7 @@ from scripts.parser import Parser
 
 class BusLineAlert(Parser):
     """
-    每分钟运行
+    每3分钟运行
     """
 
     hztrip = HztripCache()
@@ -40,7 +40,9 @@ class BusLineAlert(Parser):
             if not value['FromUserName'] == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
                 continue
 
-            if value['quality'] == 6:
+            if value['quality'] == 7:
+                self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'],
+                                                      0, alert_time=value['time'] + 24*3600)
                 continue
 
             msg = ObjectDict(

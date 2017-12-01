@@ -152,7 +152,7 @@ class HztripCache(object):
             FromUserName=from_username,
             ToUserName=to_username,
             content=content,
-            time=alert_time, # 第二天提前15分钟推送实时公交提醒
+            time=int(alert_time),  # 第二天提前15分钟推送实时公交提醒
             quality=quality,
         )
 
