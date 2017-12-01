@@ -11,7 +11,7 @@ import traceback
 from tornado import gen
 from tornado.ioloop import IOLoop
 from cache.hztrip import HztripCache
-from util.tool.date_tool import curr_now
+from util.tool.date_tool import curr_now, is_today
 from util.common import ObjectDict
 from util.tool.http_tool import http_get
 
@@ -38,6 +38,10 @@ class BusLineAlert(Parser):
             self.hztrip.del_hztrip_bus_line_alert_by_key(key)
             # for test
             if not value['FromUserName'] == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
+                continue
+
+            # 只跑今天的
+            if not is_today(value['time']):
                 continue
 
             if value['quality'] == 7:

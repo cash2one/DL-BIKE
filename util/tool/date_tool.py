@@ -4,8 +4,8 @@
 时间工具类
 '''
 
+import time
 from datetime import datetime
-
 import conf.common as const
 
 
@@ -39,6 +39,13 @@ def curr_now_msec():
 def format_dateonly(time):
     return time.strftime(const.TIME_FORMAT_DATEONLY)
 
+def is_today(timestamp):
+    timestamp = time.localtime(timestamp)
+    dt = time.strftime(const.TIME_FORMAT_DATEONLY, timestamp)
+    cur_dateonly = curr_now_dateonly()
+    if (dt == cur_dateonly):
+        return True
+    return False
 
 def is_time_valid(str_time, form):
     """
