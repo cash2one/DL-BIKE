@@ -158,10 +158,10 @@ class HztripCache(object):
 
         key = self.bus_line_alert.format(from_username, md5Encode(content))
 
-        # logger.debug(
-        #     "[HztripCache] set_hztrip_bus_line_alert key:{0} "
-        #     "value:{1} type:{2}".format(
-        #         key, value, type(value)))
+        logger.debug(
+            "[HztripCache] set_hztrip_bus_line_alert key:{0} "
+            "value:{1} type:{2}".format(
+                key, value, type(value)))
 
         self.redis.set(key, value)
         return True
