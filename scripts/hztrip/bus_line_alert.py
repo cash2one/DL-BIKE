@@ -6,6 +6,7 @@
 :desc 第二天早晚高峰，通知用户实时公交情况
 '''
 
+import time
 import traceback
 
 from tornado import gen
@@ -30,6 +31,7 @@ class BusLineAlert(Parser):
 
         keys = self.hztrip.get_hztrip_bus_line_alerts()
         self.logger.debug("all redis key:{}".format(keys))
+        timestamp_now = int(time.time())
         for key in keys:
             value = self.hztrip.get_hztrip_bus_line_alert_by_key(key)
             # 脚本每2分钟运行
@@ -41,7 +43,7 @@ class BusLineAlert(Parser):
                 continue
 
             # 只跑今天的
-            if not is_today(value['time']):
+            if not is_today(value['time']) or timestamp_now < value['time']:
                 continue
 
             if value['quality'] == 7:

@@ -146,7 +146,7 @@ class HztripCache(object):
             return False
 
         if not alert_time:
-            alert_time = time.time() - 15 * 60
+            alert_time = time.time() - 15 * 60 + 24 * 3600
 
         value = ObjectDict(
             FromUserName=from_username,
