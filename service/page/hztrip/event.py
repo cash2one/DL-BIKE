@@ -937,7 +937,7 @@ class EventPageService(PageService):
         if text == "退订":
             keys = self.hztrip_cache.get_hztrip_bus_line_alerts()
             self.logger.debug("all redis key:{}".format(keys))
-            title = "【早晚高峰提醒】您有以下提醒"
+            title = "【早晚高峰提醒】您有以下订阅"
             description = ''
             url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
@@ -948,7 +948,7 @@ class EventPageService(PageService):
             example = ''
             for key in keys:
                 value = self.hztrip_cache.get_hztrip_bus_line_alert_by_key(key)
-                description += "{}   提醒时间:{}".format(value['content'], format_hour_minute(value['time']))
+                description += "公交: {}   提醒时间: {}\n".format(value['content'], format_hour_minute(value['time']))
                 example = value['content']
 
 
