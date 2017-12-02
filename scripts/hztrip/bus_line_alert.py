@@ -36,7 +36,7 @@ class BusLineAlert(Parser):
             value = self.hztrip.get_hztrip_bus_line_alert_by_key(key)
             self.logger.debug("start redis key:{} value:{}".format(key, value))
             # 先清除该 redis 记录，避免被其他进程消费
-            self.hztrip.del_hztrip_bus_line_alert_by_key(key)
+            # self.hztrip.del_hztrip_bus_line_alert_by_key(key)
             # for test
             if not value['FromUserName'] == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
                 continue
