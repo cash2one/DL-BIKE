@@ -215,7 +215,7 @@ class EventPageService(PageService):
         :return:
         """
         # 增加取消订阅早晚高峰公交提醒
-        if msg.MsgType == "text" and msg.Content.strip().startswith("取消"):
+        if msg.MsgType == "text" and msg.Content.strip().startswith("退订"):
             res = yield self.do_cancel_bus_line_alert(msg)
         else:
             # 常规的业务查询
