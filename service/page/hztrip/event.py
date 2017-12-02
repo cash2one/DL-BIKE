@@ -389,7 +389,7 @@ class EventPageService(PageService):
                 return news_info
             else:
                 return ObjectDict(
-                    title="[早晚高峰提醒]".title,
+                    title="[早晚高峰提醒]{}".format(title),
                     description=description,
                     url=url,
                     picurl=headimg,
