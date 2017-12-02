@@ -47,6 +47,19 @@ def is_today(timestamp):
         return True
     return False
 
+def format_hour_minute(timestamp):
+    timestamp = time.localtime(timestamp)
+    dt = time.strftime(const.TIME_MINUTE_ONLY, timestamp)
+    return dt
+
+
+def weekend():
+    weekend = datetime.now().weekday()
+    if weekend in [6,7]:
+        return True
+    return False
+
+
 def is_time_valid(str_time, form):
     """
     判断时间格式是否符合要求
@@ -86,3 +99,6 @@ def sec_2_time(seconds):
     h, m = divmod(m, 60)
 
     return "%02d时%02d分%02d秒" % (h, m, s)
+
+if __name__ == '__main__':
+    print (weekend())

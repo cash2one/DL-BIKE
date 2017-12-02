@@ -17,7 +17,7 @@ from cache.hztrip import HztripCache
 from util.common import ObjectDict
 from util.tool.http_tool import http_get
 from util.common.decorator import cache
-from util.tool.date_tool import curr_now_minuteonly
+from util.tool.date_tool import curr_now_minuteonly, weekend
 
 
 class HztripDataService(DataService):
@@ -444,7 +444,8 @@ class HztripDataService(DataService):
 
         curr_minute = curr_now_minuteonly()
         if (curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
-                        curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END):
+                        curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END) and \
+                not weekend():
             self.hztrip.set_hztrip_bus_line_alert(from_username, to_username, content)
 
         raise gen.Return(True)

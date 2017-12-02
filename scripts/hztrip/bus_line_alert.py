@@ -12,7 +12,7 @@ import traceback
 from tornado import gen
 from tornado.ioloop import IOLoop
 from cache.hztrip import HztripCache
-from util.tool.date_tool import curr_now, is_today
+from util.tool.date_tool import curr_now, is_today, weekend
 from util.common import ObjectDict
 from util.tool.http_tool import http_get
 
@@ -34,7 +34,6 @@ class BusLineAlert(Parser):
         timestamp_now = int(time.time())
         for key in keys:
             value = self.hztrip.get_hztrip_bus_line_alert_by_key(key)
-            # 脚本每2分钟运行
             self.logger.debug("start redis key:{} value:{}".format(key, value))
             # 先清除该 redis 记录，避免被其他进程消费
             self.hztrip.del_hztrip_bus_line_alert_by_key(key)
@@ -42,13 +41,14 @@ class BusLineAlert(Parser):
             if not value['FromUserName'] == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
                 continue
 
-            # 只跑今天的
-            if not is_today(value['time']) or timestamp_now < value['time']:
+            # 超过7次不再跑，周末不跑，流传到第二天
+            if value['quality'] == 7 or weekend():
+                self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'],
+                                                      0, alert_time=value['time'] + 24 * 3600)
                 continue
 
-            if value['quality'] == 7:
-                self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'],
-                                                      0, alert_time=value['time'] + 24*3600)
+            # 只跑今天的
+            if not is_today(value['time']) or timestamp_now < value['time']:
                 continue
 
             msg = ObjectDict(
@@ -57,12 +57,10 @@ class BusLineAlert(Parser):
                 FromUserName=value['FromUserName'],
                 ToUserName=value['ToUserName']
             )
-            news_array = yield self.hztrip_event_ps.do_bus(msg,rsp_array=True)
-            self.logger.debug("msg:{}".format(msg))
-            self.logger.debug("news_info:{}".format(news_array))
+            news_array = yield self.hztrip_event_ps.do_bus(msg, rsp_array=True)
             res = yield self.hztrip_event_ps.wx_custom_send_news(msg, [news_array])
-            self.logger.debug("res:{}".format(res))
-            self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'], value['quality'] + 1, alert_time=value['time'])
+            self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'],
+                                                  value['quality'] + 1, alert_time=value['time'])
 
     @gen.coroutine
     def runner(self):

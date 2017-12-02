@@ -15,7 +15,7 @@ import conf.common as const
 from service.page.base import PageService
 from cache.hztrip import HztripCache
 from util.tool.url_tool import make_static_url
-from util.tool.date_tool import sec_2_time
+from util.tool.date_tool import sec_2_time, format_hour_minute
 from util.common import ObjectDict
 
 class EventPageService(PageService):
@@ -214,27 +214,32 @@ class EventPageService(PageService):
         :param session_key:
         :return:
         """
-        # search; bus; station; around; transfer; bike; park; yaohao; pm25;
-        if session_key == "search":
-            res = yield self.do_search(msg)
-        elif session_key == "bus":
-            res = yield self.do_bus(msg)
-        elif session_key == "stop":
-            res = yield self.do_stop(msg)
-        elif session_key == "around":
-            res = yield self.do_around(msg)
-        elif session_key == "transfer":
-            res = yield self.do_transfer(msg)
-        elif session_key == "bike":
-            res = yield self.do_bike(msg)
-        elif session_key == "park":
-            res = yield self.do_park(msg)
-        elif session_key == "yaohao":
-            res = yield self.do_yaohao(msg)
-        elif session_key == "pm25":
-            res = yield self.do_pm25(msg)
+        # 增加取消订阅早晚高峰公交提醒
+        if msg.startswith("取消"):
+            res = yield self.do_cancel_bus_line_alert(msg)
         else:
-            res = yield self.opt_default(msg)
+            # 常规的业务查询
+            # search; bus; station; around; transfer; bike; park; yaohao; pm25;
+            if session_key == "search":
+                res = yield self.do_search(msg)
+            elif session_key == "bus":
+                res = yield self.do_bus(msg)
+            elif session_key == "stop":
+                res = yield self.do_stop(msg)
+            elif session_key == "around":
+                res = yield self.do_around(msg)
+            elif session_key == "transfer":
+                res = yield self.do_transfer(msg)
+            elif session_key == "bike":
+                res = yield self.do_bike(msg)
+            elif session_key == "park":
+                res = yield self.do_park(msg)
+            elif session_key == "yaohao":
+                res = yield self.do_yaohao(msg)
+            elif session_key == "pm25":
+                res = yield self.do_pm25(msg)
+            else:
+                res = yield self.opt_default(msg)
 
         return res
 
@@ -344,7 +349,7 @@ class EventPageService(PageService):
                                           route.get("terminal"))
             d_first = datetime.strptime(str(route.get("firstBus")), "%H:%M:%S")
             d_last = datetime.strptime(str(route.get("lastBus")), "%H:%M:%S")
-            description = "全程: {}公里  票价: {}元\n首班: {}  末班: {}\n\n".format('%.2f' % route.get("distance"),
+            description = "全程: {}公里    票价: {}元\n首班: {}    末班: {}\n\n".format('%.2f' % route.get("distance"),
                                                                        route.get("airPrice"),
                                                                        "{}时{}分".format(d_first.hour, d_first.minute),
                                                                        "{}时{}分".format(d_last.hour, d_last.minute))
@@ -384,7 +389,7 @@ class EventPageService(PageService):
                 return news_info
             else:
                 return ObjectDict(
-                    title=title,
+                    title="[早晚高峰提醒]".title,
                     description=description,
                     url=url,
                     picurl=headimg,
@@ -919,3 +924,54 @@ class EventPageService(PageService):
 
 
         return text, lng, lat
+
+    @gen.coroutine
+    def do_cancel_bus_line_alert(self, msg):
+        """
+        退订早晚高峰实时公交订阅
+        :param msg:
+        :return:
+        """
+
+        if msg == "退订":
+            keys = self.hztrip_cache.get_hztrip_bus_line_alerts()
+            self.logger.debug("all redis key:{}".format(keys))
+            title = "【早晚高峰提醒】您有以下提醒"
+            description = ''
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
+            headimg = ""
+            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+                                                      msg.ToUserName,
+                                                      str(time.time()),
+                                                      1)
+            example = ''
+            for key in keys:
+                value = self.hztrip_cache.get_hztrip_bus_line_alert_by_key(key)
+                description += "{}   提醒时间:{}".format(value['content'], format_hour_minute(value['time']))
+                example = value['content']
+
+
+            description += "您在早晚高峰期间查询得实时公交将自动成为公交订阅，系统将在第二天提前为您推送实时公交\n" \
+                           "若您在早晚高峰期间对同一公交线路发起查询，系统将自动调整订阅时间\n" \
+                           "退订，请回复退订+内容，如退订{}".format(example)
+
+            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                title,
+                description,
+                headimg,
+                url
+            )
+            news += item
+
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
+        elif msg.startswith("退订"):
+            content = msg.replace("退订", "")
+            key = self.hztrip_cache.get_hztrip_bus_line_alert_key(msg.FromUserName, content)
+            self.hztrip_cache.del_hztrip_bus_line_alert_by_key(key)
+            content = "退订【{}】成功".format(content)
+            res = yield self.wx_rep_text(msg, content)
+            return res
+
+
+
