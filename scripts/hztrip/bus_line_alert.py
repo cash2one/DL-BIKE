@@ -41,14 +41,14 @@ class BusLineAlert(Parser):
             if not value['FromUserName'] == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
                 continue
 
+            # 只跑今天的
+            if not is_today(value['time']) or timestamp_now < value['time']:
+                continue
+
             # 超过7次不再跑，周末不跑，流传到第二天
             if value['quality'] == 7 or weekend():
                 self.hztrip.set_hztrip_bus_line_alert(value['FromUserName'], value['ToUserName'], value['content'],
                                                       0, alert_time=value['time'] + 24 * 3600)
-                continue
-
-            # 只跑今天的
-            if not is_today(value['time']) or timestamp_now < value['time']:
                 continue
 
             msg = ObjectDict(
