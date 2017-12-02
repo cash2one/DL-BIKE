@@ -72,15 +72,15 @@ class EventPageService(PageService):
 
         content = ""
         if click_key == "search":
-            content += "查车站，线路名称:\n输入线路或车站，如B1路, 小车桥\n"
+            content += "查车站，线路名称:\n输入线路或车站，如B1路, 吴山广场\n"
         elif click_key == "bus":
             content += "查公交实时到站:\n准确输入公交线路，如193路\n"
         elif click_key == "stop":
-            content += "查车站电子站牌:\n准确输入车站名，如小车桥\n"
+            content += "查车站电子站牌:\n准确输入车站名，如吴山广场\n"
         elif click_key == "around":
             content += "查周边车站、线路:\n1.输入具体地址\n2.发送您的位置信息\n"
         elif click_key == "transfer":
-            content += "查公交换乘:\n输入起点和终点，并以空格分割，如留下 小车桥\n"
+            content += "查公交换乘:\n输入起点和终点，并以空格分割，如留下 吴山广场\n"
         elif click_key == "bike":
             content += "查询实时自行车租赁点:\n1.输入详细的街道或小区\n2.发送您的位置信息\n3.用语音输入查询的地点\n\n提示：可点击结果查看具体租赁点地图\n"
         elif click_key == "park":
