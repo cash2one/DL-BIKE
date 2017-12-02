@@ -933,7 +933,8 @@ class EventPageService(PageService):
         :return:
         """
 
-        if msg == "退订":
+        text = msg.Content.strip()
+        if text == "退订":
             keys = self.hztrip_cache.get_hztrip_bus_line_alerts()
             self.logger.debug("all redis key:{}".format(keys))
             title = "【早晚高峰提醒】您有以下提醒"
@@ -965,8 +966,8 @@ class EventPageService(PageService):
 
             news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
             return news_info
-        elif msg.startswith("退订"):
-            content = msg.replace("退订", "")
+        elif text.startswith("退订"):
+            content = text.replace("退订", "")
             key = self.hztrip_cache.get_hztrip_bus_line_alert_key(msg.FromUserName, content)
             self.hztrip_cache.del_hztrip_bus_line_alert_by_key(key)
             content = "退订【{}】成功".format(content)
