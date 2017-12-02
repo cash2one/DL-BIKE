@@ -946,14 +946,15 @@ class EventPageService(PageService):
                                                       str(time.time()),
                                                       1)
             example = ''
-            for key in keys:
-                value = self.hztrip_cache.get_hztrip_bus_line_alert_by_key(key)
-                description += "公交: {}   提醒时间: {}\n".format(value['content'], format_hour_minute(value['time']))
-                example = value['content']
-
-
-            description += "\n您在早晚高峰期间查询的实时公交将自动订阅，系统将在第二天提前推送实时公交\n\n" \
-                           "退订，请回复退订+内容，如退订{}".format(example)
+            if keys:
+                for key in keys:
+                    value = self.hztrip_cache.get_hztrip_bus_line_alert_by_key(key)
+                    description += "公交: {}   提醒时间: {}\n".format(value['content'], format_hour_minute(value['time']))
+                    example = value['content']
+            else:
+                description += "订阅空空如也，快去试试订阅实时公交吧\n"
+                description += "\n您在早晚高峰期间查询的实时公交将自动订阅，系统将在第二天提前推送实时公交\n\n" \
+                               "退订，请回复退订+内容，如退订{}".format(example)
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                 title,
