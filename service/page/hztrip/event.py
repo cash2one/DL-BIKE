@@ -952,8 +952,7 @@ class EventPageService(PageService):
                 example = value['content']
 
 
-            description += "您在早晚高峰期间查询得实时公交将自动成为公交订阅，系统将在第二天提前为您推送实时公交\n" \
-                           "若您在早晚高峰期间对同一公交线路发起查询，系统将自动调整订阅时间\n" \
+            description += "\n您在早晚高峰期间查询的实时公交将自动订阅，系统将在第二天提前推送实时公交\n\n" \
                            "退订，请回复退订+内容，如退订{}".format(example)
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
@@ -970,7 +969,7 @@ class EventPageService(PageService):
             content = text.replace("退订", "")
             key = self.hztrip_cache.get_hztrip_bus_line_alert_key(msg.FromUserName, content)
             self.hztrip_cache.del_hztrip_bus_line_alert_by_key(key)
-            content = "退订【{}】成功".format(content)
+            content = "退订【{}】成功\n若您在早晚高峰期间对同一公交线路手动发起查询，系统将自动调整订阅时间".format(content)
             res = yield self.wx_rep_text(msg, content)
             return res
 
