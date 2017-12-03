@@ -166,9 +166,9 @@ class HztripCache(object):
         self.redis.set(key, value)
         return True
 
-    def get_hztrip_bus_line_alerts(self):
+    def get_hztrip_bus_line_alerts(self, openid='*'):
         """获得 bus_line 的所有 keys 信息"""
-        pattern = "{}_hztrip_busline_alert_*".format(self.redis._PREFIX)
+        pattern = "{}_hztrip_busline_alert_{}_{}".format(self.redis._PREFIX, openid, "*")
         paper = self.redis.keys(pattern)
         return paper
 

@@ -390,7 +390,7 @@ class EventPageService(PageService):
             else:
                 return ObjectDict(
                     title="[早晚高峰提醒]{}".format(title),
-                    description=description,
+                    description="{}\n如需退订，请回复退订".format(description),
                     url=url,
                     picurl=headimg,
                 )
@@ -935,7 +935,7 @@ class EventPageService(PageService):
 
         text = msg.Content.strip()
         if text == "退订":
-            keys = self.hztrip_cache.get_hztrip_bus_line_alerts()
+            keys = self.hztrip_cache.get_hztrip_bus_line_alerts(msg.FromUserName)
             self.logger.debug("all redis key:{}".format(keys))
             title = "【早晚高峰提醒】您有以下订阅"
             description = ''
@@ -953,8 +953,9 @@ class EventPageService(PageService):
                     example = value['content']
             else:
                 description += "订阅空空如也，快去试试订阅实时公交吧\n"
-                description += "\n您在早晚高峰期间查询的实时公交将自动订阅，系统将在第二天提前推送实时公交\n\n" \
-                               "退订，请回复退订+内容，如退订{}".format(example)
+
+            description += "\n您在早晚高峰期间查询的实时公交将自动订阅，系统将在第二天提前推送实时公交\n\n" \
+                           "退订，请回复退订+内容，如退订{}".format(example)
 
             item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                 title,

@@ -437,15 +437,18 @@ class HztripDataService(DataService):
     def add_bus_line_alert(self, from_username, to_username, content):
         """
         对早高峰，晚高峰的查询实时公交的用户，添加第二天的实时消息提醒
+        周末不计入订阅
         :param openid:
         :param msg:
         :return:
         """
 
+        if weekend():
+            raise gen.Return(True)
+
         curr_minute = curr_now_minuteonly()
         if (curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
-                        curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END) and \
-                not weekend():
+                        curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END)
             self.hztrip.set_hztrip_bus_line_alert(from_username, to_username, content)
 
         raise gen.Return(True)
