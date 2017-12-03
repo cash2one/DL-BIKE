@@ -448,7 +448,7 @@ class HztripDataService(DataService):
 
         curr_minute = curr_now_minuteonly()
         if (curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
-                        curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END)
+                curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END):
             self.hztrip.set_hztrip_bus_line_alert(from_username, to_username, content)
 
         raise gen.Return(True)
