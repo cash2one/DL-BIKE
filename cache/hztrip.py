@@ -181,7 +181,7 @@ class HztripCache(object):
 
     def get_hztrip_bus_line_alert_key(self, from_username, content):
         """获得 bus_line 的 key """
-        key = self.bus_line_alert.format(from_username, md5Encode(content))
+        key = "{}_hztrip_busline_alert_{}_{}".format(self.redis._PREFIX, from_username, md5Encode(content))
         return key
 
     def del_hztrip_bus_line_alert_by_key(self, key):

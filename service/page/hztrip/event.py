@@ -971,7 +971,7 @@ class EventPageService(PageService):
             content = text.replace("退订", "")
             key = self.hztrip_cache.get_hztrip_bus_line_alert_key(msg.FromUserName, content)
             self.hztrip_cache.del_hztrip_bus_line_alert_by_key(key)
-            content = "退订【{}】成功\n若您在早晚高峰期间对同一公交线路手动发起查询，系统将自动调整订阅时间".format(content)
+            content = "退订公交【{}】成功\n若您在早晚高峰期间对同一公交线路手动发起查询，系统将自动调整订阅时间".format(content)
             res = yield self.wx_rep_text(msg, content)
             return res
 
