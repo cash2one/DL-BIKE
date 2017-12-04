@@ -391,7 +391,7 @@ class EventPageService(PageService):
                 return ObjectDict(
                     title="[早晚高峰提醒]{}".format(title),
                     description="{}\n\n如需退订，请回复退订".format(description),
-                    url=url,
+                    url="https://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=2648249675&idx=1&sn=5eb85860158431a0fb91c1d75926a607&chksm=bef6cac4898143d26056cd5b08591746c468f7ed7d445925a4c07d8a458d1479084a5474b34a#rd",
                     picurl=headimg,
                 )
         else:
@@ -939,7 +939,7 @@ class EventPageService(PageService):
             self.logger.debug("all redis key:{}".format(keys))
             title = "【早晚高峰提醒】您有以下订阅"
             description = ''
-            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
+            url = "https://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=2648249675&idx=1&sn=5eb85860158431a0fb91c1d75926a607&chksm=bef6cac4898143d26056cd5b08591746c468f7ed7d445925a4c07d8a458d1479084a5474b34a#rd"
             headimg = ""
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
                                                       msg.ToUserName,
