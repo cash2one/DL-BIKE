@@ -390,7 +390,7 @@ class EventPageService(PageService):
             else:
                 return ObjectDict(
                     title="[早晚高峰提醒]{}".format(title),
-                    description="{}\n如需退订，请回复退订".format(description),
+                    description="{}\n\n如需退订，请回复退订".format(description),
                     url=url,
                     picurl=headimg,
                 )
