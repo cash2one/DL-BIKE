@@ -343,28 +343,6 @@ def qyer_helper_sign_in():
 
     print("[qyer_help][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
-def chexiang_sign_in():
-    """车享家ios客户端灌水签到"""
-
-    conn = http.client.HTTPSConnection("h.jia.chexiang.com")
-    payload = "--compressed"
-    headers = {
-        'host': "h.jia.chexiang.com",
-        'accept': "application/json, text/plain, */*",
-        'x-requested-with': "XMLHttpRequest",
-        'accept-language': "zh-cn",
-        'content-type': "application/json;charset=utf-8",
-        'origin': "https://h.jia.chexiang.com",
-        'user-agent': "{  \"clientId\" : \"93c36ab85c994b04b184c3653297eaed\",  \"deviceId\" : \"723D3C53-952C-4FF2-8C80-EE0D47788F4B\",  \"appCode\" : \"MongoToC\",  \"plateformType\" : \"ios\",  \"signature\" : \"2009CFFC21D78FE8B8C0A0B1E5741ACF\",  \"origin\" : \"Mozilla\/5.0 (iPhone; CPU iPhone OS 11_0_3 like Mac OS X) AppleWebKit\/604.1.38 (KHTML, like Gecko) Mobile\/15A432\",  \"userToken\" : \"MTAwMDU5ZWNhNzg4NWE2MzRlODgxMDY1MjMwNSLkvLka68lia3_un5ki1aVctZjN\",  \"sourceCode\" : \"APPStore\",  \"deviceManufacturer\" : \"iPhone\",  \"appVersion\" : \"4.3.1\",  \"userAccount\" : \"17621856713\",  \"signVersion\" : \"0.2\"}",
-        'referer': "https://h.jia.chexiang.com/cx/cxj/cxjweb/checkins/checkins.shtml?userInfo=JTdCJTIyc291cmNlVHlwZSUyMiUzQSUyMjIlMjIlMkMlMjJsb2NhbFglMjIlM0ElMjIxMjEuMzc3NDAxJTIyJTJDJTIybG9jYWxZJTIyJTNBJTIyMzEuMzI0Mzk4JTIyJTJDJTIybW9iaWxlUGhvbmUlMjIlM0ElMjIxNzYyMTg1NjcxMyUyMiUyQyUyMmNpdHlOYW1lJTIyJTNBJTIyJUU0JUI4JThBJUU2JUI1JUI3JUU1JUI4JTgyJTIyJTJDJTIydXNlcklkJTIyJTNBJTIyS0h5OTJnJTJGV2UxTXRYbTRBUWVmRld3JTNEJTNEJTIyJTJDJTIyZXF1SWQlMjIlM0ElMjI3MjNEM0M1My05NTJDLTRGRjItOEM4MC1FRTBENDc3ODhGNEIlMjIlMkMlMjJjdXN0TmFtZSUyMiUzQSUyMiUyMiU3RA==",
-        'cookie': 'user_trace_cookie=CiCcDln3NDBJpVSRMEexAg==; analysis_sign=10652305; wemall_cxid_c=10652305; wemall_equid_c=723D3C53-952C-4FF2-8C80-EE0D47788F4B; wemall_openid_c=""; wemall_opentype_c=6; wemall_userkey_c=62882c7f-3644-46d1-ad1c-c8131d339161; _ga=GA1.2.1080391224.1509372664; _gid=GA1.2.879806854.1509372664; wcid=26D47ADB-80AD-4FAF-BD19-06952B0647E7',
-        'cache-control': "no-cache",
-    }
-    conn.request("POST", "/water/addWater.htm", payload, headers)
-    res = conn.getresponse()
-    data = res.read()
-    print("[chexiang][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
-
 def wangyi_yanxuan_sign_in():
     """
     网易严选 ios 客户端签到
@@ -409,6 +387,5 @@ if __name__ == '__main__':
     # mafengwo_zhuanpan_sign_in()
     # fliggy_sigin_in()
     qyer_helper_sign_in()
-    chexiang_sign_in()
     wangyi_yanxuan_sign_in()
 
