@@ -368,9 +368,9 @@ class EventPageService(PageService):
 
                 if not is_realtime:
                     description += "\n当前暂无车辆实时信息\n"
-                else:
-                    # 添加第二天的实时公交提醒
-                    yield self.hztrip_ds.add_bus_line_alert(msg.FromUserName, msg.ToUserName, keyword)
+                # else:
+                #     # 添加第二天的实时公交提醒
+                #     yield self.hztrip_ds.add_bus_line_alert(msg.FromUserName, msg.ToUserName, keyword)
             description += "\n小提示:\n1.查询反向线路信息，请输入“{} {}”，关键词按空格分割\n2.可在底部菜单中切换到“电子站牌”，" \
                            "查询车站所有线路实时到站".format(route.get("routeName"), 1 if index==0 else 0)
             url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
@@ -933,47 +933,51 @@ class EventPageService(PageService):
         :return:
         """
 
-        text = msg.Content.strip()
-        if text == "退订":
-            keys = self.hztrip_cache.get_hztrip_bus_line_alerts(msg.FromUserName)
-            self.logger.debug("all redis key:{}".format(keys))
-            title = "【早晚高峰提醒】您有以下订阅"
-            description = ''
-            url = "https://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=2648249675&idx=1&sn=5eb85860158431a0fb91c1d75926a607&chksm=bef6cac4898143d26056cd5b08591746c468f7ed7d445925a4c07d8a458d1479084a5474b34a#rd"
-            headimg = ""
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
-            example = '193'
-            if keys:
-                for key in keys:
-                    value = self.hztrip_cache.get_hztrip_bus_line_alert_by_key(key)
-                    description += "公交: {}   提醒时间: {}\n".format(value['content'], format_hour_minute(value['time']))
-                    example = value['content']
-            else:
-                description += "订阅空空如也，快去试试订阅实时公交吧\n"
+        content = "早晚高峰订阅功能暂时下线"
+        res = yield self.wx_rep_text(msg, content)
+        return res
 
-            description += "\n您在早晚高峰期间查询的实时公交将自动订阅，系统会在第二天提前推送实时公交到站\n\n" \
-                           "退订，请回复退订+公交，如退订{}".format(example)
-
-            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += item
-
-            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-            return news_info
-        elif text.startswith("退订"):
-            content = text.replace("退订", "")
-            key = self.hztrip_cache.get_hztrip_bus_line_alert_key(msg.FromUserName, content)
-            self.hztrip_cache.del_hztrip_bus_line_alert_by_key(key)
-            content = "退订公交【{}】成功\n若您在早晚高峰期间对同一公交线路手动发起查询，系统将自动调整订阅时间".format(content)
-            res = yield self.wx_rep_text(msg, content)
-            return res
+        # text = msg.Content.strip()
+        # if text == "退订":
+        #     keys = self.hztrip_cache.get_hztrip_bus_line_alerts(msg.FromUserName)
+        #     self.logger.debug("all redis key:{}".format(keys))
+        #     title = "【早晚高峰提醒】您有以下订阅"
+        #     description = ''
+        #     url = "https://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=2648249675&idx=1&sn=5eb85860158431a0fb91c1d75926a607&chksm=bef6cac4898143d26056cd5b08591746c468f7ed7d445925a4c07d8a458d1479084a5474b34a#rd"
+        #     headimg = ""
+        #     news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+        #                                               msg.ToUserName,
+        #                                               str(time.time()),
+        #                                               1)
+        #     example = '193'
+        #     if keys:
+        #         for key in keys:
+        #             value = self.hztrip_cache.get_hztrip_bus_line_alert_by_key(key)
+        #             description += "公交: {}   提醒时间: {}\n".format(value['content'], format_hour_minute(value['time']))
+        #             example = value['content']
+        #     else:
+        #         description += "订阅空空如也，快去试试订阅实时公交吧\n"
+        #
+        #     description += "\n您在早晚高峰期间查询的实时公交将自动订阅，系统会在第二天提前推送实时公交到站\n\n" \
+        #                    "退订，请回复退订+公交，如退订{}".format(example)
+        #
+        #     item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+        #         title,
+        #         description,
+        #         headimg,
+        #         url
+        #     )
+        #     news += item
+        #
+        #     news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+        #     return news_info
+        # elif text.startswith("退订"):
+        #     content = text.replace("退订", "")
+        #     key = self.hztrip_cache.get_hztrip_bus_line_alert_key(msg.FromUserName, content)
+        #     self.hztrip_cache.del_hztrip_bus_line_alert_by_key(key)
+        #     content = "退订公交【{}】成功\n若您在早晚高峰期间对同一公交线路手动发起查询，系统将自动调整订阅时间".format(content)
+        #     res = yield self.wx_rep_text(msg, content)
+        #     return res
 
 
 
