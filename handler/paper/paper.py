@@ -42,3 +42,11 @@ class PaperHandler(BaseHandler):
         self.paper_cache.set_paper_session(self.params.id, jdata)
 
         self.send_json_success(data="我知道了，你可以去做其他事了。预计三天后，文章阅读量会上涨{}，点赞数会上涨{}".format(quality, self.params.zan))
+
+    @handle_response
+    @gen.coroutine
+    def put(self, *args, **kwargs):
+
+        self.logger.debug("args: {}".format(args))
+        self.logger.debug("kwargs: {}".format(kwargs))
+        self.send_json_success(data="success")
