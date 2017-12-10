@@ -98,7 +98,7 @@ class Chexiangjia(Parser):
         })
 
         for key, header in routine_header.items():
-            res = yield http_get(
+            yield http_get(
                 "https://cxj.activity.chexiang.com/service/dailyfuli/receive?prizeCode={}".format(prize_code),
                 headers=header)
 
