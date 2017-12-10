@@ -368,6 +368,24 @@ def wangyi_yanxuan_sign_in():
     data = res.read()
     print("[wangyiyanxuan][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
+def umetrip_sign_in_wang():
+    """航旅纵横签到_wang"""
+
+    conn = http.client.HTTPConnection("ume1.umetrip.com")
+
+    headers = {
+        'host': "ume1.umetrip.com",
+        'cookie': "JSESSIONID=5D3D5CFCF2E69B60F0DB18C3D1B2CC34.umeIProductServer14649; X-LB=1.b.c.b2c89313; c988d5d44eb5785f6cc59227db78abf6=9c1c1704fa970ac7d2f89d8d2464fd30; s_fid=08CA1DF7274D1C13-2F7996041DABB2B2",
+        'accept': "application/json, text/javascript, */*; q=0.01",
+        'user-agent': "UmetripFree/4.3.9.1 CFNetwork/889.9 Darwin/17.2.0",
+        'x-requested-with': "XMLHttpRequest",
+    }
+
+    conn.request("GET", "/UmeAd/everyday/luck.do?sid=10159341%24%243ccd35d067ee452297d6f2813802c66f", headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+    print("[umetrip][wang][time:{}][res:{}]".format(curr_now(), data.decode("utf-8")))
 
 
 if __name__ == '__main__':
