@@ -20,7 +20,6 @@ from util.common import ObjectDict
 
 from scripts.parser import Parser
 
-
 class PublishAds(Parser):
     """
     每3分钟运行
@@ -39,30 +38,30 @@ class PublishAds(Parser):
 
         self.p.subscribe(self.const.CHANNEL_ADS)
         for item in self.p.listen():
-            print(item)
             if item['type'] == 'message':
                 data = item['data']
                 content = json.loads(to_str(data))
-                print(content)
                 msg = ObjectDict(
                     FromUserName=content.get('from_username'),
                     ToUserName=content.get('to_username'),
                 )
+                yield self.hztrip_event_ps.wx_custom_send_text(msg, self.const.ADS_CONTENT)
 
-                if content.from_username == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
-                    res = yield self.hztrip_event_ps.wx_rep_text(msg, self.const.ADS_CONTENT)
-                    print(111)
-                    print(res)
+                # if content.get('from_username') == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
+                #     res = yield self.hztrip_event_ps.wx_custom_send_text(msg, self.const.ADS_CONTENT)
 
     @gen.coroutine
     def runner(self):
         try:
             self.logger.debug("[PublishAds]start in:{}".format(curr_now()))
-            yield self.get_pubsub()
+            if self._redis.get(self.const.CHANNEL_ADS_SIGNLE) < 1:
+                self._redis.incr(self.const.CHANNEL_ADS_SIGNLE)
+                yield self.get_pubsub()
         except Exception as e:
             self.logger.error(traceback.format_exc())
         finally:
             self.p.unsubscribe(self.const.CHANNEL_ADS)
+            self._redis.decr(self.const.CHANNEL_ADS_SIGNLE)
             IOLoop.instance().stop()
             self.logger.debug("[PublishAds]end in:{}".format(curr_now()))
 

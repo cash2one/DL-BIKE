@@ -77,4 +77,5 @@ BUS_LINE_ALERT_EVENING_PEAK_END = "18:30"
 
 # pubsub ads
 CHANNEL_ADS = "channel_ads"
-ADS_CONTENT = "你好，hello!"
+CHANNEL_ADS_SIGNLE = "channel_ads_single"
+ADS_CONTENT = "【红包】摇号没中签？就送红包！#吱口令#长按复制此消息，打开支付宝就能领取！yLl4je03Ux"
