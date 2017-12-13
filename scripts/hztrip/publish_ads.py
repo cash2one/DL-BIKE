@@ -15,6 +15,7 @@ from tornado.ioloop import IOLoop
 from setting import settings
 from cache.hztrip import HztripCache
 from util.tool.date_tool import curr_now
+from util.tool.str_tool import to_str
 from util.common import ObjectDict
 
 from scripts.parser import Parser
@@ -41,7 +42,7 @@ class PublishAds(Parser):
             print(item)
             if item['type'] == 'message':
                 data = item['data']
-                content = json.loads(data)
+                content = json.loads(to_str(data))
                 print(content)
                 msg = ObjectDict(
                     FromUserName=content.from_username,
