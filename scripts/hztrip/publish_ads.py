@@ -45,8 +45,8 @@ class PublishAds(Parser):
                 content = json.loads(to_str(data))
                 print(content)
                 msg = ObjectDict(
-                    FromUserName=content.from_username,
-                    ToUserName=content.to_username,
+                    FromUserName=content.get('from_username'),
+                    ToUserName=content.get('to_username'),
                 )
 
                 if content.from_username == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
