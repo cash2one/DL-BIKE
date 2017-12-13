@@ -190,3 +190,16 @@ class HztripCache(object):
             "[HztripCache] del_hztrip_bus_line_alert_by_key key:{0}".format(key))
         self.redis.delete(key, prefix=False)
         return True
+
+    def publish_ads(self, channel, message):
+        """
+        发布订阅消息
+        :param channel:
+        :param message:
+        :return:
+        """
+        logger.debug(
+            "[HztripCache] publish_ads channel:{0} message:{1}".format(channel, message))
+        self.redis.pub(channel, message)
+        return True
+

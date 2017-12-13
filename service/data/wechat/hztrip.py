@@ -18,6 +18,7 @@ from util.common import ObjectDict
 from util.tool.http_tool import http_get
 from util.common.decorator import cache
 from util.tool.date_tool import curr_now_minuteonly, weekend
+from util.tool.json_tool import json_dumps
 
 
 class HztripDataService(DataService):
@@ -447,8 +448,26 @@ class HztripDataService(DataService):
             raise gen.Return(True)
 
         curr_minute = curr_now_minuteonly()
-        if (curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
-                curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END):
+        if (
+                curr_minute > comm.BUS_LINE_ALERT_MORNING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_MORNING_PEAK_END) or (
+                        curr_minute > comm.BUS_LINE_ALERT_EVENING_PEAK_START and curr_minute < comm.BUS_LINE_ALERT_EVENING_PEAK_END):
             self.hztrip.set_hztrip_bus_line_alert(from_username, to_username, content)
 
+        raise gen.Return(True)
+
+    @gen.coroutine
+    def publish_ads(self, from_username, to_username, content):
+        """
+        发布消息广告
+        :param from_username:
+        :param to_username:
+        :param content:
+        :return:
+        """
+        message = ObjectDict(
+            from_username=from_username,
+            to_username=to_username,
+            content=content,
+        )
+        self.hztrip.publish_ads(comm.CHANNEL_ADS, json_dumps(message))
         raise gen.Return(True)

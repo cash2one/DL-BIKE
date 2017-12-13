@@ -86,8 +86,8 @@ class BaseRedis(object):
         key = self.key_name(key)
         return self._redis.exists(key)
 
-    def pub(self, key, message, prefix=True):
-        channel = self.key_name(key, prefix)
+    def pub(self, channel, message, prefix=False):
+        channel = self.key_name(channel, prefix)
         return self._redis.publish(channel, message)
 
 if __name__ == "__main__":
