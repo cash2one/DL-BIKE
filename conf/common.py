@@ -77,3 +77,4 @@ BUS_LINE_ALERT_EVENING_PEAK_END = "18:30"
 
 # pubsub ads
 CHANNEL_ADS = "channel_ads"
+ADS_CONTENT = "你好，hello!"

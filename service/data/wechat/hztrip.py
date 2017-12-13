@@ -456,7 +456,7 @@ class HztripDataService(DataService):
         raise gen.Return(True)
 
     @gen.coroutine
-    def publish_ads(self, from_username, to_username, content):
+    def publish_ads(self, from_username, to_username):
         """
         发布消息广告
         :param from_username:
@@ -467,7 +467,6 @@ class HztripDataService(DataService):
         message = ObjectDict(
             from_username=from_username,
             to_username=to_username,
-            content=content,
         )
         self.hztrip.publish_ads(comm.CHANNEL_ADS, json_dumps(message))
         raise gen.Return(True)

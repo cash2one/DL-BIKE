@@ -746,7 +746,7 @@ class EventPageService(PageService):
             news += item
 
             # 加广告，对摇号查询没有中签的用户发送福利广告
-            yield self.hztrip_ds.publish_ads(msg.FromUserName, msg.ToUserName, keyword)
+            yield self.hztrip_ds.publish_ads(msg.FromUserName, msg.ToUserName)
 
         else:
             news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
