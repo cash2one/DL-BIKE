@@ -754,7 +754,6 @@ class EventPageService(PageService):
                                                       str(time.time()),
                                                       1)
 
-            title = "恭喜，所有【{}】的同名中签结果如下".format(keyword)
             description = "中签有效期六个月，过期无效。本次查询只列出所有有效中签结果\n"
 
             Obj_dict = dict()
@@ -768,13 +767,19 @@ class EventPageService(PageService):
 
             Obj_list = sorted(Obj_dict.items(), key=lambda d: d[0], reverse=True)
             valid_month = (datetime.now() + timedelta(days=-200)).strftime("%Y%m")
+            isValid = False
             for k, v in Obj_list:
                 res_date_time = datetime.strptime(str(k), "%Y%m")
                 if k < valid_month:
                     break
+                    isValid = True
                 description += "\n★期号: {}年{}月\n".format(res_date_time.year, res_date_time.month)
                 for item in v:
                     description += "{}  {}\n".format(item.get("name"), item.get("tid"))
+            if isValid:
+                title = "恭喜，所有【{}】的同名中签结果如下".format(keyword)
+            else:
+                title = "【{}】的同名中签结果已超过六个月".format(keyword)
 
             description += "\n温馨提示: \n1.指标配置成功后，您可以登录杭州小客车摇号官网打印《小客车配置指标确认通知书》办理购车、上牌等手续\n" \
                            "2.指标有效期为6个月。单位和个人应当在指标有效期内使用指标。\n" \
