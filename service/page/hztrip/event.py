@@ -154,7 +154,7 @@ class EventPageService(PageService):
         :return:
         """
         if not text:
-            text = "【红包福利】人人可领，领完就能用。#吱口令#长按复制此消息，打开支付宝就能领取！yLl4je03Ux"
+            text = "【红包福利】人人可领，最高888元。#吱口令#长按复制此消息，打开支付宝就能领取！yLl4je03Ux"
             # text = "<a href='http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3'>微信查杭州实时公交、实时自行车、实时停车位</a>"
 
         jdata = ObjectDict({
@@ -772,7 +772,7 @@ class EventPageService(PageService):
                 res_date_time = datetime.strptime(str(k), "%Y%m")
                 if k < valid_month:
                     break
-                    isValid = True
+                isValid = True
                 description += "\n★期号: {}年{}月\n".format(res_date_time.year, res_date_time.month)
                 for item in v:
                     description += "{}  {}\n".format(item.get("name"), item.get("tid"))
