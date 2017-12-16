@@ -270,10 +270,10 @@ class EventPageService(PageService):
             res = yield self.wx_rep_text(msg, content)
             return res
         else:
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
             description = ""
             if stop_res.get("items"):
                 description += "查询车站结果如下:\n"
@@ -290,16 +290,20 @@ class EventPageService(PageService):
             url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3"
             headimg = ""
 
-            news_item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += news_item
+            description = "{}\n{}".format(title, description)
+            res = yield self.wx_rep_text(msg, description)
+            return res
 
-            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-            return news_info
+            # news_item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+            #     title,
+            #     description,
+            #     headimg,
+            #     url
+            # )
+            # news += news_item
+            #
+            # news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            # return news_info
 
     @gen.coroutine
     def do_bus(self, msg, rsp_array=False):
@@ -340,10 +344,10 @@ class EventPageService(PageService):
                 "routeId": route.get("routeId", 0),
             })
 
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
 
             title = "【{}】{} —> {}".format(route.get("routeName"), route.get("origin"),
                                           route.get("terminal"))
@@ -382,24 +386,28 @@ class EventPageService(PageService):
             # 加广告，对用户发送福利广告
             yield self.hztrip_ds.publish_ads(msg.FromUserName, msg.ToUserName, 2)
 
-            if not rsp_array:
-                item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                    title,
-                    description,
-                    headimg,
-                    url
-                )
-                news += item
+            description = "{}\n{}".format(title, description)
+            res = yield self.wx_rep_text(msg, description)
+            return res
 
-                news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-                return news_info
-            else:
-                return ObjectDict(
-                    title="[早晚高峰提醒]{}".format(title),
-                    description="{}\n\n如需退订，请回复退订".format(description),
-                    url="https://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=2648249675&idx=1&sn=5eb85860158431a0fb91c1d75926a607&chksm=bef6cac4898143d26056cd5b08591746c468f7ed7d445925a4c07d8a458d1479084a5474b34a#rd",
-                    picurl=headimg,
-                )
+            # if not rsp_array:
+            #     item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+            #         title,
+            #         description,
+            #         headimg,
+            #         url
+            #     )
+            #     news += item
+            #
+            #     news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            #     return news_info
+            # else:
+            #     return ObjectDict(
+            #         title="[早晚高峰提醒]{}".format(title),
+            #         description="{}\n\n如需退订，请回复退订".format(description),
+            #         url="https://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=2648249675&idx=1&sn=5eb85860158431a0fb91c1d75926a607&chksm=bef6cac4898143d26056cd5b08591746c468f7ed7d445925a4c07d8a458d1479084a5474b34a#rd",
+            #         picurl=headimg,
+            #     )
         else:
             content = "抱歉，找不到线路【{}】！输入更详细的线路名，查找更精确\n" \
                       "如B1路, B支3路区间, 193路\n\n小提示: \n如不清楚线路名称，" \
@@ -439,10 +447,10 @@ class EventPageService(PageService):
                 "amapStopId": route.get("amapId"),
             })
 
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
 
             title = "【{}】电子站牌".format(stop_cache.get("name"))
 
@@ -469,22 +477,26 @@ class EventPageService(PageService):
             description += "\n小提示:\n1.查询其他【{}】车站电子站牌，请输入\n".format(stop_cache.get("name"))
             for idx, val in enumerate(stop_cache.get("stops")):
                 description += "{} {}\n".format(val.get("stopName"), idx)
-            description += "\n2.可在底部菜单中切换到“实时公交”，查询实时公交到站"
-            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
+            # description += "\n2.可在底部菜单中切换到“实时公交”，查询实时公交到站"
+            # url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
 
             # 加广告，对用户发送福利广告
             yield self.hztrip_ds.publish_ads(msg.FromUserName, msg.ToUserName, 2)
 
-            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += item
+            description = "{}\n{}".format(title, description)
+            res = yield self.wx_rep_text(msg, description)
+            return res
 
-            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-            return news_info
+            # item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+            #     title,
+            #     description,
+            #     headimg,
+            #     url
+            # )
+            # news += item
+            #
+            # news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            # return news_info
         else:
             content = "抱歉，找不到车站【{}】！输入更详细的车站名，查找更精确\n" \
                       "如艮山门东站, 小和山公交站\n\n小提示: \n如不清楚车站名称，" \
@@ -516,10 +528,10 @@ class EventPageService(PageService):
             res = yield self.wx_rep_text(msg, content)
             return res
         else:
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
             title = "查找到【{}】附近车站或线路如下".format(keyword)
             headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
                       "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(
@@ -543,19 +555,24 @@ class EventPageService(PageService):
                         for vvval in vval.get("buses", []):
                             description += "  ↑----最近一班的距离{}米----↑\n".format(vvval.get("targetDistance"))
 
-            description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
-            url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3"
+            # description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
 
-            news_item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += news_item
+            description = "{}\n{}".format(title, description)
+            res = yield self.wx_rep_text(msg, description)
+            return res
 
-            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-            return news_info
+            # url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3"
+            #
+            # news_item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+            #     title,
+            #     description,
+            #     headimg,
+            #     url
+            # )
+            # news += news_item
+            #
+            # news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            # return news_info
 
     @gen.coroutine
     def do_transfer(self, msg):
@@ -580,13 +597,13 @@ class EventPageService(PageService):
         yield self.wechat_ds.send_tagging(msg.FromUserName, 103)
 
         if transfer_res and transfer_res.get("status") == 0:
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
 
             title = "【{}】到【{}】的公交换乘方案".format(start_name, end_name)
-            description = "共找到{}个公交换成方案\n".format(len(transfer_res.get("result", {}).get("routes", [])))
+            # description = "共找到{}个公交换成方案\n".format(len(transfer_res.get("result", {}).get("routes", [])))
 
             for idx, val in enumerate(transfer_res.get("result", {}).get("routes", [])):
                 description += "\n★方案{}: 距离: {}公里，约耗时: {}\n".format(idx + 1, '%.2f' % (
@@ -603,21 +620,25 @@ class EventPageService(PageService):
                                                                                                                {}).get(
                     "taxi", {}).get("detail", []) else 0)
 
-            description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n" \
-                           "2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
-            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
-            headimg = ""
+            # description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n" \
+            #                "2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
+            # url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
+            # headimg = ""
+            #
+            # item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+            #     title,
+            #     description,
+            #     headimg,
+            #     url
+            # )
+            # news += item
+            #
+            # news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            # return news_info
 
-            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += item
-
-            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-            return news_info
+            description = "{}\n{}".format(title, description)
+            res = yield self.wx_rep_text(msg, description)
+            return res
 
         else:
             content = "抱歉，找不到从【{}】到【{}】的换乘方案，" \
@@ -705,12 +726,12 @@ class EventPageService(PageService):
             res = yield self.wx_rep_text(msg, content)
             return res
         else:
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
 
-            title = "搜索【{}】周边的实时停车位".format(keyword)
+            # title = "搜索【{}】周边的实时停车位".format(keyword)
             description = "共找到{0}处停车位\n\n".format(len(res.List))
             for item in res.List:
                 description += "★停车场: {0}\n实时车位: 『{1}』\n地址: {2}\n距离: {3}米\n参考价: {4}\n\n".format(item.get("Name"),
@@ -774,11 +795,14 @@ class EventPageService(PageService):
             # 加广告，对摇号查询没有中签的用户发送福利广告
             yield self.hztrip_ds.publish_ads(msg.FromUserName, msg.ToUserName, 1)
 
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
+
         else:
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
 
             description = "中签有效期六个月，过期无效。本次查询只列出所有有效中签结果\n"
 
@@ -807,22 +831,26 @@ class EventPageService(PageService):
             else:
                 title = "【{}】的同名中签结果已超过六个月".format(keyword)
 
-            description += "\n温馨提示: \n1.指标配置成功后，您可以登录杭州小客车摇号官网打印《小客车配置指标确认通知书》办理购车、上牌等手续\n" \
-                           "2.指标有效期为6个月。单位和个人应当在指标有效期内使用指标。\n" \
-                           "3.逾期未使用的，视为放弃指标且自有效期届满次日起，两年内不得申请增量指标\n"
-            url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=201864609&idx=1&sn=df673dd4a643301833453fcd503fce82#rd"
-            headimg = ""
+        description = "{}\n{}".format(title, description)
+        res = yield self.wx_rep_text(msg, description)
+        return res
 
-            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += item
-
-        news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-        return news_info
+        #     description += "\n温馨提示: \n1.指标配置成功后，您可以登录杭州小客车摇号官网打印《小客车配置指标确认通知书》办理购车、上牌等手续\n" \
+        #                    "2.指标有效期为6个月。单位和个人应当在指标有效期内使用指标。\n" \
+        #                    "3.逾期未使用的，视为放弃指标且自有效期届满次日起，两年内不得申请增量指标\n"
+        #     url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=201864609&idx=1&sn=df673dd4a643301833453fcd503fce82#rd"
+        #     headimg = ""
+        #
+        #     item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+        #         title,
+        #         description,
+        #         headimg,
+        #         url
+        #     )
+        #     news += item
+        #
+        # news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+        # return news_info
 
     @gen.coroutine
     def do_pm25(self, msg):
@@ -852,11 +880,14 @@ class EventPageService(PageService):
             )
             news += item
 
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
+
         else:
-            news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
-                                                      msg.ToUserName,
-                                                      str(time.time()),
-                                                      1)
+            # news = wx_const.WX_NEWS_REPLY_HEAD_TPL % (msg.FromUserName,
+            #                                           msg.ToUserName,
+            #                                           str(time.time()),
+            #                                           1)
 
             update_time_str = city_pm25[0].get("time_point")
             d = datetime.strptime(str(update_time_str), "%Y-%m-%dT%H:%M:%SZ")
@@ -876,20 +907,23 @@ class EventPageService(PageService):
                                                                                  item.get("so2")
                                                                                  )
 
-            description += "\n数据更新时间: {} \n数据来源于pm25.in \n★可输入城市名，查询国内各城市实时空气污染指数".format(update_time)
-            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
-            headimg = ""
+            description = "{}\n{}".format(title, description)
+            res = yield self.wx_rep_text(msg, description)
+            return res
+            # description += "\n数据更新时间: {} \n数据来源于pm25.in \n★可输入城市名，查询国内各城市实时空气污染指数".format(update_time)
+            # url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
+            # headimg = ""
+            #
+            # item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+            #     title,
+            #     description,
+            #     headimg,
+            #     url
+            # )
+            # news += item
 
-            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-                title,
-                description,
-                headimg,
-                url
-            )
-            news += item
-
-        news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-        return news_info
+        # news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+        # return news_info
 
     def _get_text(self, msg):
 
