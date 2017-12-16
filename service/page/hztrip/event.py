@@ -117,7 +117,7 @@ class EventPageService(PageService):
             raise gen.Return("")
 
         length = len(text)
-        self.logger.debug("text: {] len:{}".format(text, length))
+        self.logger.debug("text: {} len: {}".format(text, length))
         if length > 2040:
             text = text[0:2040]
 
