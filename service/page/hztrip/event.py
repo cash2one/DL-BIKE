@@ -118,8 +118,8 @@ class EventPageService(PageService):
 
         length = len(text)
         self.logger.debug("text: {} len: {}".format(text, length))
-        if length > 2040:
-            text = text[0:2040]
+        if length > 1024:
+            text = "{}...".format(text[0:1020])
 
         text_info = wx_const.WX_TEXT_REPLY % (msg.FromUserName,
                                               msg.ToUserName,
