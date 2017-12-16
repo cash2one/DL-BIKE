@@ -371,7 +371,7 @@ class EventPageService(PageService):
                     description += "(地铁换乘)\n" if item.get("routeStop", {}).get("metroTrans") else "\n"
                     if item.get("buses", []) and item.get("routeStop", {}).get("seqNo") != route.get("stationCnt"):
                         is_realtime = True
-                        description += "   ↓--行驶中，距下一站{}米--↓\n".format(item.get("buses", [])[0].get("nextDistance"))
+                        description += "   ↓-行驶中距下1站{}米-↓\n".format(item.get("buses", [])[0].get("nextDistance"))
 
                 if not is_realtime:
                     description += "\n当前暂无车辆实时信息\n"
@@ -472,7 +472,7 @@ class EventPageService(PageService):
                                                                       "{}时{}分".format(d_last.hour, d_last.minute),
                                                                       vval.get("route", {}).get("airPrice", "未知"))
                         for vvval in vval.get("buses", []):
-                            description += "  ↑--最近一班的距离{}米--↑\n".format(vvval.get("targetDistance"))
+                            description += "  ↑-最近1班距离{}米-↑\n".format(vvval.get("targetDistance"))
 
             description += "\n小提示:\n1.查询其他【{}】车站电子站牌，请输入\n".format(stop_cache.get("name"))
             for idx, val in enumerate(stop_cache.get("stops")):
@@ -553,7 +553,7 @@ class EventPageService(PageService):
                                                                       "{}时{}分".format(d_last.hour, d_last.minute),
                                                                       vval.get("route", {}).get("airPrice", "未知"))
                         for vvval in vval.get("buses", []):
-                            description += "  ↑--最近一班的距离{}米--↑\n".format(vvval.get("targetDistance"))
+                            description += "  ↑-最近1班距离{}米-↑\n".format(vvval.get("targetDistance"))
 
             # description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
 
