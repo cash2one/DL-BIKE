@@ -116,12 +116,8 @@ class EventPageService(PageService):
         if text is None:
             raise gen.Return("")
 
-        length = len(text)
-        self.logger.debug("text: {} len: {}".format(text, length))
-        if length > 680:
+        if len(text) > 900:
             text = "{}...".format(text[0:900])
-
-        self.logger.debug("text: {} len: {}".format(text, len(text)))
 
         text_info = wx_const.WX_TEXT_REPLY % (msg.FromUserName,
                                               msg.ToUserName,
@@ -611,8 +607,7 @@ class EventPageService(PageService):
             #                                           1)
 
             title = "【{}】到【{}】的公交换乘方案".format(start_name, end_name)
-            transfer_list = transfer_res.get("result", {}).get("routes", [])[0:3]
-            description = "共找到{}个公交换成方案\n".format(len(transfer_list))
+            description = "共找到{}个公交换成方案\n".format(len(transfer_res.get("result", {}).get("routes", [])))
 
             for idx, val in enumerate(transfer_res.get("result", {}).get("routes", [])):
                 description += "\n★方案{}: 距离: {}公里，约耗时: {}\n".format(idx + 1, '%.2f' % (
@@ -907,8 +902,8 @@ class EventPageService(PageService):
             d = datetime.strptime(str(update_time_str), "%Y-%m-%dT%H:%M:%SZ")
             update_time = "{}年{}月{}日 {}时{}分".format(d.year, d.month, d.day, d.hour, d.minute)
             title = "{}实时空气质量指数(更新于{})".format(keyword, update_time)
-            description = "您好，当前{}各监测点空气质量指数如下(数值单位: μg/m3)：\n".format(keyword)
-            city_pm25 = city_pm25[0:5]
+            # description = "您好，当前{}各监测点空气质量指数如下(数值单位: μg/m3)：\n".format(keyword)
+            description = ""
 
             for item in city_pm25:
                 description += "★{}\n空气质量指数类别: {}\n空气质量指数: {}\n首要污染物: {}\nPM2.5/小时: {}" \
