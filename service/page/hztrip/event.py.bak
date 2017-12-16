@@ -18,8 +18,8 @@ from util.tool.url_tool import make_static_url
 from util.tool.date_tool import sec_2_time, format_hour_minute
 from util.common import ObjectDict
 
-
 class EventPageService(PageService):
+
     def __init__(self):
         super().__init__()
         self.hztrip_cache = HztripCache()
@@ -117,9 +117,9 @@ class EventPageService(PageService):
             raise gen.Return("")
 
         text_info = wx_const.WX_TEXT_REPLY % (msg.FromUserName,
-                                              msg.ToUserName,
-                                              int(time.time()),
-                                              text)
+                                            msg.ToUserName,
+                                            int(time.time()),
+                                            text)
 
         raise gen.Return(text_info)
 
@@ -134,9 +134,9 @@ class EventPageService(PageService):
         """
 
         text_info = wx_const.WX_IMAGE_REPLY % (msg.FromUserName,
-                                               msg.ToUserName,
-                                               int(time.time()),
-                                               media_id)
+                                            msg.ToUserName,
+                                            int(time.time()),
+                                            media_id)
         raise gen.Return(text_info)
 
     @gen.coroutine
@@ -314,11 +314,11 @@ class EventPageService(PageService):
         keyword = self._get_text(msg)
         line_list = re.split(" ", keyword)
         # 线路名
-        line_name = line_list[0] if len(line_list) > 0 else ""
+        line_name = line_list[0] if len(line_list)>0 else ""
         # 方向
-        line_order = line_list[1] if len(line_list) > 1 else 0
+        line_order = line_list[1] if len(line_list)>1 else 0
 
-        new_line_name = line_name.replace("(", "").replace(")", "")
+        new_line_name = line_name.replace("(", "").replace(")","")
         if new_line_name.isdigit() or new_line_name[-1].isdigit():
             new_line_name = "{}路".format(new_line_name)
         line_cache = self.hztrip_cache.get_bus_lines(new_line_name)
@@ -350,11 +350,9 @@ class EventPageService(PageService):
             d_first = datetime.strptime(str(route.get("firstBus")), "%H:%M:%S")
             d_last = datetime.strptime(str(route.get("lastBus")), "%H:%M:%S")
             description = "全程: {}公里    票价: {}元\n首班: {}    末班: {}\n\n".format('%.2f' % route.get("distance"),
-                                                                             route.get("airPrice"),
-                                                                             "{}时{}分".format(d_first.hour,
-                                                                                             d_first.minute),
-                                                                             "{}时{}分".format(d_last.hour,
-                                                                                             d_last.minute))
+                                                                       route.get("airPrice"),
+                                                                       "{}时{}分".format(d_first.hour, d_first.minute),
+                                                                       "{}时{}分".format(d_last.hour, d_last.minute))
 
             if bus_res and bus_res.get("items"):
                 bus_info = bus_res.get("items", [])[0]
@@ -362,20 +360,19 @@ class EventPageService(PageService):
 
                 is_realtime = False
                 for item in stops:
-                    description += "{}  {}".format(item.get("routeStop", {}).get("seqNo"),
-                                                   item.get("routeStop", {}).get("stopName"))
-                    description += "(地铁换乘)\n" if item.get("routeStop", {}).get("metroTrans") else "\n"
-                    if item.get("buses", []) and item.get("routeStop", {}).get("seqNo") != route.get("stationCnt"):
+                    description += "{}  {}".format(item.get("routeStop",{}).get("seqNo"), item.get("routeStop",{}).get("stopName"))
+                    description += "(地铁换乘)\n" if item.get("routeStop",{}).get("metroTrans") else "\n"
+                    if item.get("buses",[]) and item.get("routeStop",{}).get("seqNo") != route.get("stationCnt"):
                         is_realtime = True
-                        description += "   ↓----行驶中，距下一站{}米----↓\n".format(item.get("buses", [])[0].get("nextDistance"))
+                        description += "   ↓----行驶中，距下一站{}米----↓\n".format(item.get("buses",[])[0].get("nextDistance"))
 
                 if not is_realtime:
                     description += "\n当前暂无车辆实时信息\n"
-                    # else:
-                    #     # 添加第二天的实时公交提醒
-                    #     yield self.hztrip_ds.add_bus_line_alert(msg.FromUserName, msg.ToUserName, keyword)
+                # else:
+                #     # 添加第二天的实时公交提醒
+                #     yield self.hztrip_ds.add_bus_line_alert(msg.FromUserName, msg.ToUserName, keyword)
             description += "\n小提示:\n1.查询反向线路信息，请输入“{} {}”，关键词按空格分割\n2.可在底部菜单中切换到“电子站牌”，" \
-                           "查询车站所有线路实时到站".format(route.get("routeName"), 1 if index == 0 else 0)
+                           "查询车站所有线路实时到站".format(route.get("routeName"), 1 if index==0 else 0)
             url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
 
@@ -417,9 +414,9 @@ class EventPageService(PageService):
         keyword = self._get_text(msg)
         line_list = re.split(" ", keyword)
         # 车站名
-        stop_name = line_list[0] if len(line_list) > 0 else ""
+        stop_name = line_list[0] if len(line_list)>0 else ""
         # 方向
-        stop_order = line_list[1] if len(line_list) > 1 else 0
+        stop_order = line_list[1] if len(line_list)>1 else 0
 
         stop_cache = self.hztrip_cache.get_bus_stops(stop_name)
         if not stop_cache:
@@ -428,7 +425,7 @@ class EventPageService(PageService):
             })
             stop_cache = self.hztrip_cache.get_bus_stops(stop_name)
 
-        index = 0 if stop_cache and int(stop_order) >= len(stop_cache.get("stops")) else int(stop_order)
+        index = 0 if stop_cache and int(stop_order)>=len(stop_cache.get("stops")) else int(stop_order)
 
         # 加标签：公交群
         yield self.wechat_ds.send_tagging(msg.FromUserName, 103)
@@ -444,6 +441,7 @@ class EventPageService(PageService):
                                                       str(time.time()),
                                                       1)
 
+
             title = "【{}】电子站牌".format(stop_cache.get("name"))
 
             headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
@@ -451,19 +449,19 @@ class EventPageService(PageService):
                 route.get("lng", 0), route.get("lat", 0), route.get("lng", 0), route.get("lat", 0))
             description = "本站可换乘轨道交通\n" if route.get("metroTrans") else ""
 
-            for item in stop_res.get("items", []):
-                for val in item.get("stops", []):
-                    for vval in val.get("routes", []):
-                        description += "\n★【{}】{} —> {}\n".format(vval.get("route", {}).get("routeName"),
-                                                                  vval.get("route", {}).get("origin"),
-                                                                  vval.get("route", {}).get("terminal"))
+            for item in stop_res.get("items",[]):
+                for val in item.get("stops",[]):
+                    for vval in val.get("routes",[]):
+                        description += "\n★【{}】{} —> {}\n".format(vval.get("route",{}).get("routeName"),
+                                                                vval.get("route",{}).get("origin"),
+                                                                vval.get("route",{}).get("terminal"))
 
-                        d_first = datetime.strptime(str(vval.get("route", {}).get("firstBus")), "%H:%M:%S")
-                        d_last = datetime.strptime(str(vval.get("route", {}).get("lastBus")), "%H:%M:%S")
-                        description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour, d_first.minute),
+                        d_first = datetime.strptime(str(vval.get("route",{}).get("firstBus")), "%H:%M:%S")
+                        d_last = datetime.strptime(str(vval.get("route",{}).get("lastBus")), "%H:%M:%S")
+                        description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
                                                                       "{}时{}分".format(d_last.hour, d_last.minute),
                                                                       vval.get("route", {}).get("airPrice", "未知"))
-                        for vvval in vval.get("buses", []):
+                        for vvval in vval.get("buses",[]):
                             description += "  ↑----最近一班的距离{}米----↑\n".format(vvval.get("targetDistance"))
 
             description += "\n小提示:\n1.查询其他【{}】车站电子站牌，请输入\n".format(stop_cache.get("name"))
@@ -522,26 +520,25 @@ class EventPageService(PageService):
                                                       1)
             title = "查找到【{}】附近车站或线路如下".format(keyword)
             headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
-                      "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(
-                lng, lat, lng, lat)
+                      "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(lng, lat, lng, lat)
             description = ""
-            for item in around_res.get("items", []):
-                for val in item.get("stops", []):
-                    description += "\n★距离: {}米 【{}】".format(val.get("stop", {}).get("userDistance"),
-                                                            val.get("stop", {}).get("stopName"))
+            for item in around_res.get("items",[]):
+                for val in item.get("stops",[]):
+                    description += "\n★距离: {}米 【{}】".format(val.get("stop",{}).get("userDistance"), val.get("stop",{}).get("stopName"))
                     description += "(地铁换乘)\n" if val.get("stop", {}).get("metroTrans") else "\n"
-                    for vval in val.get("routes", []):
-                        description += "【{}】{} —> {}\n".format(vval.get("route", {}).get("routeName"),
-                                                               vval.get("route", {}).get("origin"),
-                                                               vval.get("route", {}).get("terminal"))
+                    for vval in val.get("routes",[]):
+                        description += "【{}】{} —> {}\n".format(vval.get("route",{}).get("routeName"),
+                                                                vval.get("route",{}).get("origin"),
+                                                                vval.get("route",{}).get("terminal"))
 
-                        d_first = datetime.strptime(str(vval.get("route", {}).get("firstBus")), "%H:%M:%S")
-                        d_last = datetime.strptime(str(vval.get("route", {}).get("lastBus")), "%H:%M:%S")
-                        description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour, d_first.minute),
+                        d_first = datetime.strptime(str(vval.get("route",{}).get("firstBus")), "%H:%M:%S")
+                        d_last = datetime.strptime(str(vval.get("route",{}).get("lastBus")), "%H:%M:%S")
+                        description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour,d_first.minute),
                                                                       "{}时{}分".format(d_last.hour, d_last.minute),
                                                                       vval.get("route", {}).get("airPrice", "未知"))
-                        for vvval in vval.get("buses", []):
+                        for vvval in vval.get("buses",[]):
                             description += "  ↑----最近一班的距离{}米----↑\n".format(vvval.get("targetDistance"))
+
 
             description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
             url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=200265581&idx=1&sn=3cb4415ab52fd40b24353212115917e3"
@@ -567,9 +564,9 @@ class EventPageService(PageService):
         keyword = self._get_text(msg)
         line_list = re.split(" ", keyword)
         # 起点
-        start_name = line_list[0] if len(line_list) > 0 else ""
+        start_name = line_list[0] if len(line_list)>0 else ""
         # 终点
-        end_name = line_list[1] if len(line_list) > 1 else ""
+        end_name = line_list[1] if len(line_list)>1 else ""
 
         transfer_res = yield self.hztrip_ds.get_bd_transfer({
             "origin": start_name,
@@ -586,22 +583,16 @@ class EventPageService(PageService):
                                                       1)
 
             title = "【{}】到【{}】的公交换乘方案".format(start_name, end_name)
-            description = "共找到{}个公交换成方案\n".format(len(transfer_res.get("result", {}).get("routes", [])))
+            description = "共找到{}个公交换成方案\n".format(len(transfer_res.get("result",{}).get("routes",[])))
 
-            for idx, val in enumerate(transfer_res.get("result", {}).get("routes", [])):
-                description += "\n★方案{}: 距离: {}公里，约耗时: {}\n".format(idx + 1, '%.2f' % (
-                val.get("scheme")[0].get("distance") / 1000), sec_2_time(val.get("scheme")[0].get("duration")))
+            for idx, val in enumerate(transfer_res.get("result",{}).get("routes",[])):
+                description += "\n★方案{}: 距离: {}公里，约耗时: {}\n".format(idx+1, '%.2f' % (val.get("scheme")[0].get("distance")/1000), sec_2_time(val.get("scheme")[0].get("duration")))
                 for idxx, vval in enumerate(val.get("scheme")[0].get("steps")):
-                    description += "{}. {}\n".format(idxx + 1,
-                                                     re.sub(r'</?\w+[^>]*>', '', vval[0].get("stepInstruction")))
+                    description += "{}. {}\n".format(idxx+1, re.sub(r'</?\w+[^>]*>', '', vval[0].get("stepInstruction")))
 
-            description += "\n打的: \n距离: {}公里，约耗时: {}\n打车费用: {}元（按驾车的最短路程计算）\n".format(
-                '%.2f' % (transfer_res.get("result", {}).get("taxi", {}).get("distance", 0) / 1000),
-                sec_2_time(transfer_res.get("result", {}).get("taxi", {}).get("duration", 0)),
-                transfer_res.get("result", {}).get("taxi", {}).get("detail", [])[0].get("total_price",
-                                                                                        0) if transfer_res.get("result",
-                                                                                                               {}).get(
-                    "taxi", {}).get("detail", []) else 0)
+            description += "\n打的: \n距离: {}公里，约耗时: {}\n打车费用: {}元（按驾车的最短路程计算）\n".format('%.2f' % (transfer_res.get("result",{}).get("taxi",{}).get("distance", 0)/1000),
+                                                                                   sec_2_time(transfer_res.get("result", {}).get("taxi", {}).get("duration", 0)),
+                                                                                   transfer_res.get("result", {}).get("taxi", {}).get("detail", [])[0].get("total_price",0) if transfer_res.get("result", {}).get("taxi", {}).get("detail", []) else 0)
 
             description += "\n小提示: \n1.可在底部菜单中切换到“实时公交”，查询实时公交到站\n" \
                            "2.可在底部菜单中切换到“电子站牌”，查询车站所有线路实时到站"
@@ -660,15 +651,12 @@ class EventPageService(PageService):
                                                       str(time.time()),
                                                       len(data_list))
             for item in data_list:
-                title = "【{0}】{1}_可租[{2}]_可还[{3}]".format(item.get("number", ""), item.get("name", ""),
-                                                          item.get("rentcount", ""), item.get("restorecount", ""))
-                description = "位置：{0}".format(item.get("address", ""))
+                title = "【{0}】{1}_可租[{2}]_可还[{3}]".format(item.get("number", ""), item.get("name", ""), item.get("rentcount",""), item.get("restorecount", ""))
+                description = "位置：{0}".format(item.get("address",""))
                 url = "http://api.map.baidu.com/marker?location={0},{1}&title={2}" \
-                      "&content=[杭州公共出行]公共自行车租赁点&output=html".format(item.get("lat", 0), item.get("lon", 0),
-                                                                     item.get("name", ""))
+                       "&content=[杭州公共出行]公共自行车租赁点&output=html".format(item.get("lat", 0), item.get("lon", 0), item.get("name", ""))
                 headimg = "http://api.map.baidu.com/staticimage/v2?ak=lSbGt6Z31wK9Pwi2GLUCx6ywLeflbjHf" \
-                          "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(
-                    item.get("lon", 0), item.get("lat", 0), item.get("lon", 0), item.get("lat", 0))
+                          "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(item.get("lon", 0),item.get("lat", 0),item.get("lon", 0),item.get("lat", 0))
 
                 news_item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
                     title,
@@ -714,29 +702,25 @@ class EventPageService(PageService):
             description = "共找到{0}处停车位\n\n".format(len(res.List))
             for item in res.List:
                 description += "★停车场: {0}\n实时车位: 『{1}』\n地址: {2}\n距离: {3}米\n参考价: {4}\n\n".format(item.get("Name"),
-                                                                                                const.STOP_STATE.get(
-                                                                                                    str(
-                                                                                                        item.get(
-                                                                                                            "State"))),
-                                                                                                item.get("Address"),
-                                                                                                item.get("Distance"),
-                                                                                                item.get("Type"))
+                                                                                               const.STOP_STATE.get(str(
+                                                                                                   item.get("State"))),
+                                                                                               item.get("Address"),
+                                                                                               item.get("Distance"),
+                                                                                               item.get("Type"))
 
-            res = yield self.wx_rep_text(msg, description)
-            return res
-            # url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
-            # headimg = make_static_url("http://www.hztrip.org/image/banner.jpg")
-            #
-            # item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
-            #     title,
-            #     description,
-            #     headimg,
-            #     url
-            # )
-            # news += item
-            #
-            # news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
-            # return news_info
+            url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
+            headimg = make_static_url("http://www.hztrip.org/image/banner.jpg")
+
+            item = wx_const.WX_NEWS_REPLY_ITEM_TPL % (
+                title,
+                description,
+                headimg,
+                url
+            )
+            news += item
+
+            news_info = news + wx_const.WX_NEWS_REPLY_FOOT_TPL
+            return news_info
 
     @gen.coroutine
     def do_yaohao(self, msg):
@@ -758,7 +742,7 @@ class EventPageService(PageService):
 
             title = "抱歉，继续努力吧！"
             description = "抱歉，找不到【{}】的摇号结果\n\n" \
-                          "摇号申请编码有效期为3个月，请及时登录官网延长有效期\n目前仅支持个人用户的中签查询".format(keyword)
+                      "摇号申请编码有效期为3个月，请及时登录官网延长有效期\n目前仅支持个人用户的中签查询".format(keyword)
 
             url = "http://mp.weixin.qq.com/s?__biz=MjM5NzM0MTkyMA==&mid=201864609&idx=1&sn=df673dd4a643301833453fcd503fce82#rd"
             headimg = ""
@@ -867,14 +851,15 @@ class EventPageService(PageService):
             for item in city_pm25:
                 description += "★{}\n空气质量指数类别: {}\n空气质量指数: {}\n首要污染物: {}\nPM2.5/小时: {}" \
                                "\nPM10/小时: {}\nO3/小时: {}\nSO2/小时: {}\n\n".format(item.get("position_name"),
-                                                                                 item.get("quality"),
-                                                                                 item.get("aqi") or "",
-                                                                                 item.get("primary_pollutant"),
-                                                                                 item.get("pm2_5"),
-                                                                                 item.get("pm10"),
-                                                                                 item.get("o3"),
-                                                                                 item.get("so2")
-                                                                                 )
+                                                                             item.get("quality"),
+                                                                             item.get("aqi") or "",
+                                                                             item.get("primary_pollutant"),
+                                                                             item.get("pm2_5"),
+                                                                             item.get("pm10"),
+                                                                             item.get("o3"),
+                                                                             item.get("so2")
+                                                                             )
+
 
             description += "\n数据更新时间: {} \n数据来源于pm25.in \n★可输入城市名，查询国内各城市实时空气污染指数".format(update_time)
             url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
@@ -924,8 +909,7 @@ class EventPageService(PageService):
             text = keyword
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0 and res.results:
-                lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get(
-                    "location", {}).get("lat", 0)
+                lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get("location", {}).get("lat", 0)
 
             if type == "soso":
                 res = yield self.hztrip_ds.get_soso_lnglat(lng, lat)
@@ -948,14 +932,14 @@ class EventPageService(PageService):
             text = keyword
             res = yield self.hztrip_ds.get_lnglat_by_baidu(keyword)
             if res.status == 0 and res.results:
-                lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get(
-                    "location", {}).get("lat", 0)
+                lng, lat = res.get("results", [])[0].get("location", {}).get("lng", 0), res.get("results", [])[0].get("location", {}).get("lat", 0)
 
             if type == "soso":
                 res = yield self.hztrip_ds.get_soso_lnglat(lng, lat)
                 if res.status == 0 and res.locations:
                     location = res.get("locations", [])[0] if len(res.get("locations", [])) > 0 else {}
                     lng, lat = location.get("lng", 0), location.get("lat", 0)
+
 
         return text, lng, lat
 
@@ -1012,3 +996,6 @@ class EventPageService(PageService):
         #     content = "退订公交【{}】成功\n若您在早晚高峰期间对同一公交线路手动发起查询，系统将自动调整订阅时间".format(content)
         #     res = yield self.wx_rep_text(msg, content)
         #     return res
+
+
+

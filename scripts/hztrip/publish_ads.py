@@ -47,7 +47,10 @@ class PublishAds(Parser):
                 )
                 yield gen.sleep(1)
                 print(msg)
-                yield self.hztrip_event_ps.wx_custom_send_text(msg, self.const.ADS_CONTENT)
+                if (content.get('type') == 1):
+                    yield self.hztrip_event_ps.wx_custom_send_text(msg, self.const.ADS_CONTENT)
+                else:
+                    yield self.hztrip_event_ps.wx_custom_send_text(msg)
 
                 # if content.get('from_username') == 'o4Ijkjhmjjip2O9Vin2BEay-QoQA':
                 #     res = yield self.hztrip_event_ps.wx_custom_send_text(msg, self.const.ADS_CONTENT)
