@@ -116,6 +116,11 @@ class EventPageService(PageService):
         if text is None:
             raise gen.Return("")
 
+        length = len(text)
+        self.logger.debug("text: {] len:{}".format(text, length))
+        if length > 2040:
+            text = text[0:2040]
+
         text_info = wx_const.WX_TEXT_REPLY % (msg.FromUserName,
                                               msg.ToUserName,
                                               int(time.time()),
@@ -458,10 +463,8 @@ class EventPageService(PageService):
                       "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(
                 route.get("lng", 0), route.get("lat", 0), route.get("lng", 0), route.get("lat", 0))
             description = "本站可换乘轨道交通\n" if route.get("metroTrans") else ""
-            # 避免回复文本超长，至多显示11个公交
-            stop_list = stop_res.get("items", [])[0:12]
 
-            for item in stop_list:
+            for item in stop_res.get("items", []):
                 for val in item.get("stops", []):
                     for vval in val.get("routes", []):
                         description += "\n★【{}】{} —> {}\n".format(vval.get("route", {}).get("routeName"),
@@ -539,8 +542,7 @@ class EventPageService(PageService):
                       "&center={0},{1}&width=360&height=200&zoom=17&copyright=1&markers={2},{3}&markerStyles=l".format(
                 lng, lat, lng, lat)
             description = ""
-            # 至多显示11个公交，避免文本超长
-            around_list = around_res.get("items", [])[0:12]
+
             for item in around_res.get("items", []):
                 for val in item.get("stops", []):
                     # description += "\n★距离: {}米 【{}】".format(val.get("stop", {}).get("userDistance"),
