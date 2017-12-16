@@ -116,7 +116,6 @@ class EventPageService(PageService):
         if text is None:
             raise gen.Return("")
 
-        text = text.encode('utf8')
         length = len(text)
         self.logger.debug("text: {} len: {}".format(text, length))
         if length > 1024:
