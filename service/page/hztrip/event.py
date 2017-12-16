@@ -118,8 +118,8 @@ class EventPageService(PageService):
 
         length = len(text)
         self.logger.debug("text: {} len: {}".format(text, length))
-        if length > 1024:
-            text = "{}...".format(text[0:1000])
+        if length > 680:
+            text = "{}...".format(text[0:680])
 
         self.logger.debug("text: {} len: {}".format(text, len(text)))
 
