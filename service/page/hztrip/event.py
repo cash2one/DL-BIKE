@@ -378,7 +378,7 @@ class EventPageService(PageService):
                     # else:
                     #     # 添加第二天的实时公交提醒
                     #     yield self.hztrip_ds.add_bus_line_alert(msg.FromUserName, msg.ToUserName, keyword)
-            description += "\n小提示:\n1.查询反向线路信息，请输入“{} {}”，关键词按空格分割\n2.可在底部菜单中切换到“电子站牌”，" \
+            description += "\n小提示:\n1.查询反向线路，输入“{} {}”，关键词按空格分割\n2.可在底部菜单中切换到“电子站牌”，" \
                            "查询车站所有线路实时到站".format(route.get("routeName"), 1 if index == 0 else 0)
             url = "https://mp.weixin.qq.com/s/liRLTrncTko3jsbuiJXMWw"
             headimg = ""
@@ -466,11 +466,11 @@ class EventPageService(PageService):
                                                                   vval.get("route", {}).get("origin"),
                                                                   vval.get("route", {}).get("terminal"))
 
-                        d_first = datetime.strptime(str(vval.get("route", {}).get("firstBus")), "%H:%M:%S")
-                        d_last = datetime.strptime(str(vval.get("route", {}).get("lastBus")), "%H:%M:%S")
-                        description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour, d_first.minute),
-                                                                      "{}时{}分".format(d_last.hour, d_last.minute),
-                                                                      vval.get("route", {}).get("airPrice", "未知"))
+                        # d_first = datetime.strptime(str(vval.get("route", {}).get("firstBus")), "%H:%M:%S")
+                        # d_last = datetime.strptime(str(vval.get("route", {}).get("lastBus")), "%H:%M:%S")
+                        # description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour, d_first.minute),
+                        #                                               "{}时{}分".format(d_last.hour, d_last.minute),
+                        #                                               vval.get("route", {}).get("airPrice", "未知"))
                         for vvval in vval.get("buses", []):
                             description += "  ↑-最近1班距离{}米-↑\n".format(vvval.get("targetDistance"))
 
@@ -539,19 +539,19 @@ class EventPageService(PageService):
             description = ""
             for item in around_res.get("items", []):
                 for val in item.get("stops", []):
-                    description += "\n★距离: {}米 【{}】".format(val.get("stop", {}).get("userDistance"),
-                                                            val.get("stop", {}).get("stopName"))
+                    # description += "\n★距离: {}米 【{}】".format(val.get("stop", {}).get("userDistance"),
+                    #                                         val.get("stop", {}).get("stopName"))
                     description += "(地铁换乘)\n" if val.get("stop", {}).get("metroTrans") else "\n"
                     for vval in val.get("routes", []):
                         description += "【{}】{} —> {}\n".format(vval.get("route", {}).get("routeName"),
                                                                vval.get("route", {}).get("origin"),
                                                                vval.get("route", {}).get("terminal"))
 
-                        d_first = datetime.strptime(str(vval.get("route", {}).get("firstBus")), "%H:%M:%S")
-                        d_last = datetime.strptime(str(vval.get("route", {}).get("lastBus")), "%H:%M:%S")
-                        description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour, d_first.minute),
-                                                                      "{}时{}分".format(d_last.hour, d_last.minute),
-                                                                      vval.get("route", {}).get("airPrice", "未知"))
+                        # d_first = datetime.strptime(str(vval.get("route", {}).get("firstBus")), "%H:%M:%S")
+                        # d_last = datetime.strptime(str(vval.get("route", {}).get("lastBus")), "%H:%M:%S")
+                        # description += "首: {} 末: {} 票价: {}元\n".format("{}时{}分".format(d_first.hour, d_first.minute),
+                        #                                               "{}时{}分".format(d_last.hour, d_last.minute),
+                        #                                               vval.get("route", {}).get("airPrice", "未知"))
                         for vvval in vval.get("buses", []):
                             description += "  ↑-最近1班距离{}米-↑\n".format(vvval.get("targetDistance"))
 
@@ -603,7 +603,7 @@ class EventPageService(PageService):
             #                                           1)
 
             title = "【{}】到【{}】的公交换乘方案".format(start_name, end_name)
-            # description = "共找到{}个公交换成方案\n".format(len(transfer_res.get("result", {}).get("routes", [])))
+            description = "共找到{}个公交换成方案\n".format(len(transfer_res.get("result", {}).get("routes", [])))
 
             for idx, val in enumerate(transfer_res.get("result", {}).get("routes", [])):
                 description += "\n★方案{}: 距离: {}公里，约耗时: {}\n".format(idx + 1, '%.2f' % (
@@ -804,7 +804,8 @@ class EventPageService(PageService):
             #                                           str(time.time()),
             #                                           1)
 
-            description = "中签有效期六个月，过期无效。本次查询只列出所有有效中签结果\n"
+            # description = "\n中签有效期六个月，过期无效。本次查询只列出所有有效中签结果\n"
+            description = ""
 
             Obj_dict = dict()
             for item in res.data[0].get("disp_data", ""):
@@ -831,9 +832,13 @@ class EventPageService(PageService):
             else:
                 title = "【{}】的同名中签结果已超过六个月".format(keyword)
 
-        description = "{}\n{}".format(title, description)
-        res = yield self.wx_rep_text(msg, description)
-        return res
+            description += "\n温馨提示: \n1.指标配置成功后，您可以登录杭州小客车摇号官网打印《小客车配置指标确认通知书》办理购车、上牌等手续\n" \
+                           "2.指标有效期为6个月。单位和个人应当在指标有效期内使用指标。\n" \
+                           "3.逾期未使用的，视为放弃指标且自有效期届满次日起，两年内不得申请增量指标\n"
+
+            description = "{}\n{}".format(title, description)
+            res = yield self.wx_rep_text(msg, description)
+            return res
 
         #     description += "\n温馨提示: \n1.指标配置成功后，您可以登录杭州小客车摇号官网打印《小客车配置指标确认通知书》办理购车、上牌等手续\n" \
         #                    "2.指标有效期为6个月。单位和个人应当在指标有效期内使用指标。\n" \
@@ -894,6 +899,7 @@ class EventPageService(PageService):
             update_time = "{}年{}月{}日 {}时{}分".format(d.year, d.month, d.day, d.hour, d.minute)
             title = "{}实时空气质量指数(更新于{})".format(keyword, update_time)
             description = "您好，当前{}各监测点空气质量指数如下(数值单位: μg/m3)：\n".format(keyword)
+            city_pm25 = city_pm25[0:5]
 
             for item in city_pm25:
                 description += "★{}\n空气质量指数类别: {}\n空气质量指数: {}\n首要污染物: {}\nPM2.5/小时: {}" \
